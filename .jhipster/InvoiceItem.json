@@ -1,0 +1,63 @@
+{
+    "relationships": [
+        {
+            "relationshipName": "imei",
+            "otherEntityName": "imei",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "invoiceItem"
+        },
+        {
+            "relationshipName": "invoice",
+            "otherEntityName": "invoice",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "mrp",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "amount",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "taxType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "taxRate",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "discount",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "quantity",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "creationTime",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "modificationTime",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "color",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20160620040012",
+    "dto": "no",
+    "service": "serviceImpl",
+    "entityTableName": "invoice_item",
+    "pagination": "pager"
+}

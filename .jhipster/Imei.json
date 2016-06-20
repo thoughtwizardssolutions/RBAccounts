@@ -1,0 +1,25 @@
+{
+    "relationships": [
+        {
+            "relationshipName": "invoiceItem",
+            "otherEntityName": "invoiceItem",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "imei1",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "imei2",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20160620034840",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "imei",
+    "pagination": "pager"
+}

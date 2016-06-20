@@ -1,0 +1,100 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myInvoiceItemLabel">Create or edit a Invoice Item</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.invoiceItem.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.invoiceItem.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_mrp">Mrp</label>
+            <input type="number" class="form-control" name="mrp" id="field_mrp"
+                    ng-model="vm.invoiceItem.mrp"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_description">Description</label>
+            <input type="text" class="form-control" name="description" id="field_description"
+                    ng-model="vm.invoiceItem.description"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_amount">Amount</label>
+            <input type="number" class="form-control" name="amount" id="field_amount"
+                    ng-model="vm.invoiceItem.amount"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_taxType">Tax Type</label>
+            <input type="text" class="form-control" name="taxType" id="field_taxType"
+                    ng-model="vm.invoiceItem.taxType"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_taxRate">Tax Rate</label>
+            <input type="number" class="form-control" name="taxRate" id="field_taxRate"
+                    ng-model="vm.invoiceItem.taxRate"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_discount">Discount</label>
+            <input type="number" class="form-control" name="discount" id="field_discount"
+                    ng-model="vm.invoiceItem.discount"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_quantity">Quantity</label>
+            <input type="number" class="form-control" name="quantity" id="field_quantity"
+                    ng-model="vm.invoiceItem.quantity"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_creationTime">Creation Time</label>
+                <div class="input-group">
+                    <input id="field_creationTime" type="text" class="form-control" name="creationTime" datetime-picker="{{dateformat}}" ng-model="vm.invoiceItem.creationTime" is-open="vm.datePickerOpenStatus.creationTime"
+                      />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('creationTime')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_modificationTime">Modification Time</label>
+                <div class="input-group">
+                    <input id="field_modificationTime" type="text" class="form-control" name="modificationTime" datetime-picker="{{dateformat}}" ng-model="vm.invoiceItem.modificationTime" is-open="vm.datePickerOpenStatus.modificationTime"
+                      />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('modificationTime')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_color">Color</label>
+            <input type="text" class="form-control" name="color" id="field_color"
+                    ng-model="vm.invoiceItem.color"
+                     />
+        </div>
+
+        <div class="form-group">
+            <label for="field_invoice">Invoice</label>
+            <select class="form-control" id="field_invoice" name="invoice" ng-model="vm.invoiceItem.invoice" ng-options="invoice as invoice.id for invoice in vm.invoices track by invoice.id">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

@@ -1,0 +1,46 @@
+
+<div>
+    <h2><span>Address</span> {{vm.address.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span>Address 1</span></dt>
+        <dd>
+            <span>{{vm.address.address1}}</span>
+        </dd>
+        <dt><span>Address 2</span></dt>
+        <dd>
+            <span>{{vm.address.address2}}</span>
+        </dd>
+        <dt><span>City</span></dt>
+        <dd>
+            <span>{{vm.address.city}}</span>
+        </dd>
+        <dt><span>State</span></dt>
+        <dd>
+            <span>{{vm.address.state}}</span>
+        </dd>
+        <dt><span>Country</span></dt>
+        <dd>
+            <span>{{vm.address.country}}</span>
+        </dd>
+        <dt><span>Pincode</span></dt>
+        <dd>
+            <span>{{vm.address.pincode}}</span>
+        </dd>
+        <dt><span>Phone</span></dt>
+        <dd>
+            <span>{{vm.address.phone}}</span>
+        </dd>
+        <dt><span>Email</span></dt>
+        <dd>
+            <span>{{vm.address.email}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+</div>

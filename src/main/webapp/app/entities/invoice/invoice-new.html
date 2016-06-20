@@ -1,0 +1,237 @@
+
+<div>
+    <h2><span>Create New Invoice</span></h2>
+    <hr>
+    
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="alert alert-success" ng-show="vm.success">
+                <strong>Invoice saved!</strong>.
+            </div>
+            <div class="alert alert-danger" ng-show="vm.error">
+                <strong>Create Invoice failed!</strong> Please try again later.
+            </div>
+        </div>
+        <div class="col-md-10 col-md-offset-1">
+            <form ng-show="!vm.success" name="editForm" role="form" novalidate show-validation>
+
+				<!-- Choose Contact -->
+				<div class="form-group">
+			        <div class="btn-group" uib-dropdown keyboard-nav>
+				        <button id="simple-btn-keyboard-nav" type="button" class="btn btn-primary" uib-dropdown-toggle>
+				            {{ vm.selectedContact.firmName || 'Select Contact'}} <span class="caret"></span>
+				        </button>
+				        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+							<li role="menuitem" ng-repeat= "dealer in vm.dealers" ng-click="vm.selectContact(dealer)"><a>{{dealer.firmName}}</a></li>
+				        </ul>
+				    </div>
+		            <input type="text" class="form-control" name="field_contact" id="field_contact" value ="{{vm.selectedContact.firmName}}" required readonly="true"/>
+		            <div ng-show="editForm.invoiceNumber.$invalid">
+		                <p class="help-block" ng-show="editForm.invoiceNumber.$error.required">
+		                    This field is required.
+		                </p>
+		            </div>
+		        </div>	
+		       	<!-- Choose Contact -->		
+				
+				<!-- Choose Invoice Number -->	
+				<div class="form-group">
+		            <label class="control-label" for="field_invoiceNumber">Invoice Number</label>
+		            <input type="text" class="form-control" name="invoiceNumber" id="field_invoiceNumber" ng-model="vm.invoice.invoiceNumber" required />
+		            <div ng-show="editForm.invoiceNumber.$invalid">
+		                <p class="help-block" ng-show="editForm.invoiceNumber.$error.required">
+		                    This field is required.
+		                </p>
+		            </div>
+		        </div>
+		        <!-- Choose Invoice Number -->
+		        
+		        <!-- Enter Order Number -->	
+			    <div class="form-group">
+		            <label class="control-label" for="field_orderNumber">Order Number</label>
+		            <input type="text" class="form-control" name="orderNumber" id="field_orderNumber" ng-model="vm.invoice.orderNumber" />
+	        	</div>
+	        	<!-- Enter Order Number -->
+	        	
+	        	<!-- Add Item -->
+				<button class="btn btn-primary" ng-click="vm.addInvoiceitem()">
+					<span class="glyphicon glyphicon-plus"></span> 
+					<span>Add Item</span>
+				</button>
+				
+				<!--Item start -->
+				<div class="alert alert-warning"
+					data-ng-repeat="invoiceItem in vm.invoice.invoiceItems track by invoiceItem.index">
+					<!-- Choose Product -->
+					<div class="form-group">
+						<div class="btn-group" uib-dropdown keyboard-nav>
+							<button id="product-choice" type="button" class="btn btn-primary" uib-dropdown-toggle>Select Product <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="product-choice">
+								<li role="menuitem"	ng-repeat="product in vm.products track by product.id"	ng-click="vm.selectInvoiceItemProduct(invoiceItem, product)"><a>{{product.name}}</a></li>
+							</ul>
+						</div>
+					</div>
+					<!--  Choose Product End -->
+					<!-- Item details  -->
+					<!-- Row start -->
+					<div class="row">
+						<div class="col-md-2">
+							<label class="control-label" for="product-name">Select Product</label> 
+							<input type="text" class="form-control" name="product-name"	id="product-name" ng-model="invoiceItem.name" required />
+							<div ng-show="editForm.product-name.$invalid">
+								<p class="help-block" ng-show="editForm.product-name.$error.required">This field is required.</p>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<label class="control-label" for="field_color">Color</label>
+							<input type="text" class="form-control" name="field_color" id="field_color" ng-model="invoiceItem.color" />
+						</div>
+						<div class="col-md-2">
+							<label class="control-label" for="product-description">Description</label>
+							<input type="text" class="form-control"	name="product-description" id="product-description"	ng-model="invoiceItem.description" />
+						</div>
+						<div class="col-md-2">
+							<label class="control-label" for="field_quantity">Quantity</label>
+							<input type="number" class="form-control" name="quantity" id="field_quantity" ng-model="invoiceItem.quantity" required />
+							<div ng-show="editForm.quantity.$invalid">
+								<p class="help-block" ng-show="editForm.quantity.$error.required">This field is	required.</p>
+								<p class="help-block" ng-show="editForm.quantity.$error.number">This field should be a number.</p>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<label class="control-label" for="field_quantity">Rate</label>
+							<input type="number" class="form-control" name="quantity" id="field_quantity" ng-model="invoiceItem.mrp" required />
+							<div ng-show="editForm.quantity.$invalid">
+								<p class="help-block" ng-show="editForm.quantity.$error.required">This field is	required.</p>
+								<p class="help-block" ng-show="editForm.quantity.$error.number">This field should be a number.</p>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<label class="control-label" for="field_discount">Discount</label>
+							<input type="number" class="form-control" name="discount" id="field_discount" ng-model="invoiceItem.discount" />
+							<div ng-show="editForm.quantity.$invalid">
+							<p class="help-block" ng-show="editForm.quantity.$error.required">This field is	required.</p>
+								<p class="help-block" ng-show="editForm.quantity.$error.number">This field should be a number.</p>
+							</div>
+						</div>
+						<!-- Choose Tax -->
+						<div class="col-md-2">
+							<div class="form-group" uib-dropdown keyboard-nav>
+								<button id="tax-choice" type="button" class="btn btn-default btn-md" uib-dropdown-toggle> {{invoiceItem.tax.name + invoiceItem.tax.rate || 'Select tax'}} <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" uib-dropdown-menu role="menu"	aria-labelledby="tax-choice">
+									<li role="menuitem" ng-repeat="tax in vm.taxes" ng-click="vm.selectInvoiceItemTax(invoiceItem,tax)"><a>{{tax.name}}</a></li>
+								</ul>
+							</div>
+						</div>
+						<!--  Choose Tax End -->
+						<div class="col-md-2">
+							<label class="control-label" for="field_amount">Amount</label> 
+							<input type="number" class="form-control" name="amount"	id="field_amount" ng-model="invoiceItem.amount" required />
+							<div ng-show="editForm.amount.$invalid">
+								<p class="help-block" ng-show="editForm.amount.$error.required">This field is required.</p>
+								<p class="help-block" ng-show="editForm.amount.$error.number">This	field should be a number.</p>
+							</div>
+						</div>
+						
+					
+					</div>
+					<!-- Row end -->
+					<div class="row">
+						<div class="col-md-2">
+							<!-- Add Imeis -->
+							<button class="btn btn-primary" ng-click="vm.addImeiToInvoiceItem(invoiceItem)">Add Imeis</button>
+							<!-- Add Imeis End-->
+						</div>
+						<div class="col-md-6">
+							<div class="form-group" data-ng-repeat="imei in invoiceItem.imeis track by imei.index">
+								<label class="control-label" for="field_imei2">IMEI 1</label>
+								<input type="text" class="form-control" name="imei1" id="field_imei1" ng-model="imei.imei1" ngMinlength="15" ngMaxlength="15" ng-change="vm.addImeis(invoiceItem.imeis, imei)"/>
+								<label class="control-label" for="field_imei2">IMEI 2</label>
+								<input type="text" class="form-control" name="imei2" id="field_imei2" ng-model="imei.imei2" ngMinlength="15" ngMaxlength="15" ng-change="vm.addImeis(invoiceItem.imeis, imei)"/>
+							</div>
+						</div>
+						
+						
+					</div>
+					
+					
+					<!-- Item details End -->
+					<!-- Remove Item button -->
+					<hr><button class="btn btn-primary" ng-click="vm.removeInvoiceItem(invoiceItem)">Remove</button>
+				</div>
+				<!-- Item end -->
+				<!-- Add Item End -->
+				
+				
+        <div class="form-group">
+            <label class="control-label" for="field_salesPersonName">Sales Person Name</label>
+            <input type="text" class="form-control" name="salesPersonName" id="field_salesPersonName"
+                    ng-model="vm.invoice.salesPersonName"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_subtotal">Subtotal</label>
+            <input type="number" class="form-control" name="subtotal" id="field_subtotal"
+                    ng-model="vm.invoice.subtotal"
+                    required />
+            <div ng-show="editForm.subtotal.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.subtotal.$error.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.subtotal.$error.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_taxes">Taxes</label>
+            <input type="number" class="form-control" name="taxes" id="field_taxes"
+                    ng-model="vm.invoice.taxes"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_shippingCharges">Shipping Charges</label>
+            <input type="number" class="form-control" name="shippingCharges" id="field_shippingCharges"
+                    ng-model="vm.invoice.shippingCharges"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_adjustments">Adjustments</label>
+            <input type="number" class="form-control" name="adjustments" id="field_adjustments"
+                    ng-model="vm.invoice.adjustments"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_totalAmount">Total Amount</label>
+            <input type="number" class="form-control" name="totalAmount" id="field_totalAmount"
+                    ng-model="vm.invoice.totalAmount"
+                    required />
+            <div ng-show="editForm.totalAmount.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.totalAmount.$error.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.totalAmount.$error.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
+    			<button type="submit" onclick="window.history.back()" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span></button>
+                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" ng-click="vm.saveInvoice()">Save</button>
+                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" ng-click="vm.showInvoice()">Preview</button>
+                
+            </form>
+            <p></p>
+        </div>
+    </div>
+</div>
+    
+    
+
+
+</div>

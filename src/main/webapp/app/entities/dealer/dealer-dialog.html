@@ -1,0 +1,127 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myDealerLabel">Create/Edit a Contact</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group">
+            <label class="control-label" for="field_firmName">Firm Name</label>
+            <input type="text" class="form-control" name="firmName" id="field_firmName" ng-model="vm.dealer.firmName" required />
+            <div ng-show="editForm.firmName.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.firmName.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_ownerName">Owner Name</label>
+            <input type="text" class="form-control" name="ownerName" id="field_ownerName" ng-model="vm.dealer.ownerName" />
+        </div>
+                <div class="form-group">
+            <label class="control-label" for="field_tin">TIN</label>
+            <input type="text" class="form-control" name="tin" id="field_tin" ng-model="vm.dealer.tin" placeholder="Leave blank if you have applied for it..."
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_openingBalance">Opening Balance</label>
+            <input type="number" class="form-control" name="openingBalance" id="field_openingBalance"
+                    ng-model="vm.dealer.openingBalance"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_currentBalance">Current Balance</label>
+            <input type="number" class="form-control" name="currentBalance" id="field_currentBalance"
+                    ng-model="vm.dealer.currentBalance"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_address1">Address Line 1</label>
+            <input type="text" class="form-control" name="address1" id="field_address1" ng-model="vm.dealer.address.address1" required />
+            <div ng-show="editForm.address1.$invalid">
+                <p class="help-block" ng-show="editForm.address1.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_address2">Address Line 2</label>
+            <input type="text" class="form-control" name="address2" id="field_address2" ng-model="vm.dealer.address.address2" />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_phone">Phone</label>
+            <input type="text" class="form-control" name="phone" id="field_phone" ng-model="vm.dealer.address.phone" required ng-maxlength="16" />
+            <div ng-show="editForm.phone.$invalid">
+                <p class="help-block" ng-show="editForm.phone.$error.required">
+                    This field is required.
+                </p>
+                <p class="help-block" ng-show="editForm.phone.$error.maxlength">
+                    This field cannot be longer than 16 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_email">Email</label>
+            <input type="text" class="form-control" name="email" id="field_email"
+                    ng-model="vm.dealer.address.email"
+                     />
+        </div>
+                <div class="form-group">
+            <label class="control-label" for="field_city">City</label>
+            <input type="text" class="form-control" name="city" id="field_city"
+                    ng-model="vm.dealer.address.city"
+                    required />
+            <div ng-show="editForm.city.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.city.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_state">State</label>
+            <input type="text" class="form-control" name="state" id="field_state" ng-model="vm.dealer.address.state" required />
+            <div ng-show="editForm.state.$invalid">
+                <p class="help-block" ng-show="editForm.state.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_country">Country</label>
+            <input type="text" class="form-control" name="country" id="field_country"
+                    ng-model="vm.dealer.address.country"
+                    required />
+            <div ng-show="editForm.country.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.country.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_pincode">Pincode</label>
+            <input type="number" class="form-control" name="pincode" id="field_pincode" ng-model="vm.dealer.address.pincode" required />
+            <div ng-show="editForm.pincode.$invalid">
+                <p class="help-block" ng-show="editForm.pincode.$error.required">
+                    This field is required.
+                </p>
+                <p class="help-block"S ng-show="editForm.pincode.$error.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

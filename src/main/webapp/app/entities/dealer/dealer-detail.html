@@ -1,0 +1,46 @@
+
+<div>
+    <h2>{{vm.dealer.firmName}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span>Firm Name</span></dt>
+        <dd>
+            <span>{{vm.dealer.firmName}}</span>
+        </dd>
+        <dt><span>Owner Name</span></dt>
+        <dd>
+            <span>{{vm.dealer.ownerName}}</span>
+        </dd>
+        <dt><span>Tin</span></dt>
+        <dd>
+            <span>{{vm.dealer.tin}}</span>
+        </dd>
+        <dt><span>Terms And Conditions</span></dt>
+        <dd>
+            <span>{{vm.dealer.termsAndConditions}}</span>
+        </dd>
+        <dt><span>Opening Balance</span></dt>
+        <dd>
+            <span>{{vm.dealer.openingBalance}}</span>
+        </dd>
+        <dt><span>Current Balance</span></dt>
+        <dd>
+            <span>{{vm.dealer.currentBalance}}</span>
+        </dd>
+        <dt><span>Contact Details</span></dt>
+        <dd>
+            {{vm.dealer.address.address1}}<br>
+            {{vm.dealer.address.address2}}<br>
+            {{vm.dealer.address.city}} Pin: {{vm.dealer.address.pincode}}<br>
+            {{vm.dealer.address.state}} {{vm.dealer.address.country}}<br>
+            {{vm.dealer.address.email}}
+        </dd>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+</div>

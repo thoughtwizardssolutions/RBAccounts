@@ -1,0 +1,77 @@
+{
+    "relationships": [
+        {
+            "relationshipName": "invoiceItem",
+            "otherEntityName": "invoiceItem",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "invoice"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "creationTime",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "modificationTime",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "invoiceNumber",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "orderNumber",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "salesPersonName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "shippingCharges",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "subtotal",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "taxes",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "adjustments",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "totalAmount",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "createdBy",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "dealerId",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20160620062755",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "invoice",
+    "pagination": "pager"
+}

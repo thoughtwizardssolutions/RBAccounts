@@ -1,0 +1,62 @@
+
+<div>
+    <h2><span>Invoice</span> {{vm.invoice.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span>Creation Time</span></dt>
+        <dd>
+            <span>{{vm.invoice.creationTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Modification Time</span></dt>
+        <dd>
+            <span>{{vm.invoice.modificationTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Invoice Number</span></dt>
+        <dd>
+            <span>{{vm.invoice.invoiceNumber}}</span>
+        </dd>
+        <dt><span>Order Number</span></dt>
+        <dd>
+            <span>{{vm.invoice.orderNumber}}</span>
+        </dd>
+        <dt><span>Sales Person Name</span></dt>
+        <dd>
+            <span>{{vm.invoice.salesPersonName}}</span>
+        </dd>
+        <dt><span>Shipping Charges</span></dt>
+        <dd>
+            <span>{{vm.invoice.shippingCharges}}</span>
+        </dd>
+        <dt><span>Subtotal</span></dt>
+        <dd>
+            <span>{{vm.invoice.subtotal}}</span>
+        </dd>
+        <dt><span>Taxes</span></dt>
+        <dd>
+            <span>{{vm.invoice.taxes}}</span>
+        </dd>
+        <dt><span>Adjustments</span></dt>
+        <dd>
+            <span>{{vm.invoice.adjustments}}</span>
+        </dd>
+        <dt><span>Total Amount</span></dt>
+        <dd>
+            <span>{{vm.invoice.totalAmount}}</span>
+        </dd>
+        <dt><span>Created By</span></dt>
+        <dd>
+            <span>{{vm.invoice.createdBy}}</span>
+        </dd>
+        <dt><span>Dealer Id</span></dt>
+        <dd>
+            <span>{{vm.invoice.dealerId}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+</div>

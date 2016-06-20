@@ -1,0 +1,58 @@
+
+<div>
+    <h2><span>Invoice Item</span> {{vm.invoiceItem.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span>Mrp</span></dt>
+        <dd>
+            <span>{{vm.invoiceItem.mrp}}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+            <span>{{vm.invoiceItem.description}}</span>
+        </dd>
+        <dt><span>Amount</span></dt>
+        <dd>
+            <span>{{vm.invoiceItem.amount}}</span>
+        </dd>
+        <dt><span>Tax Type</span></dt>
+        <dd>
+            <span>{{vm.invoiceItem.taxType}}</span>
+        </dd>
+        <dt><span>Tax Rate</span></dt>
+        <dd>
+            <span>{{vm.invoiceItem.taxRate}}</span>
+        </dd>
+        <dt><span>Discount</span></dt>
+        <dd>
+            <span>{{vm.invoiceItem.discount}}</span>
+        </dd>
+        <dt><span>Quantity</span></dt>
+        <dd>
+            <span>{{vm.invoiceItem.quantity}}</span>
+        </dd>
+        <dt><span>Creation Time</span></dt>
+        <dd>
+            <span>{{vm.invoiceItem.creationTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Modification Time</span></dt>
+        <dd>
+            <span>{{vm.invoiceItem.modificationTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Color</span></dt>
+        <dd>
+            <span>{{vm.invoiceItem.color}}</span>
+        </dd>
+        <dt><span>Invoice</span></dt>
+        <dd>
+            <a ui-sref="invoice-detail({id:vm.invoiceItem.invoice.id})">{{vm.invoiceItem.invoice.id}}</a>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+</div>

@@ -1,0 +1,40 @@
+{
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "mrp",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "color",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "creationTime",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "modificationTime",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "createdBy",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20160620075027",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "product",
+    "pagination": "no"
+}
