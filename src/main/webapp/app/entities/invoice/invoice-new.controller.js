@@ -23,7 +23,6 @@
 		vm.invoice.invoiceItems = [];
 		vm.invoice.dealer = null;
 		vm.selectedContact = {};
-		vm.selectedContact.firmName = null;
 		vm.loadDealers = loadDealers;
 		vm.loadProducts = loadProducts;
 		vm.loadTaxes = loadTaxes;
@@ -43,6 +42,7 @@
 		function saveInvoice() {
 			console.log('inside save method...,....');
 			Invoice.save(vm.invoice);
+			$state.go('invoice');
 		}
 		function showInvoice() {
 			console.log('inside save method...,....');

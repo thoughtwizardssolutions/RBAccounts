@@ -18,9 +18,8 @@
         <table class="jh-table table table-striped">
             <thead>
                 <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="creationTime"><span>Creation Time</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="invoiceNumber"><span>Invoice Number</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="creationTime"><span>Date</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="orderNumber"><span>Order Number</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="salesPersonName"><span>Sales Person Name</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="totalAmount"><span>Total Amount</span> <span class="glyphicon glyphicon-sort"></span></th>
@@ -29,9 +28,8 @@
             </thead>
             <tbody>
                 <tr ng-repeat="invoice in vm.invoices track by invoice.id">
-                    <td><a ui-sref="invoice-detail({id:invoice.id})">{{invoice.id}}</a></td>
-                    <td>{{invoice.creationTime | date:'medium'}}</td>
-                    <td>{{invoice.invoiceNumber}}</td>
+                    <td><a ui-sref="invoice-detail({id:invoice.id})">{{invoice.invoiceNumber}}</a></td>
+                    <td>{{invoice.creationTime}}</td>
                     <td>{{invoice.orderNumber}}</td>
                     <td>{{invoice.totalAmount}}</td>
                     <td class="text-right">
