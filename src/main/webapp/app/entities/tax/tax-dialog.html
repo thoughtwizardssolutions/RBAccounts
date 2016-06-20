@@ -8,11 +8,6 @@
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <div class="form-group" ng-show="vm.tax.id">
-            <label for="id">ID</label>
-            <input type="text" class="form-control" id="id" name="id"
-                    ng-model="vm.tax.id" readonly />
-        </div>
         <div class="form-group">
             <label class="control-label" for="field_name">Name</label>
             <input type="text" class="form-control" name="name" id="field_name"
@@ -41,13 +36,6 @@
                 </p>
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label" for="field_createdBy">Created By</label>
-            <input type="text" class="form-control" name="createdBy" id="field_createdBy"
-                    ng-model="vm.tax.createdBy"
-                     />
-        </div>
-
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">

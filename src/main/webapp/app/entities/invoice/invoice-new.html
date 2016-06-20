@@ -1,6 +1,6 @@
 
 <div>
-    <h2><span>Create New Invoice</span></h2>
+    <h2><span>Create/Edit Invoice</span></h2>
     <hr>
     
     <div class="row">
@@ -83,21 +83,21 @@
 						</div>
 						<div class="col-md-2">
 							<label class="control-label" for="field_quantity">Quantity</label>
-							<input type="number" class="form-control" name="quantity" id="field_quantity" ng-model="invoiceItem.quantity" required />
+							<input type="number" class="form-control" name="quantity" id="field_quantity" ng-model="invoiceItem.quantity" ng-change="vm.calculateItemAmount(invoiceItem)" required />
 						</div>
 						<div class="col-md-2">
 							<label class="control-label" for="field_mrp">Rate</label>
-							<input type="number" class="form-control" name="quantity" id="field_mrp" ng-model="invoiceItem.mrp" required />
+							<input type="number" class="form-control" name="quantity" id="field_mrp" ng-model="invoiceItem.mrp" ng-change="vm.calculateItemAmount(invoiceItem)" required />
 						</div>
 						<div class="col-md-2">
 							<label class="control-label" for="field_discount">Discount</label>
-							<input type="number" class="form-control" name="discount" id="field_discount" ng-model="invoiceItem.discount" />
+							<input type="number" class="form-control" name="discount" id="field_discount" ng-model="invoiceItem.discount" ng-change="vm.calculateItemAmount(invoiceItem)" />
 						</div>
 						<!-- Choose Tax -->
 						<div class="col-md-2">
-						<label class="control-label" for="field_amount">Tax</label> 
+						<label class="control-label" for="field_tax">Tax</label> 
 							<div class="form-group" uib-dropdown keyboard-nav>
-								<button id="tax-choice" type="button" class="btn btn-default btn-md" uib-dropdown-toggle> {{invoiceItem.tax.name + invoiceItem.tax.rate || 'Select tax'}} <span class="caret"></span>
+								<button id="field_tax" type="button" class="btn btn-default btn-md" uib-dropdown-toggle> {{invoiceItem.tax.name + invoiceItem.tax.rate || 'Select tax'}} <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu" uib-dropdown-menu role="menu"	aria-labelledby="tax-choice">
 									<li role="menuitem" ng-repeat="tax in vm.taxes" ng-click="vm.selectInvoiceItemTax(invoiceItem,tax)"><a>{{tax.name}}</a></li>
@@ -105,8 +105,8 @@
 							</div>
 						</div>
 						<div class="col-md-2">
-							<label class="control-label" for="field_amount">Amount</label> 
-							<input type="number" class="form-control" name="amount"	id="field_amount" ng-model="invoiceItem.amount" required />
+							<label class="control-label" for="field_item_amount">Amount</label> 
+							<input type="number" class="form-control" name="field_item_amount"	id="field_item_amount" ng-model="invoiceItem.amount" required />
 						</div>
 						<!--  Choose Tax End -->
 						
@@ -125,7 +125,7 @@
 								<label class="control-label" for="field_imei2">IMEI 1</label>
 								<input type="text" class="form-control" name="imei1" id="field_imei1" ng-model="imei.imei1" ngMinlength="15" ngMaxlength="15" ng-change="vm.addImeis(invoiceItem.imeis, imei)"/>
 								<label class="control-label" for="field_imei2">IMEI 2</label>
-								<input type="text" class="form-control" name="imei2" id="field_imei2" ng-model="imei.imei2" ngMinlength="15" ngMaxlength="15" ng-change="vm.addImeis(invoiceItem.imeis, imei)"/>
+								<input type="number" class="form-control" name="imei2" id="field_imei2" ng-model="imei.imei2" ngMinlength="15" ngMaxlength="15" ng-change="vm.addImeis(invoiceItem.imeis, imei)"/>
 							</div>
 						</div>
 					</div>
@@ -150,23 +150,23 @@
 				<div class="row">
 		        <div class="form-group col-md-4 col-md-offset-8">
 		            <label class="control-label" for="field_subtotal">Subtotal</label>
-		            <input type="number" class="form-control" name="subtotal" id="field_subtotal" ng-model="vm.invoice.subtotal" required />
+		            <input type="number" class="form-control" name="subtotal" id="field_subtotal" ng-model="vm.invoice.subTotal" ng-change="vm.calculateInvoiceTotal()"  required />
 		        </div>
 		        <div class="form-group col-md-4 col-md-offset-8">
 		            <label class="control-label" for="field_taxes">Taxes</label>
-		            <input type="number" class="form-control" name="taxes" id="field_taxes" ng-model="vm.invoice.taxes" />
+		            <input type="number" class="form-control" name="taxes" id="field_taxes" ng-model="vm.invoice.taxes" ng-change="vm.calculateInvoiceTotal()" />
 		        </div>
 		        <div class="form-group col-md-4 col-md-offset-8">
 		            <label class="control-label" for="field_shippingCharges">Shipping Charges</label>
-		            <input type="number" class="form-control" name="shippingCharges" id="field_shippingCharges" ng-model="vm.invoice.shippingCharges" />
+		            <input type="number" class="form-control" name="shippingCharges" id="field_shippingCharges" ng-model="vm.invoice.shippingCharges" ng-change="vm.calculateInvoiceTotal()"  />
 		        </div>
 		        <div class="form-group col-md-4 col-md-offset-8">
 		            <label class="control-label" for="field_adjustments">Adjustments</label>
-		            <input type="number" class="form-control" name="adjustments" id="field_adjustments" ng-model="vm.invoice.adjustments" />
+		            <input type="number" class="form-control" name="adjustments" id="field_adjustments" ng-model="vm.invoice.adjustments" ng-change="vm.calculateInvoiceTotal()" />
 		        </div>
 		        <div class="form-group col-md-4 col-md-offset-8">
 		            <label class="control-label" for="field_totalAmount">Total Amount</label>
-		            <input type="number" class="form-control" name="totalAmount" id="field_totalAmount" required />
+		            <input type="number" class="form-control" name="totalAmount" id="field_totalAmount" ng-model="vm.invoice.totalAmount" required />
 		        </div>
 		        </div>
 		        

@@ -16,9 +16,13 @@
 		vm.success = null;
 		vm.dealers = [];
 		vm.products = [];
-		vm.taxes = [];
 		vm.saveInvoice = saveInvoice;
 		vm.invoice = {};
+		vm.invoice.taxes = 0;
+		vm.invoice.subTotal = 0;
+		vm.invoice.totalAmount = 0;
+		vm.invoice.adjustments = 0;
+		vm.invoice.shippingCharges = 0;
 		vm.invoice.creationDate = new Date();
 		vm.invoice.invoiceItems = [];
 		vm.invoice.dealer = null;
@@ -34,15 +38,21 @@
 		vm.removeInvoiceItem = removeInvoiceItem;
 		vm.selectInvoiceItemProduct = selectInvoiceItemProduct
 		vm.selectInvoiceItemTax = selectInvoiceItemTax
-
+		vm.calculateItemAmount = calculateItemAmount;
+		vm.calculateInvoiceTotal = calculateInvoiceTotal;
+			
 		loadDealers();
 		loadProducts();
 		loadTaxes();
 
 		function saveInvoice() {
 			console.log('inside save method...,....');
-			Invoice.save(vm.invoice);
-			$state.go('invoice');
+			if(vm.invoice.id) {
+				Invoice.save(vm.invoice);
+			} else {
+				Invoice.update(vm.invoice);
+			}
+			$state.go('invoice', null, { reload: true });
 		}
 		function showInvoice() {
 			console.log('inside save method...,....');
@@ -253,6 +263,16 @@
 	    		 imei.imei1 = "";
 	    	 }
 	      }
+	      
+		 function calculateItemAmount(invoiceItem) {
+			 console.log('calculate invoice item');
+			 console.dir(invoiceItem);
+				invoiceItem.amount = invoiceItem.quantity * invoiceItem.mrp - invoiceItem.discount;
+		 }
+		 
+		 function calculateInvoiceTotal() {
+				vm.invoice.totalAmount =  vm.invoice.subTotal + vm.invoice.adjustments + vm.invoice.taxes + vm.invoice.shippingCharges;
+		 }
 		
 	}
 })();

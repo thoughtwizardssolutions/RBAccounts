@@ -1,6 +1,5 @@
 package com.accounts.rb.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -10,9 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -69,8 +66,7 @@ public class Invoice implements Serializable {
     @Column(name = "dealer_id", nullable = false)
     private Long dealerId;
 
-    @OneToMany(mappedBy = "invoice")
-    @JsonIgnore
+    @OneToMany(mappedBy = "invoice", cascade = {CascadeType.ALL})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<InvoiceItem> invoiceItems = new ArrayList<>();
 

@@ -1,6 +1,6 @@
 
 <div>
-    <h2><span>Invoice</span> {{vm.invoice.id}}</h2>
+    <h2><span>Invoice</span> {{vm.invoice.invoiceNumber}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="dl-horizontal jh-entity-details">
@@ -43,14 +43,6 @@
         <dt><span>Total Amount</span></dt>
         <dd>
             <span>{{vm.invoice.totalAmount}}</span>
-        </dd>
-        <dt><span>Created By</span></dt>
-        <dd>
-            <span>{{vm.invoice.createdBy}}</span>
-        </dd>
-        <dt><span>Dealer Id</span></dt>
-        <dd>
-            <span>{{vm.invoice.dealerId}}</span>
         </dd>
     </dl>
 

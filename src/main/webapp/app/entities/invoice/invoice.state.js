@@ -87,24 +87,18 @@
             data: {
                 authorities: ['ROLE_USER', 'ROLE_ORG_ADMIN']
             },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-                $uibModal.open({
-                    templateUrl: 'app/entities/invoice/invoice-dialog.html',
-                    controller: 'InvoiceDialogController',
-                    controllerAs: 'vm',
-                    backdrop: 'static',
-                    size: 'lg',
-                    resolve: {
-                        entity: ['Invoice', function(Invoice) {
-                            return Invoice.get({id : $stateParams.id}).$promise;
-                        }]
-                    }
-                }).result.then(function() {
-                    $state.go('invoice', null, { reload: true });
-                }, function() {
-                    $state.go('^');
-                });
-            }]
+            views: {
+                'content@': {
+                    templateUrl: 'app/entities/invoice/invoice-new.html',
+                    controller: 'InvoiceNewController',
+                    controllerAs: 'vm'
+                }
+            },
+            resolve: {
+                entity: ['$stateParams', 'Invoice', function($stateParams, Invoice) {
+                    return Invoice.get({id : $stateParams.id}).$promise;
+                }]
+            }
         })
         .state('invoice.delete', {
             parent: 'invoice',
