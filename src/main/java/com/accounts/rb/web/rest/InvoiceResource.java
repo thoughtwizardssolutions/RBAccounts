@@ -1,11 +1,24 @@
 package com.accounts.rb.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.accounts.rb.domain.Invoice;
-import com.accounts.rb.repository.InvoiceRepository;
-import com.accounts.rb.service.InvoiceService;
-import com.accounts.rb.web.rest.util.HeaderUtil;
-import com.accounts.rb.web.rest.util.PaginationUtil;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -18,19 +31,32 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import com.accounts.rb.domain.Invoice;
+import com.accounts.rb.service.InvoiceService;
+import com.accounts.rb.web.rest.util.HeaderUtil;
+import com.accounts.rb.web.rest.util.PaginationUtil;
+import com.codahale.metrics.annotation.Timed;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.LineSeparator;
+import com.rb.accounts.service.pdf.EnglishNumberToWords;
+import com.rb.accounts.service.pdf.TableData;
 
 /**
  * REST controller for managing Invoice.
@@ -82,7 +108,7 @@ public class InvoiceResource {
     @Timed
     public ResponseEntity<InputStreamResource> createInvoicePdf(@Valid @RequestBody Invoice invoice, HttpServletRequest request, HttpServletResponse response) throws URISyntaxException,FileNotFoundException, IOException {
         log.debug("REST request to save Invoice : {}", invoice);
-       /*Font blackHeadingFont = FontFactory.getFont(FontFactory.COURIER, 24, Font.BOLD);
+        Font blackHeadingFont = FontFactory.getFont(FontFactory.COURIER, 24, Font.BOLD);
         Font blackHeadingLargeFont = FontFactory.getFont(FontFactory.COURIER, 18, Font.BOLD);
         Font blackBoldFont = FontFactory.getFont(FontFactory.COURIER, 12, Font.BOLD);
         Font blackFont = FontFactory.getFont(FontFactory.COURIER, 10);
@@ -93,7 +119,8 @@ public class InvoiceResource {
         double amount = 0;
         double totalAmount = 0;
         try {
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("Invoice.pdf"));
+        	URL url = getClass().getClassLoader().getResource("Invoice1.pdf");
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(url.getFile())));
             document.open();
             // document.add(new Paragraph("Styling Example"));
 
@@ -268,21 +295,21 @@ public class InvoiceResource {
         }
 
         response.setContentType("application/pdf");
-        PrintWriter out = response.getWriter();
+        /*PrintWriter out = response.getWriter();
         String filename = "12354564.pdf";
-        response.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
+        response.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");*/
 
         // use inline if you want to view the content in browser, helpful for
         // pdf file
         // response.setHeader("Content-Disposition","inline; filename=\"" +
         // filename + "\"");
-        FileInputStream fileInputStream = new FileInputStream(filename);
+        /*FileInputStream fileInputStream = new FileInputStream(filename);
         int i;
         while ((i = fileInputStream.read()) != -1) {
             out.write(i);
         }
         out.close();*/
-        ClassPathResource pdfFile = new ClassPathResource("Invoice.pdf");
+        ClassPathResource pdfFile = new ClassPathResource("Invoice1.pdf");
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");
@@ -297,6 +324,15 @@ public class InvoiceResource {
         
     }
 
+    private static void setCellBorder(List<TableData> td, int count, PdfPCell cell) {
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		if (count != td.size()) {
+			cell.setBorder(Rectangle.RIGHT);
+		} else {
+			cell.setBorder(Rectangle.RIGHT | Rectangle.BOTTOM);
+		}
+	}
+    
     /**
      * PUT  /invoices : Updates an existing invoice.
      *
