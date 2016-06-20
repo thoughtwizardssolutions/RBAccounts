@@ -88,6 +88,8 @@ public class DealerResource {
         }
         dealer.setCreationTime(dealerRepository.findOne(dealer.getId()).getCreationTime());
         dealer.setModificationTime(ZonedDateTime.now());
+        Address savedAddress = addressRepository.save(dealer.getAddress());
+        dealer.setAddress(savedAddress);
         Dealer result = dealerRepository.save(dealer);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("Contact", dealer.getId().toString()))

@@ -15,15 +15,6 @@
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         vm.save = save;
-        vm.addresss = Address.query({filter: 'dealer-is-null'});
-        $q.all([vm.dealer.$promise, vm.addresss.$promise]).then(function() {
-            if (!vm.dealer.address || !vm.dealer.address.id) {
-                return $q.reject();
-            }
-            return Address.get({id : vm.dealer.address.id}).$promise;
-        }).then(function(address) {
-            vm.addresses.push(address);
-        });
 
         $timeout(function (){
             angular.element('.form-group:eq(1)>input').focus();

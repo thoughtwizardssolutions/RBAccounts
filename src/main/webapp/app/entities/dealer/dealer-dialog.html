@@ -40,6 +40,12 @@
                      />
         </div>
         <div class="form-group">
+            <label class="control-label" for="field_termsAndConditions">Terms & Conditions</label>
+            <input type="text" class="form-control" name="termsAndConditions" id="field_termsAndConditions"
+                    ng-model="vm.dealer.termsAndConditions"
+                     />
+        </div>
+        <div class="form-group">
             <label class="control-label" for="field_address1">Address Line 1</label>
             <input type="text" class="form-control" name="address1" id="field_address1" ng-model="vm.dealer.address.address1" required />
             <div ng-show="editForm.address1.$invalid">
