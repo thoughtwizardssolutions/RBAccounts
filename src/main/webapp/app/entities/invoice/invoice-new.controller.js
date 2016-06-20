@@ -46,11 +46,12 @@
 		}
 		function showInvoice() {
 			console.log('inside save method...,....');
-			$http.post("api/pdf/", vm.invoice).success(function(data, status) {
+			$http.post("api/pdf/", vm.invoice, {responseType: 'arraybuffer'}).success(function(data, status) {
                 console.log(data);
                 var file = new Blob([data], {type: 'application/pdf'});
                 var fileURL = URL.createObjectURL(file);
                 window.open(fileURL);
+                display: block;
             });
 		}
 		function addInvoiceitem() {
