@@ -26,7 +26,7 @@
 				        </ul>
 				    </div>
 				    <div>
-		            	<input type="text" class="form-control" name="field_contact" id="field_contact" ng-bind ="{{vm.selectedContact.firmName}} {{vm.selectedContact.address.address1}} {{vm.selectedContact.address.address2}} {{vm.selectedContact.address.city}} {{vm.selectedContact.address.state}} {{vm.selectedContact.address.pincode}}" required readonly="true"/>
+		            	<input type="text" class="form-control" name="field_contact" id="field_contact" value ="{{vm.selectedContact.firmName}} {{vm.selectedContact.address.address1}} {{vm.selectedContact.address.address2}} {{vm.selectedContact.address.city}} {{vm.selectedContact.address.state}} {{vm.selectedContact.address.pincode}}" required readonly="true"/>
 					</div>        
 		        </div>	
 		       	<!-- Choose Contact End -->		
@@ -54,14 +54,14 @@
 	        	</div>
 	        				
 				<!--Item start -->
-				<div class="alert alert-warning" data-ng-repeat="invoiceItem in vm.invoice.invoiceItems track by invoiceItem.id">
+				<div class="alert alert-warning" data-ng-repeat="invoiceItem in vm.invoice.invoiceItems track by invoiceItem.index">
 					<!-- Choose Product -->
 					<div class="form-group">
 						<div class="btn-group" uib-dropdown keyboard-nav>
 							<button id="product-choice" type="button" class="btn btn-primary" uib-dropdown-toggle>Select Product <span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="product-choice">
-								<li role="menuitem"	ng-repeat="product in vm.products track by product.id"	ng-click="vm.selectInvoiceItemProduct(invoiceItem, product)"><a>{{product.name}}</a></li>
+								<li role="menuitem"	ng-repeat="product in vm.products track by product.id"	ng-click="vm.selectInvoiceItemProduct(invoiceItem, product)" ><a>{{product.name}}</a></li>
 							</ul>
 						</div>
 					</div>
@@ -71,7 +71,7 @@
 					<div class="row">
 						<div class="col-md-2">
 							<label class="control-label" for="product-name">Product</label> 
-							<input type="text" class="form-control" name="product-name"	id="product-name" ng-model="invoiceItem.productName" required />
+							<input type="text" class="form-control" name="product-name"	id="product-name" ng-model="invoiceItem.productName" value="{{invoiceItem.productName}}" required />
 						</div>
 						<div class="col-md-2">
 							<label class="control-label" for="field_color">Color</label>

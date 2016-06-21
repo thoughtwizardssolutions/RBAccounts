@@ -69,7 +69,7 @@ public class InvoiceItem implements Serializable {
     @Column(name = "product_name")
     private String productName;
 
-    @OneToMany(mappedBy = "invoiceItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "invoiceItem", cascade = {CascadeType.ALL})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<Imei> imeis = new ArrayList<>();
 

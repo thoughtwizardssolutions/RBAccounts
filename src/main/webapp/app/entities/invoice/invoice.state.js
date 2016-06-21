@@ -79,6 +79,11 @@
                     controller: 'InvoiceNewController',
                     controllerAs: 'vm'
                 }
+            },
+            resolve: {
+                entity: ['$stateParams', 'Invoice', function($stateParams, Invoice) {
+                    return null;
+                }]
             }
         })
         .state('invoice.edit', {

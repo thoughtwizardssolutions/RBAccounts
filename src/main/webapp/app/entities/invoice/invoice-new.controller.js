@@ -37,6 +37,9 @@
 		
 		function setupInvoice() {
 			if(entity) {
+				for(var i = 0 ; i < entity.invoiceItems.length ;i ++) {
+					entity.invoiceItems[i].index = i;
+				}
 				vm.invoice = entity;
 				console.log(entity);
 				// load dealer
@@ -80,7 +83,7 @@
 		}
 		function addInvoiceitem() {
 			var invoiceItem = {};
-			invoiceItem.index = vm.invoice.invoiceItems.length + 1;
+			invoiceItem.index = vm.invoice.invoiceItems.length +1;
 			vm.invoice.invoiceItems.push(invoiceItem);
 		}
 		
@@ -144,17 +147,7 @@
                     size: 'lg',
                     resolve: {
                         entity: function () {
-                            return {
-                                creationDate: null,
-                                modificationDate: null,
-                                firmName: null,
-                                ownerName: null,
-                                tin: null,
-                                termsAndConditions: null,
-                                openingBalance: null,
-                                currentBalance: null,
-                                id: null
-                            };
+                            return null;
                         }
                     }
                 }).result.then(function() {
@@ -184,17 +177,7 @@
                     size: 'lg',
                     resolve: {
                         entity: function () {
-                            return {
-                                creationDate: null,
-                                modificationDate: null,
-                                firmName: null,
-                                ownerName: null,
-                                tin: null,
-                                termsAndConditions: null,
-                                openingBalance: null,
-                                currentBalance: null,
-                                id: null
-                            };
+                            return null;
                         }
                     }
                 }).result.then(function() {
@@ -207,6 +190,7 @@
 				invoiceItem.productName = product.name;
 				invoiceItem.mrp = product.mrp;
 				invoiceItem.color = product.color;
+				calculateItemAmount(invoiceItem)
 				console.log('Selected product : ');
 				console.log(product);
 				console.log('Selected invoice : ');
@@ -224,17 +208,7 @@
                     size: 'lg',
                     resolve: {
                         entity: function () {
-                            return {
-                                creationDate: null,
-                                modificationDate: null,
-                                firmName: null,
-                                ownerName: null,
-                                tin: null,
-                                termsAndConditions: null,
-                                openingBalance: null,
-                                currentBalance: null,
-                                id: null
-                            };
+                            return null;
                         }
                     }
                 }).result.then(function() {
@@ -259,6 +233,11 @@
 	    	if(!invoiceItem.imeis) {
 	    		invoiceItem.imeis = [];
 	    		var imei = {};
+	    		imei.index = invoiceItem.imeis.length + 1;
+	    		invoiceItem.imeis.push(imei);
+	    	} else {
+	    		var imei = {};
+	    		imei.index = invoiceItem.imeis.length + 1;
 	    		invoiceItem.imeis.push(imei);
 	    	}
 	      }

@@ -14,7 +14,7 @@
             url: '/dealer?page&sort&search',
             data: {
                 authorities: ['ROLE_USER', 'ROLE_ORG_ADMIN'],
-                pageTitle: 'Dealers'
+                pageTitle: 'My Contacts'
             },
             views: {
                 'content@': {
@@ -51,7 +51,7 @@
             url: '/dealer/{id}',
             data: {
                 authorities: ['ROLE_USER', 'ROLE_ORG_ADMIN'],
-                pageTitle: 'Dealer'
+                pageTitle: 'Contact details'
             },
             views: {
                 'content@': {
@@ -82,14 +82,14 @@
                     resolve: {
                         entity: function () {
                             return {
-                                creationTime: null,
-                                modificationTime: null,
+                                creationDate: null,
+                                modificationDate: null,
                                 firmName: null,
                                 ownerName: null,
                                 tin: null,
+                                termsAndConditions: null,
                                 openingBalance: null,
                                 currentBalance: null,
-                                termsAndConditions: null,
                                 id: null
                             };
                         }

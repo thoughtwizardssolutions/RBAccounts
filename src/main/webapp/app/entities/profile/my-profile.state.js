@@ -25,7 +25,7 @@
             },
             resolve: {
             }
-        }) // TODO
+        })
         .state('my-profile.edit', {
             parent: 'home',
             url: '/{id}/edit',

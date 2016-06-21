@@ -5,9 +5,9 @@
         .module('rbaccountsApp')
         .controller('DealerDialogController', DealerDialogController);
 
-    DealerDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', '$q', 'entity', 'Dealer', 'Address'];
+    DealerDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Dealer'];
 
-    function DealerDialogController ($timeout, $scope, $stateParams, $uibModalInstance, $q, entity, Dealer, Address) {
+    function DealerDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, Dealer) {
         var vm = this;
 
         vm.dealer = entity;
