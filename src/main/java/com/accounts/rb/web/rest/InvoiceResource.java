@@ -8,6 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -94,6 +95,7 @@ public class InvoiceResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("invoice", "idexists", "A new invoice cannot already have an ID")).body(null);
         }
         User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        invoice.setCreationTime(ZonedDateTime.now());
         invoice.setCreatedBy(user.getUsername());
         Invoice result = invoiceService.save(invoice);
         return ResponseEntity.created(new URI("/api/invoices/" + result.getId()))

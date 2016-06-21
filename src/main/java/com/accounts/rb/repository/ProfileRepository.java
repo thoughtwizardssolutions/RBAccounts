@@ -5,11 +5,13 @@ import com.accounts.rb.domain.Profile;
 import org.springframework.data.jpa.repository.*;
 
 import java.util.List;
+import java.lang.String;
 
 /**
  * Spring Data JPA repository for the Profile entity.
  */
-@SuppressWarnings("unused")
 public interface ProfileRepository extends JpaRepository<Profile,Long> {
+  
+  List<Profile> findByUser(String user);
 
 }

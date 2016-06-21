@@ -20,6 +20,12 @@
                         <span class="hidden-sm">Home</span>
                     </a>
                 </li>
+                <li ng-class="{active: vm.$state.includes('my-profile')}" has-any-authority = "ROLE_USER, ROLE_ORG_ADMIN" ng-switch-when="true">
+                    <a ui-sref="my-profile" ng-click="vm.collapseNavbar()">
+                        <span class="glyphicon glyphicon-asterisk"></span>
+                        <span class="hidden-sm">My Profile</span>
+                    </a>
+                </li>
                 <li ng-class="{active: vm.$state.includes('dealer')}" has-any-authority = "ROLE_USER, ROLE_ORG_ADMIN" ng-switch-when="true">
                     <a ui-sref="dealer" ng-click="vm.collapseNavbar()">
                         <span class="glyphicon glyphicon-asterisk"></span>

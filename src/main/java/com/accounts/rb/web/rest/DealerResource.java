@@ -88,7 +88,6 @@ public class DealerResource {
         if (dealer.getId() == null) {
             return createDealer(dealer);
         }
-        dealer.setCreationTime(dealerRepository.findOne(dealer.getId()).getCreationTime());
         dealer.setModificationTime(ZonedDateTime.now());
         Address savedAddress = addressRepository.save(dealer.getAddress());
         dealer.setAddress(savedAddress);

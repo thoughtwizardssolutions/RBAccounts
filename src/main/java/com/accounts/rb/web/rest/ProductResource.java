@@ -2,6 +2,7 @@ package com.accounts.rb.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,6 +57,7 @@ public class ProductResource {
         }
         User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         product.setCreatedBy(user.getUsername());
+        product.setCreationTime(ZonedDateTime.now());
         Product result = productRepository.save(product);
         return ResponseEntity.created(new URI("/api/products/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("product", result.getId().toString()))
@@ -80,6 +82,7 @@ public class ProductResource {
         if (product.getId() == null) {
             return createProduct(product);
         }
+        product.setModificationTime(ZonedDateTime.now());
         Product result = productRepository.save(product);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("product", product.getId().toString()))

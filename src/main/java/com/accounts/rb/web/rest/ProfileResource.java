@@ -2,6 +2,7 @@ package com.accounts.rb.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +62,7 @@ public class ProfileResource {
         }
         User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         profile.setUser(user.getUsername());
+        profile.setCreationTime(ZonedDateTime.now());
         Address savedAddress = addressRepository.save(profile.getAddress());
         profile.setAddress(savedAddress);
         Profile result = profileRepository.save(profile);
@@ -87,6 +89,7 @@ public class ProfileResource {
         if (profile.getId() == null) {
             return createProfile(profile);
         }
+        profile.setModificationTime(ZonedDateTime.now());
         Profile result = profileRepository.save(profile);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("profile", profile.getId().toString()))
