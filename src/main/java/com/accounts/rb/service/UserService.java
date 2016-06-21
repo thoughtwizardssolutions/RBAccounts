@@ -1,14 +1,5 @@
 package com.accounts.rb.service;
 
-import com.accounts.rb.domain.Authority;
-import com.accounts.rb.domain.User;
-import com.accounts.rb.repository.AuthorityRepository;
-import com.accounts.rb.repository.PersistentTokenRepository;
-import com.accounts.rb.repository.UserRepository;
-import com.accounts.rb.security.AuthoritiesConstants;
-import com.accounts.rb.security.SecurityUtils;
-import com.accounts.rb.service.util.RandomUtil;
-import com.accounts.rb.web.rest.dto.ManagedUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,6 +7,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.accounts.rb.domain.Authority;
+import com.accounts.rb.domain.User;
+import com.accounts.rb.repository.AuthorityRepository;
+import com.accounts.rb.repository.PersistentTokenRepository;
+import com.accounts.rb.repository.UserRepository;
+import com.accounts.rb.security.SecurityUtils;
+import com.accounts.rb.service.util.RandomUtil;
+import com.accounts.rb.web.rest.dto.ManagedUserDTO;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -90,7 +89,7 @@ public class UserService {
         String langKey) {
 
         User newUser = new User();
-        Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
+        Authority authority = authorityRepository.findOne("ROLE_USER");
         Set<Authority> authorities = new HashSet<>();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(login);
@@ -101,7 +100,7 @@ public class UserService {
         newUser.setEmail(email);
         newUser.setLangKey(langKey);
         // new user is not active
-        newUser.setActivated(false);
+        newUser.setActivated(true);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         authorities.add(authority);
@@ -168,6 +167,11 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
+      log.info("Logining with user : "+ login);
+      Optional<User> result = userRepository.findOneByLogin(login);
+      log.info("user found with credentials :"+ result);
+      
+      
         return userRepository.findOneByLogin(login).map(u -> {
             u.getAuthorities().size();
             return u;

@@ -19,7 +19,7 @@
 		vm.saveInvoice = saveInvoice;
 		vm.invoice = {};
 		vm.invoice.taxes = 0;
-		vm.invoice.subTotal = 0;
+		vm.invoice.subtotal = 0;
 		vm.invoice.totalAmount = 0;
 		vm.invoice.adjustments = 0;
 		vm.invoice.shippingCharges = 0;
@@ -40,6 +40,7 @@
 		vm.selectInvoiceItemTax = selectInvoiceItemTax
 		vm.calculateItemAmount = calculateItemAmount;
 		vm.calculateInvoiceTotal = calculateInvoiceTotal;
+		vm.updateAmounts = updateAmounts;
 			
 		loadDealers();
 		loadProducts();
@@ -48,14 +49,14 @@
 		function saveInvoice() {
 			console.log('inside save method...,....');
 			if(vm.invoice.id) {
-				Invoice.save(vm.invoice);
-			} else {
 				Invoice.update(vm.invoice);
+			} else {
+				Invoice.save(vm.invoice);
 			}
 			$state.go('invoice', null, { reload: true });
 		}
 		function showInvoice() {
-			console.log('inside save method...,....');
+			console.log('inside show method...,....');
 			$http.post("api/pdf/", vm.invoice, {responseType: 'arraybuffer'}).success(function(data, status) {
                 console.log(data);
                 var file = new Blob([data], {type: 'application/pdf'});
@@ -71,10 +72,12 @@
 		}
 		
 		function removeInvoiceItem(invoiceItem) {
+			// remove item
 			var index = vm.invoice.invoiceItems.indexOf(invoiceItem);
 			vm.invoice.invoiceItems.splice(index, 1);
+			updateAmounts();
+			
 		}
-		
 		
 		function loadDealers() {
 			Dealer.query({}, onSuccess, onError);
@@ -227,9 +230,11 @@
                    loadTaxes();
                 });
 			} else {
-				invoiceItem.tax = tax;
+				invoiceItem.taxRate = tax.rate;
+				invoiceItem.taxType = tax.name;
 				console.log('Selected tax : ');
 				console.log(tax);
+				updateAmounts();
 				console.log('Selected invoice : ');
 				console.log(vm.invoice);
 			}
@@ -265,13 +270,33 @@
 	      }
 	      
 		 function calculateItemAmount(invoiceItem) {
+			 if(!invoiceItem.discount) invoiceItem.discount = 0;
+			 if(!invoiceItem.quantity) invoiceItem.quantity = 0;
+			 if(!invoiceItem.mrp) invoiceItem.mrp = 0;
 			 console.log('calculate invoice item');
 			 console.dir(invoiceItem);
-				invoiceItem.amount = invoiceItem.quantity * invoiceItem.mrp - invoiceItem.discount;
+			if (invoiceItem) {
+				invoiceItem.amount = (invoiceItem.quantity * invoiceItem.mrp) - invoiceItem.discount;
+				updateAmounts();
+			 } else {
+			 console.log('invoice item is empty or null');
+		     }
+	}
+		 function updateAmounts(){
+			console.log('updating amounts...');
+			vm.invoice.subtotal = 0;
+			vm.invoice.taxes = 0;
+			 for(var i = 0; i < vm.invoice.invoiceItems.length; i++) {
+				 vm.invoice.subtotal = vm.invoice.subtotal + vm.invoice.invoiceItems[i].amount;
+				 if(vm.invoice.invoiceItems[i].tax) {
+					 vm.invoice.taxes = vm.invoice.taxes +  (vm.invoice.invoiceItems[i].amount * vm.invoice.invoiceItems[i].tax.rate)/100;
+				 }
+			 }
+			 vm.invoice.totalAmount = vm.invoice.subtotal + vm.invoice.taxes + vm.invoice.shippingCharges + vm.invoice.adjustments;
 		 }
 		 
 		 function calculateInvoiceTotal() {
-				vm.invoice.totalAmount =  vm.invoice.subTotal + vm.invoice.adjustments + vm.invoice.taxes + vm.invoice.shippingCharges;
+				vm.invoice.totalAmount =  vm.invoice.subtotal + vm.invoice.adjustments + vm.invoice.taxes + vm.invoice.shippingCharges;
 		 }
 		
 	}
