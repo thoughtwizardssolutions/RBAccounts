@@ -6,7 +6,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -68,15 +66,16 @@ public class InvoiceItem implements Serializable {
     @Column(name = "color")
     private String color;
 
+    @Column(name = "product_name")
+    private String productName;
+
     @OneToMany(mappedBy = "invoiceItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<Imei> imeis = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name="invoice_id")
-    @JsonIgnore
     private Invoice invoice;
-    
+
     public Long getId() {
         return id;
     }
@@ -165,20 +164,28 @@ public class InvoiceItem implements Serializable {
         this.color = color;
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
     public List<Imei> getImeis() {
         return imeis;
     }
 
-    public void setImeis(List<Imei> imeis2) {
-        this.imeis = imeis2;
+    public void setImeis(List<Imei> imeis) {
+        this.imeis = imeis;
     }
 
     public Invoice getInvoice() {
-      return invoice;
+        return invoice;
     }
 
     public void setInvoice(Invoice invoice) {
-      this.invoice = invoice;
+        this.invoice = invoice;
     }
 
     @Override
@@ -215,6 +222,7 @@ public class InvoiceItem implements Serializable {
             ", creationTime='" + creationTime + "'" +
             ", modificationTime='" + modificationTime + "'" +
             ", color='" + color + "'" +
+            ", productName='" + productName + "'" +
             '}';
     }
 }

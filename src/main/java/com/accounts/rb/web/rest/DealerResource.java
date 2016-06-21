@@ -15,6 +15,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -57,10 +59,10 @@ public class DealerResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("Contact", "idexists", "A new Contact cannot already have an ID")).body(null);
         }
                 
-        // User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Address savedAddress = addressRepository.save(dealer.getAddress());
         dealer.setAddress(savedAddress);
-        // dealer.setCreated_by(user.getUsername());
+        dealer.setCreatedBy(user.getUsername());
         dealer.setCreationTime(ZonedDateTime.now());
         Dealer result = dealerRepository.save(dealer);
         return ResponseEntity.created(new URI("/api/dealers/" + result.getId()))
@@ -110,7 +112,8 @@ public class DealerResource {
     public ResponseEntity<List<Dealer>> getAllDealers(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Dealers");
-        Page<Dealer> page = dealerRepository.findAll(pageable); 
+        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Page<Dealer> page = dealerRepository.findByCreatedBy(pageable, user.getUsername());
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/dealers");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

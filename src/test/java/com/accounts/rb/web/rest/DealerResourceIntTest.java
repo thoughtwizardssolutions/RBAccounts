@@ -68,8 +68,6 @@ public class DealerResourceIntTest {
 
     private static final BigDecimal DEFAULT_CURRENT_BALANCE = new BigDecimal(1);
     private static final BigDecimal UPDATED_CURRENT_BALANCE = new BigDecimal(2);
-    private static final String DEFAULT_TERMS_AND_CONDITIONS = "AAAAA";
-    private static final String UPDATED_TERMS_AND_CONDITIONS = "BBBBB";
 
     @Inject
     private DealerRepository dealerRepository;
@@ -104,7 +102,6 @@ public class DealerResourceIntTest {
         dealer.setTin(DEFAULT_TIN);
         dealer.setOpeningBalance(DEFAULT_OPENING_BALANCE);
         dealer.setCurrentBalance(DEFAULT_CURRENT_BALANCE);
-        dealer.setTermsAndConditions(DEFAULT_TERMS_AND_CONDITIONS);
     }
 
     @Test
@@ -130,7 +127,6 @@ public class DealerResourceIntTest {
         assertThat(testDealer.getTin()).isEqualTo(DEFAULT_TIN);
         assertThat(testDealer.getOpeningBalance()).isEqualTo(DEFAULT_OPENING_BALANCE);
         assertThat(testDealer.getCurrentBalance()).isEqualTo(DEFAULT_CURRENT_BALANCE);
-        assertThat(testDealer.getTermsAndConditions()).isEqualTo(DEFAULT_TERMS_AND_CONDITIONS);
     }
 
     @Test
@@ -168,8 +164,7 @@ public class DealerResourceIntTest {
                 .andExpect(jsonPath("$.[*].ownerName").value(hasItem(DEFAULT_OWNER_NAME.toString())))
                 .andExpect(jsonPath("$.[*].tin").value(hasItem(DEFAULT_TIN.toString())))
                 .andExpect(jsonPath("$.[*].openingBalance").value(hasItem(DEFAULT_OPENING_BALANCE.intValue())))
-                .andExpect(jsonPath("$.[*].currentBalance").value(hasItem(DEFAULT_CURRENT_BALANCE.intValue())))
-                .andExpect(jsonPath("$.[*].termsAndConditions").value(hasItem(DEFAULT_TERMS_AND_CONDITIONS.toString())));
+                .andExpect(jsonPath("$.[*].currentBalance").value(hasItem(DEFAULT_CURRENT_BALANCE.intValue())));
     }
 
     @Test
@@ -189,8 +184,7 @@ public class DealerResourceIntTest {
             .andExpect(jsonPath("$.ownerName").value(DEFAULT_OWNER_NAME.toString()))
             .andExpect(jsonPath("$.tin").value(DEFAULT_TIN.toString()))
             .andExpect(jsonPath("$.openingBalance").value(DEFAULT_OPENING_BALANCE.intValue()))
-            .andExpect(jsonPath("$.currentBalance").value(DEFAULT_CURRENT_BALANCE.intValue()))
-            .andExpect(jsonPath("$.termsAndConditions").value(DEFAULT_TERMS_AND_CONDITIONS.toString()));
+            .andExpect(jsonPath("$.currentBalance").value(DEFAULT_CURRENT_BALANCE.intValue()));
     }
 
     @Test
@@ -218,7 +212,6 @@ public class DealerResourceIntTest {
         updatedDealer.setTin(UPDATED_TIN);
         updatedDealer.setOpeningBalance(UPDATED_OPENING_BALANCE);
         updatedDealer.setCurrentBalance(UPDATED_CURRENT_BALANCE);
-        updatedDealer.setTermsAndConditions(UPDATED_TERMS_AND_CONDITIONS);
 
         restDealerMockMvc.perform(put("/api/dealers")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -236,7 +229,6 @@ public class DealerResourceIntTest {
         assertThat(testDealer.getTin()).isEqualTo(UPDATED_TIN);
         assertThat(testDealer.getOpeningBalance()).isEqualTo(UPDATED_OPENING_BALANCE);
         assertThat(testDealer.getCurrentBalance()).isEqualTo(UPDATED_CURRENT_BALANCE);
-        assertThat(testDealer.getTermsAndConditions()).isEqualTo(UPDATED_TERMS_AND_CONDITIONS);
     }
 
     @Test

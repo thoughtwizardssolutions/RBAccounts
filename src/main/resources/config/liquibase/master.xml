@@ -12,9 +12,11 @@
     <include file="classpath:config/liquibase/changelog/20160620074017_added_entity_Dealer.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160620074743_added_entity_Tax.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160620075027_added_entity_Product.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160621141124_added_entity_Profile.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="classpath:config/liquibase/changelog/20160620034840_added_entity_constraints_Imei.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160620040012_added_entity_constraints_InvoiceItem.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160620074017_added_entity_constraints_Dealer.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160621141124_added_entity_constraints_Profile.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

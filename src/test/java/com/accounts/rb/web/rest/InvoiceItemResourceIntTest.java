@@ -28,7 +28,7 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
-import java.math.BigDecimal;
+import java.math.BigDecimal;;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -78,9 +78,14 @@ public class InvoiceItemResourceIntTest {
     private static final String DEFAULT_MODIFICATION_TIME_STR = dateTimeFormatter.format(DEFAULT_MODIFICATION_TIME);
     private static final String DEFAULT_COLOR = "AAAAA";
     private static final String UPDATED_COLOR = "BBBBB";
+    private static final String DEFAULT_PRODUCT_NAME = "AAAAA";
+    private static final String UPDATED_PRODUCT_NAME = "BBBBB";
 
     @Inject
     private InvoiceItemRepository invoiceItemRepository;
+
+    @Inject
+    private InvoiceItemService invoiceItemService;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -96,6 +101,7 @@ public class InvoiceItemResourceIntTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         InvoiceItemResource invoiceItemResource = new InvoiceItemResource();
+        ReflectionTestUtils.setField(invoiceItemResource, "invoiceItemService", invoiceItemService);
         this.restInvoiceItemMockMvc = MockMvcBuilders.standaloneSetup(invoiceItemResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -114,6 +120,7 @@ public class InvoiceItemResourceIntTest {
         invoiceItem.setCreationTime(DEFAULT_CREATION_TIME);
         invoiceItem.setModificationTime(DEFAULT_MODIFICATION_TIME);
         invoiceItem.setColor(DEFAULT_COLOR);
+        invoiceItem.setProductName(DEFAULT_PRODUCT_NAME);
     }
 
     @Test
@@ -142,6 +149,7 @@ public class InvoiceItemResourceIntTest {
         assertThat(testInvoiceItem.getCreationTime()).isEqualTo(DEFAULT_CREATION_TIME);
         assertThat(testInvoiceItem.getModificationTime()).isEqualTo(DEFAULT_MODIFICATION_TIME);
         assertThat(testInvoiceItem.getColor()).isEqualTo(DEFAULT_COLOR);
+        assertThat(testInvoiceItem.getProductName()).isEqualTo(DEFAULT_PRODUCT_NAME);
     }
 
     @Test
@@ -164,7 +172,8 @@ public class InvoiceItemResourceIntTest {
                 .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
                 .andExpect(jsonPath("$.[*].creationTime").value(hasItem(DEFAULT_CREATION_TIME_STR)))
                 .andExpect(jsonPath("$.[*].modificationTime").value(hasItem(DEFAULT_MODIFICATION_TIME_STR)))
-                .andExpect(jsonPath("$.[*].color").value(hasItem(DEFAULT_COLOR.toString())));
+                .andExpect(jsonPath("$.[*].color").value(hasItem(DEFAULT_COLOR.toString())))
+                .andExpect(jsonPath("$.[*].productName").value(hasItem(DEFAULT_PRODUCT_NAME.toString())));
     }
 
     @Test
@@ -187,7 +196,8 @@ public class InvoiceItemResourceIntTest {
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY))
             .andExpect(jsonPath("$.creationTime").value(DEFAULT_CREATION_TIME_STR))
             .andExpect(jsonPath("$.modificationTime").value(DEFAULT_MODIFICATION_TIME_STR))
-            .andExpect(jsonPath("$.color").value(DEFAULT_COLOR.toString()));
+            .andExpect(jsonPath("$.color").value(DEFAULT_COLOR.toString()))
+            .andExpect(jsonPath("$.productName").value(DEFAULT_PRODUCT_NAME.toString()));
     }
 
     @Test
@@ -202,7 +212,7 @@ public class InvoiceItemResourceIntTest {
     @Transactional
     public void updateInvoiceItem() throws Exception {
         // Initialize the database
-      invoiceItemRepository.save(invoiceItem);
+        invoiceItemService.save(invoiceItem);
 
         int databaseSizeBeforeUpdate = invoiceItemRepository.findAll().size();
 
@@ -219,6 +229,7 @@ public class InvoiceItemResourceIntTest {
         updatedInvoiceItem.setCreationTime(UPDATED_CREATION_TIME);
         updatedInvoiceItem.setModificationTime(UPDATED_MODIFICATION_TIME);
         updatedInvoiceItem.setColor(UPDATED_COLOR);
+        updatedInvoiceItem.setProductName(UPDATED_PRODUCT_NAME);
 
         restInvoiceItemMockMvc.perform(put("/api/invoice-items")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -239,13 +250,14 @@ public class InvoiceItemResourceIntTest {
         assertThat(testInvoiceItem.getCreationTime()).isEqualTo(UPDATED_CREATION_TIME);
         assertThat(testInvoiceItem.getModificationTime()).isEqualTo(UPDATED_MODIFICATION_TIME);
         assertThat(testInvoiceItem.getColor()).isEqualTo(UPDATED_COLOR);
+        assertThat(testInvoiceItem.getProductName()).isEqualTo(UPDATED_PRODUCT_NAME);
     }
 
     @Test
     @Transactional
     public void deleteInvoiceItem() throws Exception {
         // Initialize the database
-        invoiceItemRepository.save(invoiceItem);
+        invoiceItemService.save(invoiceItem);
 
         int databaseSizeBeforeDelete = invoiceItemRepository.findAll().size();
 

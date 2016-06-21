@@ -92,6 +92,7 @@
                                 creationTime: null,
                                 modificationTime: null,
                                 color: null,
+                                productName: null,
                                 id: null
                             };
                         }

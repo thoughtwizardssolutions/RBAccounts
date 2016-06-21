@@ -1,13 +1,13 @@
 <div>
-    <h2>Contacts</h2>
+    <h2>Profiles</h2>
     <jhi-alert></jhi-alert>
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="dealer.new" >
+                <button class="btn btn-primary" ui-sref="profile.new" >
                     <span class="glyphicon glyphicon-plus"></span>
                     <span >
-                        Create new Contact
+                        Create new Profile
                     </span>
                 </button>
             </div>
@@ -17,38 +17,46 @@
     <div class="table-responsive">
         <table class="jh-table table table-striped">
             <thead>
-                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                    <th jh-sort-by="firmName"><span>Firm Name</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="ownerName"><span>Owner Name</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="tin"><span>Tin</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="openingBalance"><span>Opening Balance</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="currentBalance"><span>Current Balance</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <tr>
+                    <th><span>ID</span></th>
+                    <th><span>Creation Time</span></th>
+                    <th><span>Modification Time</span></th>
+                    <th><span>Firm Name</span></th>
+                    <th><span>Owner Name</span></th>
+                    <th><span>Tin</span></th>
+                    <th><span>User</span></th>
+                    <th><span>Address</span></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="dealer in vm.dealers track by dealer.id">
-                    <td><a ui-sref="dealer-detail({id:dealer.id})">{{dealer.firmName}}</a></td>
-                    <td>{{dealer.ownerName}}</td>
-                    <td>{{dealer.tin}}</td>
-                    <td>{{dealer.openingBalance}}</td>
-                    <td>{{dealer.currentBalance}}</td>
+                <tr ng-repeat="profile in vm.profiles track by profile.id">
+                    <td><a ui-sref="profile-detail({id:profile.id})">{{profile.id}}</a></td>
+                    <td>{{profile.creationTime | date:'medium'}}</td>
+                    <td>{{profile.modificationTime | date:'medium'}}</td>
+                    <td>{{profile.firmName}}</td>
+                    <td>{{profile.ownerName}}</td>
+                    <td>{{profile.tin}}</td>
+                    <td>{{profile.user}}</td>
+                    <td>
+                        <a ui-sref="address-detail({id:profile.address.id})">{{profile.address.id}}</a>
+                    </td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"
-                                    ui-sref="dealer-detail({id:dealer.id})"
+                                    ui-sref="profile-detail({id:profile.id})"
                                     class="btn btn-info btn-sm">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                                 <span class="hidden-xs hidden-sm"></span>
                             </button>
                             <button type="submit"
-                                    ui-sref="dealer.edit({id:dealer.id})"
+                                    ui-sref="profile.edit({id:profile.id})"
                                     class="btn btn-primary btn-sm">
                                 <span class="glyphicon glyphicon-pencil"></span>
                                 <span class="hidden-xs hidden-sm"></span>
                             </button>
                             <button type="submit"
-                                    ui-sref="dealer.delete({id:dealer.id})"
+                                    ui-sref="profile.delete({id:profile.id})"
                                     class="btn btn-danger btn-sm">
                                 <span class="glyphicon glyphicon-remove-circle"></span>
                                 <span class="hidden-xs hidden-sm"></span>
@@ -59,8 +67,4 @@
             </tbody>
         </table>
     </div>
-    <div class="text-center">
-        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-    </div>
-    <uib-pager total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pager>
 </div>

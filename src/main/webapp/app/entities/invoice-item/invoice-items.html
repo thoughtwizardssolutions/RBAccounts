@@ -29,6 +29,7 @@
                     <th jh-sort-by="creationTime"><span>Creation Time</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="modificationTime"><span>Modification Time</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="color"><span>Color</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="productName"><span>Product Name</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="invoice.id"><span>Invoice</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th></th>
                 </tr>
@@ -46,6 +47,7 @@
                     <td>{{invoiceItem.creationTime | date:'medium'}}</td>
                     <td>{{invoiceItem.modificationTime | date:'medium'}}</td>
                     <td>{{invoiceItem.color}}</td>
+                    <td>{{invoiceItem.productName}}</td>
                     <td>
                         <a ui-sref="invoice-detail({id:invoiceItem.invoice.id})">{{invoiceItem.invoice.id}}</a>
                     </td>

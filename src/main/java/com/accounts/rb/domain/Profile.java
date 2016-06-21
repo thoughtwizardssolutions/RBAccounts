@@ -6,17 +6,16 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
- * A Dealer.
+ * A Profile.
  */
 @Entity
-@Table(name = "dealer")
+@Table(name = "profile")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Dealer implements Serializable {
+public class Profile implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,7 +23,8 @@ public class Dealer implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "creation_time")
+    @NotNull
+    @Column(name = "creation_time", nullable = false)
     private ZonedDateTime creationTime;
 
     @Column(name = "modification_time")
@@ -40,18 +40,13 @@ public class Dealer implements Serializable {
     @Column(name = "tin")
     private String tin;
 
-    @Column(name = "opening_balance", precision=10, scale=2)
-    private BigDecimal openingBalance;
-
-    @Column(name = "current_balance", precision=10, scale=2)
-    private BigDecimal currentBalance;
+    @NotNull
+    @Column(name = "user", nullable = false)
+    private String user;
 
     @OneToOne
     @JoinColumn(unique = true)
     private Address address;
-
-    @Column(name = "created_by")
-    private String createdBy;
 
     public Long getId() {
         return id;
@@ -101,20 +96,12 @@ public class Dealer implements Serializable {
         this.tin = tin;
     }
 
-    public BigDecimal getOpeningBalance() {
-        return openingBalance;
+    public String getUser() {
+        return user;
     }
 
-    public void setOpeningBalance(BigDecimal openingBalance) {
-        this.openingBalance = openingBalance;
-    }
-
-    public BigDecimal getCurrentBalance() {
-        return currentBalance;
-    }
-
-    public void setCurrentBalance(BigDecimal currentBalance) {
-        this.currentBalance = currentBalance;
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public Address getAddress() {
@@ -125,14 +112,6 @@ public class Dealer implements Serializable {
         this.address = address;
     }
 
-    public String getCreatedBy() {
-      return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-      this.createdBy = createdBy;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -141,11 +120,11 @@ public class Dealer implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Dealer dealer = (Dealer) o;
-        if(dealer.id == null || id == null) {
+        Profile profile = (Profile) o;
+        if(profile.id == null || id == null) {
             return false;
         }
-        return Objects.equals(id, dealer.id);
+        return Objects.equals(id, profile.id);
     }
 
     @Override
@@ -155,15 +134,14 @@ public class Dealer implements Serializable {
 
     @Override
     public String toString() {
-        return "Dealer{" +
+        return "Profile{" +
             "id=" + id +
             ", creationTime='" + creationTime + "'" +
             ", modificationTime='" + modificationTime + "'" +
             ", firmName='" + firmName + "'" +
             ", ownerName='" + ownerName + "'" +
             ", tin='" + tin + "'" +
-            ", openingBalance='" + openingBalance + "'" +
-            ", currentBalance='" + currentBalance + "'" +
+            ", user='" + user + "'" +
             '}';
     }
 }

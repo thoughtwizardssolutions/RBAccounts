@@ -6,13 +6,16 @@
             "relationshipType": "one-to-one",
             "otherEntityField": "id",
             "ownerSide": true,
-            "otherEntityRelationshipName": "dealer"
+            "otherEntityRelationshipName": "profile"
         }
     ],
     "fields": [
         {
             "fieldName": "creationTime",
-            "fieldType": "ZonedDateTime"
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldName": "modificationTime",
@@ -34,17 +37,16 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "openingBalance",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "currentBalance",
-            "fieldType": "BigDecimal"
+            "fieldName": "user",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
-    "changelogDate": "20160620074017",
+    "changelogDate": "20160621141124",
     "dto": "no",
     "service": "no",
-    "entityTableName": "dealer",
-    "pagination": "pager"
+    "entityTableName": "profile",
+    "pagination": "no"
 }

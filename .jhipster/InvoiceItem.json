@@ -53,6 +53,10 @@
         {
             "fieldName": "color",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "productName",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20160620040012",

@@ -1,0 +1,127 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myProfileLabel">Create or edit a Profile</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.profile.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.profile.id" readonly />
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="field_firmName">Firm Name</label>
+            <input type="text" class="form-control" name="firmName" id="field_firmName"
+                    ng-model="vm.profile.firmName"
+                    required />
+            <div ng-show="editForm.firmName.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.firmName.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_ownerName">Owner Name</label>
+            <input type="text" class="form-control" name="ownerName" id="field_ownerName"
+                    ng-model="vm.profile.ownerName"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_tin">Tin</label>
+            <input type="text" class="form-control" name="tin" id="field_tin"
+                    ng-model="vm.profile.tin"
+                     />
+        </div>
+
+<div class="form-group">
+            <label class="control-label" for="field_address1">Address Line 1</label>
+            <input type="text" class="form-control" name="address1" id="field_address1" ng-model="vm.profile.address.address1" required />
+            <div ng-show="editForm.address1.$invalid">
+                <p class="help-block" ng-show="editForm.address1.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_address2">Address Line 2</label>
+            <input type="text" class="form-control" name="address2" id="field_address2" ng-model="vm.profile.address.address2" />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_phone">Phone</label>
+            <input type="text" class="form-control" name="phone" id="field_phone" ng-model="vm.profile.address.phone" required ng-maxlength="16" />
+            <div ng-show="editForm.phone.$invalid">
+                <p class="help-block" ng-show="editForm.phone.$error.required">
+                    This field is required.
+                </p>
+                <p class="help-block" ng-show="editForm.phone.$error.maxlength">
+                    This field cannot be longer than 16 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_email">Email</label>
+            <input type="text" class="form-control" name="email" id="field_email"
+                    ng-model="vm.profile.address.email"
+                     />
+        </div>
+                <div class="form-group">
+            <label class="control-label" for="field_city">City</label>
+            <input type="text" class="form-control" name="city" id="field_city"
+                    ng-model="vm.profile.address.city"
+                    required />
+            <div ng-show="editForm.city.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.city.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_state">State</label>
+            <input type="text" class="form-control" name="state" id="field_state" ng-model="vm.profile.address.state" required />
+            <div ng-show="editForm.state.$invalid">
+                <p class="help-block" ng-show="editForm.state.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_country">Country</label>
+            <input type="text" class="form-control" name="country" id="field_country"
+                    ng-model="vm.profile.address.country"
+                    required />
+            <div ng-show="editForm.country.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.country.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_pincode">Pincode</label>
+            <input type="number" class="form-control" name="pincode" id="field_pincode" ng-model="vm.profile.address.pincode" required />
+            <div ng-show="editForm.pincode.$invalid">
+                <p class="help-block" ng-show="editForm.pincode.$error.required">
+                    This field is required.
+                </p>
+                <p class="help-block"S ng-show="editForm.pincode.$error.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>
