@@ -42,6 +42,10 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "termsAndConditions",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20160621141124",

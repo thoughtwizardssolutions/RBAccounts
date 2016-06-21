@@ -68,6 +68,7 @@
                                 ownerName: null,
                                 tin: null,
                                 user: null,
+                                termsAndConditions: null,
                                 id: null
                             };
                         }

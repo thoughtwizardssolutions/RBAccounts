@@ -44,6 +44,9 @@ public class Profile implements Serializable {
     @Column(name = "user", nullable = false)
     private String user;
 
+    @Column(name = "terms_and_conditions")
+    private String termsAndConditions;
+
     @OneToOne
     @JoinColumn(unique = true)
     private Address address;
@@ -104,6 +107,14 @@ public class Profile implements Serializable {
         this.user = user;
     }
 
+    public String getTermsAndConditions() {
+        return termsAndConditions;
+    }
+
+    public void setTermsAndConditions(String termsAndConditions) {
+        this.termsAndConditions = termsAndConditions;
+    }
+
     public Address getAddress() {
         return address;
     }
@@ -142,6 +153,7 @@ public class Profile implements Serializable {
             ", ownerName='" + ownerName + "'" +
             ", tin='" + tin + "'" +
             ", user='" + user + "'" +
+            ", termsAndConditions='" + termsAndConditions + "'" +
             '}';
     }
 }

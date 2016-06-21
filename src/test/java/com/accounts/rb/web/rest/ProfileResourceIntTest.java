@@ -63,6 +63,8 @@ public class ProfileResourceIntTest {
     private static final String UPDATED_TIN = "BBBBB";
     private static final String DEFAULT_USER = "AAAAA";
     private static final String UPDATED_USER = "BBBBB";
+    private static final String DEFAULT_TERMS_AND_CONDITIONS = "AAAAA";
+    private static final String UPDATED_TERMS_AND_CONDITIONS = "BBBBB";
 
     @Inject
     private ProfileRepository profileRepository;
@@ -96,6 +98,7 @@ public class ProfileResourceIntTest {
         profile.setOwnerName(DEFAULT_OWNER_NAME);
         profile.setTin(DEFAULT_TIN);
         profile.setUser(DEFAULT_USER);
+        profile.setTermsAndConditions(DEFAULT_TERMS_AND_CONDITIONS);
     }
 
     @Test
@@ -120,6 +123,7 @@ public class ProfileResourceIntTest {
         assertThat(testProfile.getOwnerName()).isEqualTo(DEFAULT_OWNER_NAME);
         assertThat(testProfile.getTin()).isEqualTo(DEFAULT_TIN);
         assertThat(testProfile.getUser()).isEqualTo(DEFAULT_USER);
+        assertThat(testProfile.getTermsAndConditions()).isEqualTo(DEFAULT_TERMS_AND_CONDITIONS);
     }
 
     @Test
@@ -192,7 +196,8 @@ public class ProfileResourceIntTest {
                 .andExpect(jsonPath("$.[*].firmName").value(hasItem(DEFAULT_FIRM_NAME.toString())))
                 .andExpect(jsonPath("$.[*].ownerName").value(hasItem(DEFAULT_OWNER_NAME.toString())))
                 .andExpect(jsonPath("$.[*].tin").value(hasItem(DEFAULT_TIN.toString())))
-                .andExpect(jsonPath("$.[*].user").value(hasItem(DEFAULT_USER.toString())));
+                .andExpect(jsonPath("$.[*].user").value(hasItem(DEFAULT_USER.toString())))
+                .andExpect(jsonPath("$.[*].termsAndConditions").value(hasItem(DEFAULT_TERMS_AND_CONDITIONS.toString())));
     }
 
     @Test
@@ -211,7 +216,8 @@ public class ProfileResourceIntTest {
             .andExpect(jsonPath("$.firmName").value(DEFAULT_FIRM_NAME.toString()))
             .andExpect(jsonPath("$.ownerName").value(DEFAULT_OWNER_NAME.toString()))
             .andExpect(jsonPath("$.tin").value(DEFAULT_TIN.toString()))
-            .andExpect(jsonPath("$.user").value(DEFAULT_USER.toString()));
+            .andExpect(jsonPath("$.user").value(DEFAULT_USER.toString()))
+            .andExpect(jsonPath("$.termsAndConditions").value(DEFAULT_TERMS_AND_CONDITIONS.toString()));
     }
 
     @Test
@@ -238,6 +244,7 @@ public class ProfileResourceIntTest {
         updatedProfile.setOwnerName(UPDATED_OWNER_NAME);
         updatedProfile.setTin(UPDATED_TIN);
         updatedProfile.setUser(UPDATED_USER);
+        updatedProfile.setTermsAndConditions(UPDATED_TERMS_AND_CONDITIONS);
 
         restProfileMockMvc.perform(put("/api/profiles")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -254,6 +261,7 @@ public class ProfileResourceIntTest {
         assertThat(testProfile.getOwnerName()).isEqualTo(UPDATED_OWNER_NAME);
         assertThat(testProfile.getTin()).isEqualTo(UPDATED_TIN);
         assertThat(testProfile.getUser()).isEqualTo(UPDATED_USER);
+        assertThat(testProfile.getTermsAndConditions()).isEqualTo(UPDATED_TERMS_AND_CONDITIONS);
     }
 
     @Test

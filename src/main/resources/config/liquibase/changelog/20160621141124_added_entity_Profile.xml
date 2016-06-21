@@ -44,6 +44,10 @@
             <column name="user" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+            
+            <column name="terms_and_conditions" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
                         <column name="address_id" type="bigint">
                 <constraints unique="true" nullable="true" />
             </column>
