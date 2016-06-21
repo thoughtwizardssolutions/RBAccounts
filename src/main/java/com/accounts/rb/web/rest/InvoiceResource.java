@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -42,7 +44,9 @@ import com.accounts.rb.domain.Dealer;
 import com.accounts.rb.domain.Imei;
 import com.accounts.rb.domain.Invoice;
 import com.accounts.rb.domain.InvoiceItem;
+import com.accounts.rb.domain.Profile;
 import com.accounts.rb.repository.DealerRepository;
+import com.accounts.rb.repository.ProfileRepository;
 import com.accounts.rb.service.InvoiceService;
 import com.accounts.rb.web.rest.util.HeaderUtil;
 import com.accounts.rb.web.rest.util.PaginationUtil;
@@ -50,6 +54,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
@@ -77,6 +82,9 @@ public class InvoiceResource {
     
     @Inject
     private DealerRepository dealerResource;
+    
+    @Inject
+    private ProfileRepository profileRepo;
     
     /**
      * POST  /invoices : Create a new invoice.
@@ -127,23 +135,23 @@ public class InvoiceResource {
 		String DATE_FORMAT = "MM/dd/yyyy";
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 		Document document = new Document();
-		double amount = 0;
-		double totalAmount = 0;
 		Dealer dealer = dealerResource.findOne(invoice.getDealerId());
+		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Profile profile = profileRepo.findByUser(user.getUsername()).get(0);
 		try {
 			URL url = getClass().getClassLoader().getResource("Invoice1.pdf");
 			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(url.getFile())));
 			document.open();
 
 			// Paragraph with color and font styles
-			Paragraph paragraphOne = new Paragraph(dealer.getFirmName().toUpperCase(), blackHeadingFont);
+			Paragraph paragraphOne = new Paragraph(profile.getFirmName().toUpperCase(), blackHeadingFont);
 			paragraphOne.setAlignment(Element.ALIGN_CENTER);
 			document.add(paragraphOne);
 
 			Paragraph paragraphTwo = new Paragraph(
-					"\n " + dealer.getAddress().getAddress1() + ", " + dealer.getAddress().getAddress2() + "\n"
-							+ dealer.getAddress().getCity() + " - " + dealer.getAddress().getPincode() + "\n Phone : "
-							+ dealer.getAddress().getPhone() + "\n" + dealer.getAddress().getEmail());
+					"\n " + profile.getAddress().getAddress1() + ", " + profile.getAddress().getAddress2() + "\n"
+							+ profile.getAddress().getCity() + " - " + profile.getAddress().getPincode() + "\n Phone : "
+							+ profile.getAddress().getPhone() + "\n" + profile.getAddress().getEmail());
 			paragraphTwo.setAlignment(Element.ALIGN_CENTER);
 			document.add(paragraphTwo);
 
@@ -214,7 +222,7 @@ public class InvoiceResource {
 			cell5.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell5.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
-			PdfPCell cell6 = new PdfPCell(new Paragraph("Vat%", blackBoldFont));
+			PdfPCell cell6 = new PdfPCell(new Paragraph("Tax", blackBoldFont));
 			cell6.setBackgroundColor(BaseColor.LIGHT_GRAY);
 			cell6.setPaddingLeft(10);
 			cell6.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -241,7 +249,8 @@ public class InvoiceResource {
 			for (InvoiceItem invoiceItem : currInvoiceItems) {
 				td.add(new TableData(String.valueOf(invoiceCount), invoiceItem.getColor(),
 						String.valueOf(invoiceItem.getMrp()), String.valueOf(invoiceItem.getQuantity()),
-						String.valueOf(invoiceItem.getAmount()), String.valueOf(invoiceItem.getTaxRate())));
+						String.valueOf(invoiceItem.getAmount()), 
+						StringUtils.isNotBlank(invoiceItem.getTaxType()) ? invoiceItem.getTaxType() + " " + invoiceItem.getTaxRate() + " %" : ""));
 				invoiceCount++;
 			}
 
@@ -266,40 +275,66 @@ public class InvoiceResource {
 				cell = new PdfPCell(new Phrase(tableData.getQty(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
 				setCellBorder(td, count, cell);
 				table.addCell(cell);
+				cell = new PdfPCell(new Phrase(tableData.getMrp(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+				setCellBorder(td, count, cell);
+				table.addCell(cell);
+				cell = new PdfPCell(new Phrase(tableData.getTaxRate() , FontFactory.getFont(FontFactory.HELVETICA, 8)));
+				setCellBorder(td, count, cell);
+				table.addCell(cell);
 				cell = new PdfPCell(new Phrase(tableData.getRate(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-				setCellBorder(td, count, cell);
-				table.addCell(cell);
-				cell = new PdfPCell(new Phrase(tableData.getTaxRate(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
-				setCellBorder(td, count, cell);
-				table.addCell(cell);
-				amount = 0;
-				amount = Integer.parseInt(tableData.getQty()) * Double.parseDouble(tableData.getRate());
-				totalAmount += amount;
-				cell = new PdfPCell(new Phrase(String.valueOf(amount), FontFactory.getFont(FontFactory.HELVETICA, 8)));
 				setCellBorder(td, count, cell);
 				table.addCell(cell);
 				count++;
 			}
 
 			document.add(table);
+			
+			PdfPTable tableAmount = new PdfPTable(2);
+			tableAmount.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			tableAmount.setWidthPercentage(30);
+			tableAmount.setSpacingBefore(10f); // Space before table
+			tableAmount.setSpacingAfter(10f); // Space after table
 
-			Paragraph paragraphSeven = new Paragraph("SUB TOTAL", newFont);
-			paragraphSeven.add("\t\t" + totalAmount);
-			paragraphSeven.add("\n CST 2%");
-			paragraphSeven.add("\t\t" + String.format("%.2f", (totalAmount * 0.02)));
-			paragraphSeven.add("\n Adjustments");
-			paragraphSeven.add("\t\t" + invoice.getAdjustments());
-			paragraphSeven.setAlignment(Element.ALIGN_RIGHT);
-			document.add(paragraphSeven);
+			String[] str = { "SUB TOTAL", "Taxes" , "Shipping Charges" ,"Adjustments" };
+			BigDecimal[] amounts = { invoice.getSubtotal(), invoice.getTaxes(), invoice.getShippingCharges(), invoice.getAdjustments() };
+			for (int i = 0; i < 4; i++) {
+				PdfPCell cellOne = new PdfPCell(new Phrase(str[i], newFont));
+				PdfPCell cellTwo = new PdfPCell(new Phrase(String.format("%.2f", amounts[i]), newFont));
+				cellOne.setBorder(Rectangle.NO_BORDER);
+				cellOne.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cellOne.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cellTwo.setBorder(Rectangle.NO_BORDER);
+				cellTwo.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cellTwo.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				tableAmount.addCell(cellOne);
+				tableAmount.addCell(cellTwo);
+			}
+
+			document.add(tableAmount);
 			document.add(new Chunk(ls));
 
 			Paragraph paragraphEight = new Paragraph(
-					"Rs. " + EnglishNumberToWords.convert(new Double(totalAmount).intValue()) + " Only", newFont);
+					"Rs. " + EnglishNumberToWords.convert(invoice.getTotalAmount().intValue()) + " Only", newFont);
 			document.add(paragraphEight);
 
-			paragraphEight = new Paragraph("GRAND TOTAL\t\t" + totalAmount, newFont);
-			paragraphEight.setAlignment(Element.ALIGN_RIGHT);
-			document.add(paragraphEight);
+			PdfPTable tableGrand = new PdfPTable(2);
+			tableGrand.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			tableGrand.setWidthPercentage(30);
+			tableGrand.setSpacingBefore(10f); // Space before table
+			tableGrand.setSpacingAfter(10f); // Space after table
+			
+			PdfPCell cellOne = new PdfPCell(new Phrase("GRAND TOTAL", newFont));
+			PdfPCell cellTwo = new PdfPCell(new Phrase(String.format("%.2f", invoice.getTotalAmount()), newFont));
+			cellOne.setBorder(Rectangle.NO_BORDER);
+			cellOne.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cellOne.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cellTwo.setBorder(Rectangle.NO_BORDER);
+			cellTwo.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cellTwo.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			tableGrand.addCell(cellOne);
+			tableGrand.addCell(cellTwo);
+			document.add(tableGrand);
+			
 			document.add(new Chunk(ls));
 
 			Paragraph paragraph = new Paragraph("Terms & Conditions", newFont);
@@ -314,29 +349,32 @@ public class InvoiceResource {
 			paragraph.setAlignment(Element.ALIGN_RIGHT);
 			document.add(paragraph);
 
-			document.newPage();
+			boolean imeiExits = true;
 			PdfPTable table2 = new PdfPTable(2);
-			table2.setWidthPercentage(100); // Width 100%
-			table2.setSpacingBefore(10f); // Space before table
-			table2.setSpacingAfter(10f); // Space after table
-
-			PdfPCell cell21 = new PdfPCell(new Paragraph("IMEI1", blackBoldFont));
-			cell21.setBackgroundColor(BaseColor.LIGHT_GRAY);
-			cell21.setPaddingLeft(10);
-			cell21.setHorizontalAlignment(Element.ALIGN_CENTER);
-			cell21.setVerticalAlignment(Element.ALIGN_MIDDLE);
-
-			PdfPCell cell22 = new PdfPCell(new Paragraph("IMEI2", blackBoldFont));
-			cell22.setBackgroundColor(BaseColor.LIGHT_GRAY);
-			cell22.setPaddingLeft(10);
-			cell22.setHorizontalAlignment(Element.ALIGN_CENTER);
-			cell22.setVerticalAlignment(Element.ALIGN_MIDDLE);
-
-			table2.addCell(cell21);
-			table2.addCell(cell22);
-
 			for (InvoiceItem invoiceItem : currInvoiceItems) {
 				if (!CollectionUtils.isEmpty(invoiceItem.getImeis())) {
+					if (imeiExits) {
+						document.newPage();
+						table2.setWidthPercentage(100); // Width 100%
+						table2.setSpacingBefore(10f); // Space before table
+						table2.setSpacingAfter(10f); // Space after table
+
+						PdfPCell cell21 = new PdfPCell(new Paragraph("IMEI1", blackBoldFont));
+						cell21.setBackgroundColor(BaseColor.LIGHT_GRAY);
+						cell21.setPaddingLeft(10);
+						cell21.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell21.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+						PdfPCell cell22 = new PdfPCell(new Paragraph("IMEI2", blackBoldFont));
+						cell22.setBackgroundColor(BaseColor.LIGHT_GRAY);
+						cell22.setPaddingLeft(10);
+						cell22.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell22.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+						table2.addCell(cell21);
+						table2.addCell(cell22);
+						imeiExits = false;
+					}
 					for (Imei imeiNum : invoiceItem.getImeis()) {
 						PdfPCell cell = new PdfPCell(
 								new Phrase(imeiNum.getImei1(), FontFactory.getFont(FontFactory.HELVETICA, 8)));

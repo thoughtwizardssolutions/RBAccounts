@@ -13,5 +13,7 @@ import java.lang.String;
 public interface ProfileRepository extends JpaRepository<Profile,Long> {
   
   List<Profile> findByUser(String user);
+	
+	List<Profile> findByUser(String user);
 
 }
