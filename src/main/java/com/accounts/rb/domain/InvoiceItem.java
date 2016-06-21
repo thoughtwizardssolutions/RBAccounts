@@ -74,6 +74,7 @@ public class InvoiceItem implements Serializable {
     private List<Imei> imeis = new ArrayList<>();
 
     @ManyToOne
+    @JsonIgnore
     private Invoice invoice;
 
     public Long getId() {

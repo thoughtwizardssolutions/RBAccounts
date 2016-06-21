@@ -7,7 +7,7 @@
     MyProfile.$inject = ['$resource', 'DateUtils'];
 
     function MyProfile ($resource, DateUtils) {
-        var resourceUrl =  'api/profiles/:id';
+        var resourceUrl =  'api/profiles/:user';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},

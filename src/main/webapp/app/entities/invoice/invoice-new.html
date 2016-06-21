@@ -26,7 +26,7 @@
 				        </ul>
 				    </div>
 				    <div>
-		            	<input type="text" class="form-control" name="field_contact" id="field_contact" value ="{{vm.selectedContact.firmName}} {{vm.selectedContact.address.address1}} {{vm.selectedContact.address.address2}} {{vm.selectedContact.address.city}} {{vm.selectedContact.address.state}} {{vm.selectedContact.address.pincode}}" required readonly="true"/>
+		            	<input type="text" class="form-control" name="field_contact" id="field_contact" ng-bind ="{{vm.selectedContact.firmName}} {{vm.selectedContact.address.address1}} {{vm.selectedContact.address.address2}} {{vm.selectedContact.address.city}} {{vm.selectedContact.address.state}} {{vm.selectedContact.address.pincode}}" required readonly="true"/>
 					</div>        
 		        </div>	
 		       	<!-- Choose Contact End -->		
@@ -54,7 +54,7 @@
 	        	</div>
 	        				
 				<!--Item start -->
-				<div class="alert alert-warning" data-ng-repeat="invoiceItem in vm.invoice.invoiceItems track by invoiceItem.index">
+				<div class="alert alert-warning" data-ng-repeat="invoiceItem in vm.invoice.invoiceItems track by invoiceItem.id">
 					<!-- Choose Product -->
 					<div class="form-group">
 						<div class="btn-group" uib-dropdown keyboard-nav>
@@ -71,7 +71,7 @@
 					<div class="row">
 						<div class="col-md-2">
 							<label class="control-label" for="product-name">Product</label> 
-							<input type="text" class="form-control" name="product-name"	id="product-name" ng-model="invoiceItem.name" required />
+							<input type="text" class="form-control" name="product-name"	id="product-name" ng-model="invoiceItem.productName" required />
 						</div>
 						<div class="col-md-2">
 							<label class="control-label" for="field_color">Color</label>
@@ -125,7 +125,7 @@
 								<label class="control-label" for="field_imei2">IMEI 1</label>
 								<input type="text" class="form-control" name="imei1" id="field_imei1" ng-model="imei.imei1" ngMinlength="15" ngMaxlength="15" ng-change="vm.addImeis(invoiceItem.imeis, imei)"/>
 								<label class="control-label" for="field_imei2">IMEI 2</label>
-								<input type="number" class="form-control" name="imei2" id="field_imei2" ng-model="imei.imei2" ngMinlength="15" ngMaxlength="15" ng-change="vm.addImeis(invoiceItem.imeis, imei)"/>
+								<input type="text" class="form-control" name="imei2" id="field_imei2" ng-model="imei.imei2" ngMinlength="15" ngMaxlength="15" ng-change="vm.addImeis(invoiceItem.imeis, imei)"/>
 							</div>
 						</div>
 					</div>

@@ -1,4 +1,7 @@
 
+<div class="alert alert-success" ng-show="vm.success">
+	<strong>Profile saved!</strong>
+</div>
 <form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
 
     <div class="modal-header">
@@ -124,8 +127,8 @@
 
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
-            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.history.back()">
+            <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span>Back</span>
         </button>
         <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
             <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>

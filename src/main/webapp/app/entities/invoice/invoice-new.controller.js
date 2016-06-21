@@ -3,10 +3,10 @@
 
 	angular.module('rbaccountsApp').controller('InvoiceNewController', InvoiceNewController);
 
-	InvoiceNewController.$inject = [ '$scope', '$state', '$uibModal', '$timeout', 'Invoice', 'Dealer',
+	InvoiceNewController.$inject = [ '$scope', '$state', 'entity', '$uibModal', '$timeout', 'Invoice', 'Dealer',
 			'AlertService', 'Product', 'Tax', 'Pdf', '$http'];
 
-	function InvoiceNewController($scope, $state, $uibModal, $timeout, Invoice, Dealer,
+	function InvoiceNewController($scope, $state, entity, $uibModal, $timeout, Invoice, Dealer,
 			AlertService, Product, Tax, Pdf, $http) {
 		var vm = this;
 
@@ -14,19 +14,7 @@
 		vm.error = null;
 		vm.errorUserExists = null;
 		vm.success = null;
-		vm.dealers = [];
-		vm.products = [];
 		vm.saveInvoice = saveInvoice;
-		vm.invoice = {};
-		vm.invoice.taxes = 0;
-		vm.invoice.subtotal = 0;
-		vm.invoice.totalAmount = 0;
-		vm.invoice.adjustments = 0;
-		vm.invoice.shippingCharges = 0;
-		vm.invoice.creationDate = new Date();
-		vm.invoice.invoiceItems = [];
-		vm.invoice.dealer = null;
-		vm.selectedContact = {};
 		vm.loadDealers = loadDealers;
 		vm.loadProducts = loadProducts;
 		vm.loadTaxes = loadTaxes;
@@ -41,10 +29,35 @@
 		vm.calculateItemAmount = calculateItemAmount;
 		vm.calculateInvoiceTotal = calculateInvoiceTotal;
 		vm.updateAmounts = updateAmounts;
-			
+		
+		setupInvoice();
 		loadDealers();
 		loadProducts();
 		loadTaxes();
+		
+		function setupInvoice() {
+			if(entity) {
+				vm.invoice = entity;
+				console.log(entity);
+				// load dealer
+				Dealer.query(vm.invoice.dealerId, function(data){
+					console.dir(data);
+					selectContact(data);
+				});
+			} else {
+				vm.invoice = {};
+				vm.invoice.taxes = 0;
+				vm.invoice.subtotal = 0;
+				vm.invoice.totalAmount = 0;
+				vm.invoice.adjustments = 0;
+				vm.invoice.shippingCharges = 0;
+				vm.invoice.creationDate = new Date();
+				vm.invoice.invoiceItems = [];
+				vm.dealers = [];
+				vm.products = [];
+				vm.selectedContact = {};
+			}
+		}
 
 		function saveInvoice() {
 			console.log('inside save method...,....');
@@ -191,7 +204,7 @@
                 });
 			} else {
 				// invoiceItem.selectedProduct = product;
-				invoiceItem.name = product.name;
+				invoiceItem.productName = product.name;
 				invoiceItem.mrp = product.mrp;
 				invoiceItem.color = product.color;
 				console.log('Selected product : ');

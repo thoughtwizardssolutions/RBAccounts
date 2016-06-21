@@ -23,7 +23,6 @@ public class Profile implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull
     @Column(name = "creation_time", nullable = false)
     private ZonedDateTime creationTime;
 
@@ -40,7 +39,6 @@ public class Profile implements Serializable {
     @Column(name = "tin")
     private String tin;
 
-    @NotNull
     @Column(name = "user", nullable = false)
     private String user;
 

@@ -61,11 +61,15 @@ public class ProfileResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("profile", "idexists", "A new profile cannot already have an ID")).body(null);
         }
         User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        profile.setUser(user.getUsername());
-        profile.setCreationTime(ZonedDateTime.now());
-        Address savedAddress = addressRepository.save(profile.getAddress());
-        profile.setAddress(savedAddress);
-        Profile result = profileRepository.save(profile);
+        if (!profileRepository.findByUser(user.getUsername()).isEmpty()) {
+          return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("profile", "already exists", "Profile already exists")).body(null);
+      }
+          Address savedAddress = addressRepository.save(profile.getAddress());
+          profile.setUser(user.getUsername());
+          profile.setCreationTime(ZonedDateTime.now());
+          profile.setAddress(savedAddress);
+          Profile result = profileRepository.save(profile);
+          
         return ResponseEntity.created(new URI("/api/profiles/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("profile", result.getId().toString()))
             .body(result);
@@ -107,7 +111,8 @@ public class ProfileResource {
     @Timed
     public List<Profile> getAllProfiles() {
         log.debug("REST request to get all Profiles");
-        List<Profile> profiles = profileRepository.findAll();
+        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Profile> profiles = profileRepository.findByUser(user.getUsername());
         return profiles;
     }
 

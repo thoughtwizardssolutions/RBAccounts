@@ -13,7 +13,7 @@
             parent: 'entity',
             url: '/product',
             data: {
-                authorities: ['ROLE_USER'],
+                authorities: ['ROLE_USER', 'ROLE_ORG_ADMIN'],
                 pageTitle: 'Products'
             },
             views: {
@@ -30,7 +30,7 @@
             parent: 'entity',
             url: '/product/{id}',
             data: {
-                authorities: ['ROLE_USER'],
+                authorities: ['ROLE_USER', 'ROLE_ORG_ADMIN'],
                 pageTitle: 'Product'
             },
             views: {
@@ -50,7 +50,7 @@
             parent: 'product',
             url: '/new',
             data: {
-                authorities: ['ROLE_USER']
+                authorities: ['ROLE_USER', 'ROLE_ORG_ADMIN'],
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
