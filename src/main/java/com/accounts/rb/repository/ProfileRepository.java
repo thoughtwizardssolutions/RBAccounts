@@ -9,7 +9,8 @@ import java.util.List;
 /**
  * Spring Data JPA repository for the Profile entity.
  */
-@SuppressWarnings("unused")
 public interface ProfileRepository extends JpaRepository<Profile,Long> {
+	
+	List<Profile> findByUser(String user);
 
 }
