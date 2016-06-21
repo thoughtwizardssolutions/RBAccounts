@@ -41,6 +41,7 @@ import com.accounts.rb.domain.Dealer;
 import com.accounts.rb.domain.Imei;
 import com.accounts.rb.domain.Invoice;
 import com.accounts.rb.domain.InvoiceItem;
+import com.accounts.rb.repository.DealerRepository;
 import com.accounts.rb.service.InvoiceService;
 import com.accounts.rb.web.rest.util.HeaderUtil;
 import com.accounts.rb.web.rest.util.PaginationUtil;
@@ -74,7 +75,7 @@ public class InvoiceResource {
     private InvoiceService invoiceService;
     
     @Inject
-    private DealerResource dealerResource;
+    private DealerRepository dealerResource;
     
     /**
      * POST  /invoices : Create a new invoice.
@@ -126,8 +127,7 @@ public class InvoiceResource {
 		Document document = new Document();
 		double amount = 0;
 		double totalAmount = 0;
-		ResponseEntity<Dealer> dealerEntity = dealerResource.getDealer(invoice.getDealerId());
-		Dealer dealer = dealerEntity.getBody();
+		Dealer dealer = dealerResource.findOne(invoice.getDealerId());
 		try {
 			URL url = getClass().getClassLoader().getResource("Invoice1.pdf");
 			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(url.getFile())));

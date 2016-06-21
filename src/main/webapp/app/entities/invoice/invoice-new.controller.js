@@ -288,15 +288,15 @@
 			vm.invoice.taxes = 0;
 			 for(var i = 0; i < vm.invoice.invoiceItems.length; i++) {
 				 vm.invoice.subtotal = vm.invoice.subtotal + vm.invoice.invoiceItems[i].amount;
-				 if(vm.invoice.invoiceItems[i].tax) {
-					 vm.invoice.taxes = vm.invoice.taxes +  (vm.invoice.invoiceItems[i].amount * vm.invoice.invoiceItems[i].tax.rate)/100;
+				 if(vm.invoice.invoiceItems[i].taxRate) {
+					 vm.invoice.taxes = vm.invoice.taxes +  (vm.invoice.invoiceItems[i].amount * vm.invoice.invoiceItems[i].taxRate)/100;
 				 }
 			 }
-			 vm.invoice.totalAmount = vm.invoice.subtotal + vm.invoice.taxes + vm.invoice.shippingCharges + vm.invoice.adjustments;
+			 vm.invoice.totalAmount = vm.invoice.subtotal + vm.invoice.taxes + vm.invoice.shippingCharges - vm.invoice.adjustments;
 		 }
 		 
 		 function calculateInvoiceTotal() {
-				vm.invoice.totalAmount =  vm.invoice.subtotal + vm.invoice.adjustments + vm.invoice.taxes + vm.invoice.shippingCharges;
+				vm.invoice.totalAmount =  vm.invoice.subtotal - vm.invoice.adjustments + vm.invoice.taxes + vm.invoice.shippingCharges;
 		 }
 		
 	}

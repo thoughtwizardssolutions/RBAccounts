@@ -100,7 +100,7 @@
 								<button id="field_tax" type="button" class="btn btn-default btn-md" uib-dropdown-toggle> {{invoiceItem.taxType + invoiceItem.taxRate || 'Select tax'}} <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu" uib-dropdown-menu role="menu"	aria-labelledby="tax-choice">
-									<li role="menuitem" ng-repeat="tax in vm.taxes" ng-click="vm.selectInvoiceItemTax(invoiceItem,tax)"><a>{{tax.name}}</a></li>
+									<li role="menuitem" ng-repeat="tax in vm.taxes" ng-click="vm.selectInvoiceItemTax(invoiceItem, tax)"><a>{{tax.name}}</a></li>
 								</ul>
 							</div>
 						</div>
