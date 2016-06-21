@@ -7,13 +7,15 @@ public class TableData {
 	private String mrp;
 	private String qty;
 	private String rate;
+	private String taxRate;
 
-	public TableData(String sno, String itemdesc, String mrp, String qty, String rate) {
+	public TableData(String sno, String itemdesc, String mrp, String qty, String rate, String taxRate) {
 		this.sno = sno;
 		this.itemdesc = itemdesc;
 		this.mrp = mrp;
 		this.qty = qty;
 		this.rate = rate;
+		this.taxRate = taxRate;
 	}
 
 	public String getSno() {
@@ -54,6 +56,14 @@ public class TableData {
 
 	public void setRate(String rate) {
 		this.rate = rate;
+	}
+
+	public String getTaxRate() {
+		return taxRate;
+	}
+
+	public void setTaxRate(String taxRate) {
+		this.taxRate = taxRate;
 	}
 
 }
