@@ -4,8 +4,10 @@ import com.codahale.metrics.annotation.Timed;
 
 import com.accounts.rb.domain.PersistentToken;
 import com.accounts.rb.domain.User;
+import com.accounts.rb.domain.UserSequence;
 import com.accounts.rb.repository.PersistentTokenRepository;
 import com.accounts.rb.repository.UserRepository;
+import com.accounts.rb.repository.UserSequenceRepository;
 import com.accounts.rb.security.SecurityUtils;
 import com.accounts.rb.service.MailService;
 import com.accounts.rb.service.UserService;
@@ -50,6 +52,9 @@ public class AccountResource {
 
     @Inject
     private MailService mailService;
+    
+    @Inject
+    private UserSequenceRepository userSequenceRepository;
 
     /**
      * POST  /register : register the user.
@@ -83,6 +88,7 @@ public class AccountResource {
     userService.createUserInformation(managedUserDTO.getLogin(), managedUserDTO.getPassword(),
         managedUserDTO.getFirstName(), managedUserDTO.getLastName(),
         email, managedUserDTO.getLangKey());
+    userSequenceRepository.save(new UserSequence(managedUserDTO.getLogin(),"INV", 100000));
     return new ResponseEntity<>(HttpStatus.CREATED);
   }
 

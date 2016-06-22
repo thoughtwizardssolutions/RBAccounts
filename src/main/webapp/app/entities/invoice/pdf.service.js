@@ -7,7 +7,7 @@
     Pdf.$inject = ['$resource'];
 
     function Pdf ($resource, DateUtils) {
-        var resourceUrl =  'api/invoices/pdf/:invoice';
+        var resourceUrl =  'api/pdf/:invoice';
 
         var data = $resource(resourceUrl, {}, {
             createPdf:{

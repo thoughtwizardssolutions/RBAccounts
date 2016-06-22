@@ -3,11 +3,11 @@
 
 	angular.module('rbaccountsApp').controller('InvoiceNewController', InvoiceNewController);
 
-	InvoiceNewController.$inject = [ '$scope', '$state', 'entity', '$uibModal', '$timeout', 'Invoice', 'Dealer',
-			'AlertService', 'Product', 'Tax', 'Pdf', '$http'];
+	InvoiceNewController.$inject = [ '$scope', '$state', 'entity', '$uibModal', 'Invoice', 'Dealer',
+			'AlertService', 'Product', 'Tax', 'Pdf', '$http', 'UserSequence', 'Principal'];
 
-	function InvoiceNewController($scope, $state, entity, $uibModal, $timeout, Invoice, Dealer,
-			AlertService, Product, Tax, Pdf, $http) {
+	function InvoiceNewController($scope, $state, entity, $uibModal, Invoice, Dealer,
+			AlertService, Product, Tax, Pdf, $http, UserSequence, Principal) {
 		var vm = this;
 
 		vm.doNotMatch = null;
@@ -73,17 +73,33 @@
 				vm.dealers = [];
 				vm.products = [];
 				vm.selectedContact = {};
+				
+		        Principal.identity().then(function(account) {
+		        	console.log(account);
+		            vm.currentAccount = account;
+					UserSequence.get({user : account.login}, onSuccess, onError);
+					function onSuccess(data, headers) {
+						console.log(data);
+						vm.invoice.invoiceNumber = data.prefix + '-' +data.currentSequence;
+					}
+		        });
+				
+
 			}
 		}
 
 		function saveInvoice() {
 			console.log('inside save method...,....');
 			if(vm.invoice.id) {
-				Invoice.update(vm.invoice);
+				Invoice.update(vm.invoice,onSaveSuccess, onError);
 			} else {
-				Invoice.save(vm.invoice);
+				Invoice.save(vm.invoice, onSaveSuccess, onError);
 			}
 			$state.go('invoice', null, { reload: true });
+			
+			function onSaveSuccess(data) {
+				console.log('invoice saved sucessfully...,....');
+			}
 		}
 		function showInvoice() {
 			console.log('inside show method...,....');
@@ -92,6 +108,8 @@
                 var file = new Blob([data], {type: 'application/pdf'});
                 var fileURL = URL.createObjectURL(file);
                 window.open(fileURL);
+            }).failure(function(error) {
+            	AlertService.error(error.data.message);
             });
 		}
 		function addInvoiceitem() {

@@ -59,7 +59,7 @@ jhipster:
         #allow-credentials: true
         #max-age: 1800
     mail:
-        from: rbaccounts@localhost
+        from: admin@rbaccounts.com
     swagger:
         title: rbaccounts API
         description: rbaccounts API documentation

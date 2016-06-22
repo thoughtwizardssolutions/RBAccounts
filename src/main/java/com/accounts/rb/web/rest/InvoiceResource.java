@@ -47,6 +47,7 @@ import com.accounts.rb.domain.InvoiceItem;
 import com.accounts.rb.domain.Profile;
 import com.accounts.rb.repository.DealerRepository;
 import com.accounts.rb.repository.ProfileRepository;
+import com.accounts.rb.repository.UserSequenceRepository;
 import com.accounts.rb.service.InvoiceService;
 import com.accounts.rb.web.rest.util.HeaderUtil;
 import com.accounts.rb.web.rest.util.PaginationUtil;
@@ -83,7 +84,10 @@ public class InvoiceResource {
     private DealerRepository dealerResource;
     
     @Inject
-    private ProfileRepository profileRepo;
+    private ProfileRepository profileRepository;
+    
+    @Inject 
+    private UserSequenceRepository userSequenceRepository;
     
     /**
      * POST  /invoices : Create a new invoice.
@@ -105,6 +109,7 @@ public class InvoiceResource {
         invoice.setCreationTime(ZonedDateTime.now());
         invoice.setCreatedBy(user.getUsername());
         Invoice result = invoiceService.save(invoice);
+        userSequenceRepository.incrementSequence(user.getUsername());
         return ResponseEntity.created(new URI("/api/invoices/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("invoice", result.getId().toString()))
             .body(result);
@@ -136,7 +141,7 @@ public class InvoiceResource {
 		Document document = new Document();
 		Dealer dealer = dealerResource.findOne(invoice.getDealerId());
 		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Profile profile = profileRepo.findByUser(user.getUsername()).get(0);
+		Profile profile = profileRepository.findByUser(user.getUsername()).get(0);
 		try {
 			URL url = getClass().getClassLoader().getResource("Invoice1.pdf");
 			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(url.getFile())));

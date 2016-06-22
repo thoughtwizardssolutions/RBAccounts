@@ -1,0 +1,4 @@
+id;created_by;prefix;current_sequence
+1;admin;INV;100000
+2;orgadmin;INV;100000
+3;user;INV;100000
