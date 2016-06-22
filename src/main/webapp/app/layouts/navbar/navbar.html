@@ -51,7 +51,7 @@
                     </a>
                 </li>
                 <li ng-class="{active: vm.$state.includes('reports')}" has-any-authority = "ROLE_USER, ROLE_ORG_ADMIN" ng-switch-when="true">
-                    <a ui-sref="reports" ng-click="vm.collapseNavbar()">
+                    <a ui-sref="report" ng-click="vm.collapseNavbar()">
                         <span class="glyphicon glyphicon-dashboard"></span>
                         <span class="hidden-sm">Reports</span>
                     </a>

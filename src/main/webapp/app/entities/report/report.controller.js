@@ -3,11 +3,11 @@
 
     angular
         .module('rbaccountsApp')
-        .controller('ReportsController', ReportsController);
+        .controller('ReportController', ReportController);
 
-    ReportsController.$inject = ['$scope', '$state', 'Reports', 'ParseLinks', 'AlertService', 'pagingParams', 'paginationConstants'];
+    ReportController.$inject = ['$scope', '$state', 'Report', 'ParseLinks', 'AlertService', 'pagingParams', 'paginationConstants'];
 
-    function ReportsController ($scope, $state, Reports, ParseLinks, AlertService, pagingParams, paginationConstants) {
+    function ReportController ($scope, $state, Report, ParseLinks, AlertService, pagingParams, paginationConstants) {
         var vm = this;
         
         vm.loadPage = loadPage;
@@ -19,7 +19,7 @@
         loadAll();
 
         function loadAll () {
-            Reports.query({
+            Report.query({
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
                 sort: sort()

@@ -2,12 +2,12 @@
     'use strict';
     angular
         .module('rbaccountsApp')
-        .factory('Reports', Reports);
+        .factory('Report', Report);
 
-    Reports.$inject = ['$resource', 'DateUtils'];
+    Report.$inject = ['$resource', 'DateUtils'];
 
-    function Reports ($resource, DateUtils) {
-        var resourceUrl =  'api/invoices/:id';
+    function Report ($resource, DateUtils) {
+        var resourceUrl =  'api/report/:id';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
