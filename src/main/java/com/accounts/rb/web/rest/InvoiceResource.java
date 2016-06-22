@@ -54,7 +54,6 @@ import com.codahale.metrics.annotation.Timed;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
@@ -165,7 +164,7 @@ public class InvoiceResource {
 			LineSeparator ls = new LineSeparator();
 			document.add(new Chunk(ls));
 
-			Paragraph paragraphFour = new Paragraph("TIN No. : 09765723141");
+			Paragraph paragraphFour = new Paragraph("TIN No. : " + profile.getTin());
 			paragraphFour.setAlignment(Element.ALIGN_RIGHT);
 			document.add(paragraphFour);
 			document.add(new Chunk(ls));
