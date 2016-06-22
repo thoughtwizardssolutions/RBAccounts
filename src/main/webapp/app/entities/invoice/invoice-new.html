@@ -26,7 +26,7 @@
 				        </ul>
 				    </div>
 				    <div>
-		            	<input type="text" class="form-control" name="field_contact" id="field_contact" value ="{{vm.selectedContact.firmName}} {{vm.selectedContact.address.address1}} {{vm.selectedContact.address.address2}} {{vm.selectedContact.address.city}} {{vm.selectedContact.address.state}} {{vm.selectedContact.address.pincode}}" required readonly="true"/>
+		            	<input ng-bind="vm.selectedContact" type="text" class="form-control" name="field_contact" id="field_contact" value ="{{vm.selectedContact.firmName}} {{vm.selectedContact.address.address1}} {{vm.selectedContact.address.address2}} {{vm.selectedContact.address.city}} {{vm.selectedContact.address.state}} {{vm.selectedContact.address.pincode}}" required readonly="true"/>
 					</div>        
 		        </div>	
 		       	<!-- Choose Contact End -->		
@@ -66,7 +66,8 @@
 						</div>
 					</div>
 					<!--  Choose Product End -->
-					<!-- Item details  -->
+					
+					<!-- Invoice Item start  -->
 					<!-- Row start -->
 					<div class="row">
 						<div class="col-md-2">
@@ -116,34 +117,57 @@
 					<!-- Row end -->
 					
 					<!-- Add Imeis -->
-					<hr><div class="row">
-						<div class="col-md-2">
-							<button class="btn btn-primary" ng-click="vm.addImeiToInvoiceItem(invoiceItem)">Add Imeis</button>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group" data-ng-repeat="imei in invoiceItem.imeis track by imei.index">
-								<label class="control-label" for="field_imei2">IMEI 1</label>
-								<input type="text" class="form-control" name="imei1" id="field_imei1" ng-model="imei.imei1" ngMinlength="15" ngMaxlength="15" ng-change="vm.addImeis(invoiceItem.imeis, imei)"/>
-								<label class="control-label" for="field_imei2">IMEI 2</label>
-								<input type="text" class="form-control" name="imei2" id="field_imei2" ng-model="imei.imei2" ngMinlength="15" ngMaxlength="15" ng-change="vm.addImeis(invoiceItem.imeis, imei)"/>
+					<hr>
+					<div class="row">
+					<jhi-alert></jhi-alert>
+							<div class="col-md-2">
+								<button class="btn btn-primary" ng-click="vm.addImeiToInvoiceItem(invoiceItem)">Add Imeis</button>
 							</div>
+							<div ng-show="vm.showImeiSection(invoiceItem)">
+								<div class="form-group col-md-2">
+									<label class="control-label" for="field_imei1">IMEI 1</label>
+									<input type="text" class="form-control" name="imei1" id="field_imei1" ng-model="vm.imei1"  ng-keyup="$event.keyCode == 13 && vm.focusNext()"/>
+								</div>
+								<div class="form-group col-md-2">
+									<label class="control-label" for="field_imei2">IMEI 2</label>
+									<input type="text" class="form-control" name="imei2" id="field_imei2" ng-model="vm.imei2" ng-keyup="$event.keyCode == 13 && vm.addImeiOnEnter(invoiceItem, vm.imei1, vm.imei2)"/>
+								</div>
+								<div class="col-md-4">
+								<div class="table-condensed">
+									<table class="table">
+										<tr>
+											<th>Nr.</th>
+											<th>IMEI 1</th>
+											<th>IMEI 2</th>
+										</tr>
+										<tr data-ng-repeat="imei in invoiceItem.imeis track by imei.index">
+											<td>{{ imei.index}}</td>
+											<td>{{ imei.imei1}}</td>
+											<td>{{ imei.imei2}}</td>
+										</tr>
+									</table>
+									</div>
+								</div>
+								</div>
 						</div>
-					</div>
 					<!-- Add Imeis End-->
-					<!-- Item details End -->
-					
+					<hr>
 					<!-- Remove Item button -->
-					<hr><button class="btn btn-primary" ng-click="vm.removeInvoiceItem(invoiceItem)">Remove Item</button>
-				</div>
-				<!-- Item end -->
-				<!-- Add Item End -->
+					<button class="btn btn-primary" ng-click="vm.removeInvoiceItem(invoiceItem)">Remove Item</button>
+					</div>
+					<!-- Invoice Item End -->
+					
+					<hr>
+					<!-- Add Button start -->
+					<button class="btn btn-primary" ng-click="vm.addInvoiceitem()">
+						<span class="glyphicon glyphicon-plus"></span> 
+						<span>Add Item</span>
+					</button>
+					<!-- Add Button End -->
+					</div>
+					<!-- Item end -->
+					<!-- Add Item End -->
 				
-				<!-- Add Button start -->
-				<button class="btn btn-primary" ng-click="vm.addInvoiceitem()">
-					<span class="glyphicon glyphicon-plus"></span> 
-					<span>Add Item</span>
-				</button>
-				<!-- Add Button End -->
 				
 				
 				<hr>
