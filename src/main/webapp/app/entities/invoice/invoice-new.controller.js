@@ -108,9 +108,7 @@
                 var file = new Blob([data], {type: 'application/pdf'});
                 var fileURL = URL.createObjectURL(file);
                 window.open(fileURL);
-            }).failure(function(error) {
-            	AlertService.error(error.data.message);
-            });
+            })
 		}
 		function addInvoiceitem() {
 			var invoiceItem = {};

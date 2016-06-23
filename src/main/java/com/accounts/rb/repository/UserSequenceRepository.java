@@ -19,7 +19,4 @@ public interface UserSequenceRepository extends JpaRepository<UserSequence,Long>
   
   List<UserSequence> findByCreatedBy(String createdby);
   
-  @Query("UPDATE UserSequence p SET p.currentSequence  = p.currentSequence + 1 WHERE p.createdBy = LOWER(:created_by)")
-  void incrementSequence(@Param("created_by") String createdBy);
-  
 }

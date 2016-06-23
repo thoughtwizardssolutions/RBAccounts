@@ -45,6 +45,7 @@ import com.accounts.rb.domain.Imei;
 import com.accounts.rb.domain.Invoice;
 import com.accounts.rb.domain.InvoiceItem;
 import com.accounts.rb.domain.Profile;
+import com.accounts.rb.domain.UserSequence;
 import com.accounts.rb.repository.DealerRepository;
 import com.accounts.rb.repository.ProfileRepository;
 import com.accounts.rb.repository.UserSequenceRepository;
@@ -109,7 +110,10 @@ public class InvoiceResource {
         invoice.setCreationTime(ZonedDateTime.now());
         invoice.setCreatedBy(user.getUsername());
         Invoice result = invoiceService.save(invoice);
-        userSequenceRepository.incrementSequence(user.getUsername());
+        List<UserSequence> userSequence = userSequenceRepository.findByCreatedBy(user.getUsername());
+        UserSequence newUserSeq = userSequence.get(0);
+        newUserSeq.setCurrentSequence(newUserSeq.getCurrentSequence() + 1);
+        userSequenceRepository.save(newUserSeq);
         return ResponseEntity.created(new URI("/api/invoices/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("invoice", result.getId().toString()))
             .body(result);
