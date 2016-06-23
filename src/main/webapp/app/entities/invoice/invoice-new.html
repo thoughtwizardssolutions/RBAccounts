@@ -12,8 +12,8 @@
                 <strong>Create Invoice failed!</strong> Please try again later.
             </div>
         </div>
+        <form ng-show="!vm.success" name="editForm" role="form" novalidate show-validation>
         <div class="col-md-10 col-md-offset-1">
-            <form ng-show="!vm.success" name="editForm" role="form" novalidate show-validation>
 
 				<!-- Choose Contact Start -->
 				<div class="form-group">
@@ -58,7 +58,7 @@
 					<!-- Choose Product -->
 					<div class="form-group">
 						<div class="btn-group" uib-dropdown keyboard-nav>
-							<button id="product-choice" type="button" class="btn btn-primary" uib-dropdown-toggle>Select Product <span class="caret"></span>
+							<button id="product-choice" type="button" class="btn btn-primary" uib-dropdown-toggle>{{ invoiceItem.productName || 'Select Product'}}<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="product-choice">
 								<li role="menuitem"	ng-repeat="product in vm.products track by product.id"	ng-click="vm.selectInvoiceItemProduct(invoiceItem, product)" ><a>{{product.name}}</a></li>
@@ -126,11 +126,9 @@
 							<div ng-show="vm.showImeiSection(invoiceItem)">
 								<div class="form-group col-md-2">
 									<label class="control-label" for="field_imei1">IMEI 1</label>
-									<input type="text" class="form-control" name="imei1" id="field_imei1" ng-model="vm.imei1"  ng-keyup="$event.keyCode == 13 && vm.focusNext()"/>
-								</div>
-								<div class="form-group col-md-2">
+									<input type="text" class="form-control" name="imei1" id="field_imei1" ng-model="vm.imei1" move-next-on-maxlength />
 									<label class="control-label" for="field_imei2">IMEI 2</label>
-									<input type="text" class="form-control" name="imei2" id="field_imei2" ng-model="vm.imei2" ng-keyup="$event.keyCode == 13 && vm.addImeiOnEnter(invoiceItem, vm.imei1, vm.imei2)"/>
+									<input type="text" class="form-control" name="imei2" id="field_imei2" ng-model="vm.imei2" move-next-on-maxlength ng-keyup="$event.keyCode == 13 && vm.addImeiOnEnter(invoiceItem, vm.imei1, vm.imei2)"/>
 								</div>
 								<div class="col-md-4">
 								<div class="table-condensed">
@@ -144,7 +142,17 @@
 											<td>{{ imei.index}}</td>
 											<td>{{ imei.imei1}}</td>
 											<td>{{ imei.imei2}}</td>
-										</tr>
+											<td>
+											<div class="btn-group flex-btn-group-container">
+					                            <button type="submit"
+					                            		ng-click="vm.removeImeiToInvoiceItem(invoiceItem, imei)"
+					                                    class="btn btn-danger btn-sm">
+					                                <span class="glyphicon glyphicon-remove-circle"></span>
+					                                <span class="hidden-xs hidden-sm"></span>
+					                            </button>
+					                        </div>
+					                        </td>
+				                    	</tr>
 									</table>
 									</div>
 								</div>
@@ -196,8 +204,8 @@
 		        
 		        <div class="form-group col-md-4 col-md-offset-8">
     			<button type="submit" onclick="window.history.back()" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span></button>
-                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" ng-click="vm.saveInvoice()">Save</button>
-                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" ng-click="vm.showInvoice()">Preview</button>
+                <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary" ng-click="vm.saveInvoice()">Save</button>
+                <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary" ng-click="vm.showInvoice()">Preview</button>
                 </div>
             </form>
             <p></p>
