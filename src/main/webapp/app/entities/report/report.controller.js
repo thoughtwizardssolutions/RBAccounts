@@ -5,63 +5,81 @@
         .module('rbaccountsApp')
         .controller('ReportController', ReportController);
 
-    ReportController.$inject = ['$scope', '$state', 'Report', 'ParseLinks', 'AlertService', 'pagingParams', 'paginationConstants'];
+    ReportController.$inject = ['$scope', '$state', 'Report', 'AlertService', 'FileSaver', 'Blob', 'Dealer'];
 
-    function ReportController ($scope, $state, Report, ParseLinks, AlertService, pagingParams, paginationConstants) {
+    function ReportController ($scope, $state, Report, AlertService, FileSaver, Blob, Dealer) {
         var vm = this;
         
-        vm.loadPage = loadPage;
-        vm.predicate = pagingParams.predicate;
-        vm.reverse = pagingParams.ascending;
-        vm.transition = transition;
-        vm.itemsPerPage = paginationConstants.itemsPerPage;
+        vm.invoices = [];
+        
+        vm.exportData = exportData;
+        vm.getData = getData;
+        vm.datePickerOpenStatus = {};
+        vm.openCalendar = openCalendar;
+        vm.datePickerOpenStatus.creationTime = false;
+        vm.datePickerOpenStatus.modificationTime = false;
+        vm.selectContact = selectContact;
+        vm.search = {};
+        
+        loadDealers();
+        
+        function selectContact(dealer) {
+        	vm.selectedDealer = dealer;
+			vm.search.dealerId = dealer.id;
+		}
+        
+		function loadDealers() {
+			Dealer.query({}, onSuccess, onError);
+			function onSuccess(data, headers) {
+				console.log(data);
+				vm.dealers = data;
+			}
+		}
 
-        loadAll();
-
-        function loadAll () {
+        function getData () {
             Report.query({
-                page: pagingParams.page - 1,
-                size: vm.itemsPerPage,
-                sort: sort()
+            	fromDate : new Date(vm.search.fromDate).valueOf(),
+            	toDate : new Date(vm.search.toDate).valueOf(),
+            	dealerId : vm.search.dealerId                
             }, onSuccess, onError);
-            function sort() {
-                var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
-                if (vm.predicate !== 'id') {
-                    result.push('id');
-                }
-                return result;
-            }
             function onSuccess(data, headers) {
-                vm.links = ParseLinks.parse(headers('link'));
-                vm.totalItems = headers('X-Total-Count');
+            	vm.invoices = data;
+                vm.invoices? vm.totalItems = vm.invoices.length: vm.totalItems = 0;
                 vm.queryCount = vm.totalItems;
-                vm.invoices = data;
-                vm.page = pagingParams.page;
+                vm.invoiceTotalAmount = calculateTotalAmount(vm.invoices);
+                
+                
             }
             function onError(error) {
                 AlertService.error(error.data.message);
             }
         }
-
-        function loadPage (page) {
-            vm.page = page;
-            vm.transition();
-        }
-
-        function transition () {
-            $state.transitionTo($state.$current, {
-                page: vm.page,
-                sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
-                search: vm.currentSearch
-            });
-        }
         
-        $scope.exportData = function () {
+        function calculateTotalAmount(invoices) {
+        	if(!invoices) {
+        		return 0;
+        	}
+        	var total = 0;
+        	for(var i = 0 ; i < invoices.length ; i ++) {
+        		total = total + invoices[i].totalAmount;
+        	}
+        	return total;
+        }
+
+         function exportData() {
             var blob = new Blob([document.getElementById('exportable').innerHTML], {
                 type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
             });
-            saveAs(blob, "Report.xls");
-        };
+            FileSaver.saveAs(blob, "Report.xls");
+        }
+         
+         function openCalendar (date) {
+             vm.datePickerOpenStatus[date] = true;
+         }
+         
+ 		function onError(error) {
+			AlertService.error(error.data.message);
+		}
         
     }
 })();

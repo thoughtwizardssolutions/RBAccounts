@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,5 +100,25 @@ public Page<Invoice> findByCreatedBy(Pageable pageable, String createdBy) {
      */
     public void delete(Long id) {
       invoiceRepository.delete(id);
+    }
+
+    /**
+     *  find Invoices based on criteria irrespective of createdBy
+     *  
+     *  @param search criteria
+     */
+    public List<Invoice> findAllByCriteria() {
+      // TODO
+      return invoiceRepository.findAll();
+    }
+
+    /**
+     *  find Invoices based on criteria only createdBy provided username
+     *  
+     *  @param search criteria, username
+     */
+    public List<Invoice> findAllByCriteria(String username) {
+      // TODO
+      return invoiceRepository.findAll();
     }
 }

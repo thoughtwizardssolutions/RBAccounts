@@ -7,7 +7,7 @@
     Report.$inject = ['$resource', 'DateUtils'];
 
     function Report ($resource, DateUtils) {
-        var resourceUrl =  'api/report/:id';
+        var resourceUrl =  'api/reports/';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},

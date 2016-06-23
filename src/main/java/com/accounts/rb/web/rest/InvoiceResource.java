@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.util.CollectionUtils;
@@ -49,6 +51,7 @@ import com.accounts.rb.domain.UserSequence;
 import com.accounts.rb.repository.DealerRepository;
 import com.accounts.rb.repository.ProfileRepository;
 import com.accounts.rb.repository.UserSequenceRepository;
+import com.accounts.rb.security.AuthoritiesConstants;
 import com.accounts.rb.service.InvoiceService;
 import com.accounts.rb.web.rest.util.HeaderUtil;
 import com.accounts.rb.web.rest.util.PaginationUtil;
@@ -134,7 +137,7 @@ public class InvoiceResource {
 	public ResponseEntity<InputStreamResource> createInvoicePdf(@Valid @RequestBody Invoice invoice,
 			HttpServletRequest request, HttpServletResponse response)
 			throws URISyntaxException, FileNotFoundException, IOException {
-		log.debug("REST request to save Invoice : {}", invoice);
+		log.debug("REST request to create pdf Invoice : {}", invoice);
 		Font blackHeadingFont = FontFactory.getFont(FontFactory.COURIER, 24, Font.BOLD);
 		Font blackHeadingLargeFont = FontFactory.getFont(FontFactory.COURIER, 18, Font.BOLD);
 		Font blackBoldFont = FontFactory.getFont(FontFactory.COURIER, 12, Font.BOLD);
@@ -470,6 +473,31 @@ public class InvoiceResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+  /**
+   * GET /reports : get all the invoices.
+   *
+   * @param 
+   * @return the ResponseEntity with status 200 (OK) and the list of invoices in body
+   * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
+   */
+  @RequestMapping(value = "/reports", method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Timed
+  public List<Invoice> getReport() {
+    log.debug("REST request to get a page of Invoices");
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    Page<Invoice> page = null;
+    Iterator<GrantedAuthority> iter = user.getAuthorities().iterator();
+    while (iter.hasNext()) {
+      GrantedAuthority auth = iter.next();
+      if (auth.getAuthority().equals(AuthoritiesConstants.ADMIN)
+          || auth.getAuthority().equals(AuthoritiesConstants.ORG_ADMIN)) {
+        return invoiceService.findAllByCriteria();
+      }
+    }
+    return invoiceService.findAllByCriteria(user.getUsername());
+  }
+    
     /**
      * GET  /invoices/:id : get the "id" invoice.
      *
