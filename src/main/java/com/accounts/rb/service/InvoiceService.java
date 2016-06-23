@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import com.accounts.rb.domain.Imei;
 import com.accounts.rb.domain.Invoice;
@@ -36,9 +37,11 @@ public class InvoiceService {
      */
     public Invoice save(Invoice invoice) {
       for(InvoiceItem invoiceItem : invoice.getInvoiceItems()) {
-        for(Imei imei: invoiceItem.getImeis()) {
-          imei.setInvoiceItem(invoiceItem);
-        }
+    	  if (!CollectionUtils.isEmpty(invoiceItem.getImeis())) {
+	        for(Imei imei: invoiceItem.getImeis()) {
+	          imei.setInvoiceItem(invoiceItem);
+	        }
+    	  }
         invoiceItem.setInvoice(invoice);
       }
       return invoiceRepository.save(invoice);

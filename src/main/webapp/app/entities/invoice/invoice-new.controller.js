@@ -22,6 +22,7 @@
 		vm.addInvoiceitem = addInvoiceitem;
 		vm.showInvoice = showInvoice;
 		vm.addImeiToInvoiceItem = addImeisToInvoiceItem;
+		vm.removeImeiToInvoiceItem = removeImeiToInvoiceItem;
 		vm.removeInvoiceItem = removeInvoiceItem;
 		vm.selectInvoiceItemProduct = selectInvoiceItemProduct
 		vm.selectInvoiceItemTax = selectInvoiceItemTax
@@ -90,6 +91,9 @@
 
 		function saveInvoice() {
 			console.log('inside save method...,....');
+			if (vm.invoice.totalAmount == 0) {
+				return;
+			}
 			if(vm.invoice.id) {
 				Invoice.update(vm.invoice,onSaveSuccess, onError);
 			} else {
@@ -101,8 +105,12 @@
 				console.log('invoice saved sucessfully...,....');
 			}
 		}
+		
 		function showInvoice() {
 			console.log('inside show method...,....');
+			if (vm.invoice.totalAmount == 0) {
+				return;
+			}
 			$http.post("api/pdf/", vm.invoice, {responseType: 'arraybuffer'}).success(function(data, status) {
                 console.log(data);
                 var file = new Blob([data], {type: 'application/pdf'});
@@ -222,7 +230,6 @@
                 	loadProducts();
                 });
 			} else {
-				// invoiceItem.selectedProduct = product;
 				invoiceItem.productName = product.name;
 				invoiceItem.mrp = product.mrp;
 				invoiceItem.color = product.color;
@@ -272,7 +279,16 @@
 	    		invoiceItem.imeis.push(imei);
 	    	}
 	      }
-	      
+	    
+	    function removeImeiToInvoiceItem(invoiceItem, imei) { 
+    	  var index = invoiceItem.imeis.indexOf(imei);
+    	  console.log(index);
+    	  invoiceItem.imeis.splice(index, 1); 
+    	  if (invoiceItem.imeis.length == 0) {
+    		  invoiceItem.imeis = null;
+    	  }
+    	}
+	    
 	     function addImeiOnEnter(invoiceItem, imei1, imei2){
 	    	 var imeis = invoiceItem.imeis;
 	    	 console.log('imei1 :::: ' +imei1);
