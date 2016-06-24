@@ -71,7 +71,7 @@
 					<tr ng-repeat="invoice in vm.invoices track by invoice.id">
 						<td><a ui-sref="invoice-detail({id:invoice.id})">{{invoice.invoiceNumber}}</a></td>
 						<td>{{invoice.createdBy}}</td>
-						<td>{{invoice.creationTime | date:'medium'}}</td>
+						<td>{{invoice.invoiceDate | date:'medium'}}</td>
 						<td>{{invoice.customerName}}</td>
 						<td>{{invoice.taxAmount}}</td>
 						<td>{{invoice.totalAmount}}</td>
