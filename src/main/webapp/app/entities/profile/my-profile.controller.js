@@ -35,12 +35,12 @@
         function save () {
         	
             vm.isSaving = true;
-            if (vm.profile.id !== null) {
+            if (vm.profile.id) {
             	MyProfile.update(vm.profile, onSaveSuccess, onSaveError);
-            	console.log('saving profile.');
+            	console.log('updating profile.');
             } else {
             	MyProfile.save(vm.profile, onSaveSuccess, onSaveError);
-            	console.log('saving profile changes.');
+            	console.log('saving profile.');
             }
         }
 

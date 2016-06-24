@@ -18,7 +18,6 @@
         $scope.$on('$destroy', unsubscribe);
         Dealer.get({id : vm.invoice.dealerId}, onSuccess, onError);
 		function onSuccess(data, headers) {
-			console.log(data);
 			vm.selectedContact = data;
 		}
         

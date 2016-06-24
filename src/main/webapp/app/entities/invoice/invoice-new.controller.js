@@ -4,10 +4,10 @@
 	angular.module('rbaccountsApp').controller('InvoiceNewController', InvoiceNewController);
 
 	InvoiceNewController.$inject = [ '$scope', '$state', 'entity', '$uibModal', 'Invoice', 'Dealer',
-			'AlertService', 'Product', 'Tax', 'Pdf', '$http', 'UserSequence', 'Principal'];
+			'AlertService', 'Product', 'Tax', '$http', 'UserSequence', 'Principal'];
 
 	function InvoiceNewController($scope, $state, entity, $uibModal, Invoice, Dealer,
-			AlertService, Product, Tax, Pdf, $http, UserSequence, Principal) {
+			AlertService, Product, Tax, $http, UserSequence, Principal) {
 		var vm = this;
 
 		vm.doNotMatch = null;
@@ -31,35 +31,37 @@
 		vm.updateAmounts = updateAmounts;
 		vm.showImeiSection = showImeiSection;
 		vm.addImeiOnEnter = addImeiOnEnter;
-		vm.focusNext = focusNext;
+		vm.editing = false;
 		
 		setupInvoice();
 		loadDealers();
 		loadProducts();
 		loadTaxes();
 		
-		function focusNext() {
-			// TODO make this work
-			$('input').next('input').focus();
-		}
-		
 		function setupInvoice() {
 			if(entity) {
+				vm.editing = true;
 				// show items
 				for(var i = 0 ; i < entity.invoiceItems.length ;i ++) {
 					entity.invoiceItems[i].index = i;
 				}
 				// show imeis
 				for(var i = 0; i < entity.invoiceItems.length ; i ++) {
-                	for(var j = 0; j < entity.invoiceItems[i].imeis.length ; j++) {
-                		entity.invoiceItems[i].imeis[j].index = j;
-                	}
+					if(!entity.invoiceItems[i].imeis) {
+						continue;
+					}
+					if(entity.invoiceItems[i].imeis.length === 0) {
+						entity.invoiceItems[i].imeis = null;
+					} else {
+						for(var j = 0; j < entity.invoiceItems[i].imeis.length ; j++) {
+							entity.invoiceItems[i].imeis[j].index = j;
+						}
+					}
                 }
 				vm.invoice = entity;
 				// load dealer
 				Dealer.get({id : vm.invoice.dealerId}, onSuccess, onError);
 				function onSuccess(data, headers) {
-					console.log(data);
 					vm.selectedContact = data;
 				}
 			} else {
@@ -76,11 +78,9 @@
 				vm.selectedContact = {};
 				
 		        Principal.identity().then(function(account) {
-		        	console.log(account);
 		            vm.currentAccount = account;
 					UserSequence.get({user : account.login}, onSuccess, onError);
 					function onSuccess(data, headers) {
-						console.log(data);
 						vm.invoice.invoiceNumber = data.prefix + '-' +data.currentSequence;
 					}
 		        });
@@ -90,7 +90,6 @@
 		}
 
 		function saveInvoice() {
-			console.log('inside save method...,....');
 			if (vm.invoice.totalAmount == 0) {
 				return;
 			}
@@ -102,21 +101,21 @@
 			$state.go('invoice', null, { reload: true });
 			
 			function onSaveSuccess(data) {
-				console.log('invoice saved sucessfully...,....');
 			}
 		}
 		
 		function showInvoice() {
-			console.log('inside show method...,....');
 			if (vm.invoice.totalAmount == 0) {
 				return;
 			}
-			$http.post("api/pdf/", vm.invoice, {responseType: 'arraybuffer'}).success(function(data, status) {
-                console.log(data);
+			$http.post("api/pdf/", vm.invoice, {responseType: 'arraybuffer'})
+			.success(function(data, status) {
                 var file = new Blob([data], {type: 'application/pdf'});
                 var fileURL = URL.createObjectURL(file);
                 window.open(fileURL);
-            })
+            }).error(function(data,status,headers,config) {
+            	AlertService.error("Request failed, please try again later!");
+            });
 		}
 		function addInvoiceitem() {
 			var invoiceItem = {};
@@ -135,7 +134,6 @@
 		function loadDealers() {
 			Dealer.query({}, onSuccess, onError);
 			function onSuccess(data, headers) {
-				console.log(data);
 				vm.dealers = data;
 				var dealer = {};
 				dealer.firmName = 'Add new contact+';
@@ -148,7 +146,6 @@
 			Product.query({}, onSuccess, onError);
 
 			function onSuccess(data, headers) {
-				console.log(data);
 				vm.products = data;
 				var product = {};
 				product.name = 'Add new Product+';
@@ -202,12 +199,6 @@
 			} else {
 				vm.selectedContact = dealer;
 				vm.invoice.dealerId = dealer.id;
-				console.log('Selected contact : ');
-				console.log(dealer);
-				console.log('Selected firmName : ');
-				console.log(vm.selectedContact.firmName);
-				console.log('Selected invoice : ');
-				console.dir(vm.invoice);
 			}
 		}
 		
@@ -294,7 +285,7 @@
 	    	 console.log('imei1 :::: ' +imei1);
 	    	 console.log('imei2 :::: ' +imei2);
 	    	
-	    	 if(imeis.length === 1 && !imeis[0].imei1 && !imeis[0].imei1) {
+	    	 if(imeis.length === 1 && !imeis[0].imei1 && !imeis[0].imei2) {
 	    		 imeis[0].imei1 = imei1;
 	    		 imeis[0].imei2 = imei2;
 	    		 console.log('updating first imei');
@@ -321,17 +312,13 @@
 			 if(!invoiceItem.discount) invoiceItem.discount = 0;
 			 if(!invoiceItem.quantity) invoiceItem.quantity = 0;
 			 if(!invoiceItem.mrp) invoiceItem.mrp = 0;
-			 console.log('calculate invoice item');
-			 console.dir(invoiceItem);
 			if (invoiceItem) {
 				invoiceItem.amount = (invoiceItem.quantity * invoiceItem.mrp) - invoiceItem.discount;
 				updateAmounts();
 			 } else {
-			 console.log('invoice item is empty or null');
 		     }
 	}
 		 function updateAmounts(){
-			console.log('updating amounts...');
 			vm.invoice.subtotal = 0;
 			vm.invoice.taxes = 0;
 			 for(var i = 0; i < vm.invoice.invoiceItems.length; i++) {

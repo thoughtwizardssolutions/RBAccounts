@@ -196,12 +196,12 @@ public class UserResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Transactional(readOnly = true)
-    @Secured({"ROLE_ADMIN", "ROLE_ORG_ADMIN"})
     public Set<String> getAllLogins(){
        Set<String> users = userRepository.findAllLogins();
+       // remove special usernames
        users.remove("admin");
        users.remove("system");
-       users.remove("anonymous");
+       users.remove("anonymoususer");
        users.remove("user");
        return users;
     }

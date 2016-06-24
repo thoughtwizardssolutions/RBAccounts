@@ -3,7 +3,7 @@
 	<jhi-alert></jhi-alert>
 	<hr>
 	<div class="row">
-		<div class="form-group col-md-4" has-authority="ROLE_ORG_ADMIN">
+		<div class="form-group col-md-4" has-authority="ROLE_ORG_ADMIN"  ng-click="vm.loadUsernames()">
 			<div class="btn-group" uib-dropdown keyboard-nav>
 				<button id="simple-btn-keyboard-nav" type="button" class="btn btn-primary" uib-dropdown-toggle>{{ vm.selectedUsername || 'All Users'}} <span class="caret"></span>
 				</button>
@@ -71,7 +71,7 @@
 					<tr ng-repeat="invoice in vm.invoices track by invoice.id">
 						<td><a ui-sref="invoice-detail({id:invoice.id})">{{invoice.invoiceNumber}}</a></td>
 						<td>{{invoice.createdBy}}</td>
-						<td>{{invoice.creationTime | date: medium}}</td>
+						<td>{{invoice.creationTime | date:'medium'}}</td>
 						<td>{{invoice.customerName}}</td>
 						<td>{{invoice.taxAmount}}</td>
 						<td>{{invoice.totalAmount}}</td>

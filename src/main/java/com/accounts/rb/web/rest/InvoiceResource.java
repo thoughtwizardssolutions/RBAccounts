@@ -36,6 +36,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -115,6 +116,9 @@ public class InvoiceResource {
         User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         invoice.setCreationTime(ZonedDateTime.now());
         invoice.setCreatedBy(user.getUsername());
+        if(profileRepository.findByUser(user.getUsername()).isEmpty()) {
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("invoice", "profilenotexists", "Invoice cannot be created as the user has not setup profile yet.")).body(null);
+        }
         Invoice result = invoiceService.save(invoice);
         List<UserSequence> userSequence = userSequenceRepository.findByCreatedBy(user.getUsername());
         UserSequence newUserSeq = userSequence.get(0);
@@ -151,7 +155,11 @@ public class InvoiceResource {
 		Document document = new Document();
 		Dealer dealer = dealerResource.findOne(invoice.getDealerId());
 		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Profile profile = profileRepository.findByUser(user.getUsername()).get(0);
+		List<Profile> profiles = profileRepository.findByUser(user.getUsername());
+		if(profiles.isEmpty()) {
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("invoice", "profilenotexists", "Invoice cannot be created as the user has not setup profile yet.")).body(null);
+		}
+		Profile profile = profiles.get(0);
 		try {
 			URL url = getClass().getClassLoader().getResource("Invoice1.pdf");
 			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(url.getFile())));

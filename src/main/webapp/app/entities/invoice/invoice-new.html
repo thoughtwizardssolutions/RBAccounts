@@ -126,9 +126,9 @@
 							<div ng-show="vm.showImeiSection(invoiceItem)">
 								<div class="form-group col-md-4">
 									<label class="control-label" for="field_imei1">IMEI 1</label>
-									<input type="text" class="form-control" name="imei1" id="field_imei1" ng-model="vm.imei1" move-next-on-maxlength />
+									<input type="text" class="form-control" name="imei1" id="field_imei1" ng-model="vm.imei1" move-focus-next />
 									<label class="control-label" for="field_imei2">IMEI 2</label>
-									<input type="text" class="form-control" name="imei2" id="field_imei2" ng-model="vm.imei2" move-next-on-maxlength ng-keyup="$event.keyCode == 13 && vm.addImeiOnEnter(invoiceItem, vm.imei1, vm.imei2)"/>
+									<input type="text" class="form-control" name="imei2" id="field_imei2" ng-model="vm.imei2" move-focus-previous ng-keyup="$event.keyCode == 13 && vm.addImeiOnEnter(invoiceItem, vm.imei1, vm.imei2)"/>
 								</div>
 								<div class="col-md-4">
 								<div class="table-condensed">

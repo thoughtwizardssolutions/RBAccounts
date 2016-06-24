@@ -5,9 +5,9 @@
         .module('rbaccountsApp')
         .controller('ReportController', ReportController);
 
-    ReportController.$inject = ['$scope', '$state', 'Report', 'AlertService', 'FileSaver', 'Blob', 'UserName'];
+    ReportController.$inject = ['$scope', '$state', 'Report', 'AlertService', 'FileSaver', 'Blob', 'UserName', 'Principal'];
 
-    function ReportController ($scope, $state, Report, AlertService, FileSaver, Blob, UserName) {
+    function ReportController ($scope, $state, Report, AlertService, FileSaver, Blob, UserName, Principal) {
         var vm = this;
         
         vm.invoices = [];
@@ -19,9 +19,9 @@
         vm.datePickerOpenStatus.creationTime = false;
         vm.datePickerOpenStatus.modificationTime = false;
         vm.selectUser = selectUser;
+        vm.loadUsernames = loadUsernames;
         vm.search = {};
         
-        loadUsernames();
         
         function selectUser(user) {
         	vm.selectedUsername = user;
@@ -29,14 +29,16 @@
 		}
         
 		function loadUsernames() {
-			UserName.query({}, onSuccess, onError);
-			function onSuccess(data, headers) {
-				console.log(data);
-				vm.usernames = data;
-				vm.username.push('All Users');
+			if(!vm.usernames) {
+				console.log('loading usernames...');
+				UserName.query({}, onSuccess, onError);
+				function onSuccess(data, headers) {
+					vm.usernames = data;
+					vm.usernames.push('All Users');
+				}
 			}
 		}
-
+			
         function getData () {
         	vm.noData = false;
         	vm.invoices = [];
