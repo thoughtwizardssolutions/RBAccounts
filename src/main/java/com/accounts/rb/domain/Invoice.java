@@ -3,6 +3,8 @@ package com.accounts.rb.domain;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -69,7 +71,7 @@ public class Invoice implements Serializable {
     @OneToMany(mappedBy = "invoice", cascade = {CascadeType.ALL})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<InvoiceItem> invoiceItems = new ArrayList<>();
-
+    
     public Long getId() {
         return id;
     }

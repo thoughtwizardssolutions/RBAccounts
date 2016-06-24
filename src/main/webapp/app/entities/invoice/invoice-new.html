@@ -124,7 +124,7 @@
 								<button class="btn btn-primary" ng-click="vm.addImeiToInvoiceItem(invoiceItem)">Add Imeis</button>
 							</div>
 							<div ng-show="vm.showImeiSection(invoiceItem)">
-								<div class="form-group col-md-2">
+								<div class="form-group col-md-4">
 									<label class="control-label" for="field_imei1">IMEI 1</label>
 									<input type="text" class="form-control" name="imei1" id="field_imei1" ng-model="vm.imei1" move-next-on-maxlength />
 									<label class="control-label" for="field_imei2">IMEI 2</label>
@@ -146,8 +146,8 @@
 											<div class="btn-group flex-btn-group-container">
 					                            <button type="submit"
 					                            		ng-click="vm.removeImeiToInvoiceItem(invoiceItem, imei)"
-					                                    class="btn btn-danger btn-sm">
-					                                <span class="glyphicon glyphicon-remove-circle"></span>
+					                                    class="btn btn-danger btn-xs">
+					                                <span class="glyphicon glyphicon-minus"></span>
 					                                <span class="hidden-xs hidden-sm"></span>
 					                            </button>
 					                        </div>

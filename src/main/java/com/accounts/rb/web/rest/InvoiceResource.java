@@ -11,6 +11,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -46,6 +47,8 @@ import com.accounts.rb.domain.Dealer;
 import com.accounts.rb.domain.Imei;
 import com.accounts.rb.domain.Invoice;
 import com.accounts.rb.domain.InvoiceItem;
+import com.accounts.rb.domain.InvoiceReport;
+import com.accounts.rb.domain.InvoiceSearchCommand;
 import com.accounts.rb.domain.Profile;
 import com.accounts.rb.domain.UserSequence;
 import com.accounts.rb.repository.DealerRepository;
@@ -483,19 +486,22 @@ public class InvoiceResource {
   @RequestMapping(value = "/reports", method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Timed
-  public List<Invoice> getReport() {
-    log.debug("REST request to get a page of Invoices");
+  public List<InvoiceReport> getReport(InvoiceSearchCommand criteria) {
+    
+    log.debug("REST request to create report for criteria : " + criteria);
     User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    Page<Invoice> page = null;
     Iterator<GrantedAuthority> iter = user.getAuthorities().iterator();
-    while (iter.hasNext()) {
+    while(iter.hasNext()) {
       GrantedAuthority auth = iter.next();
-      if (auth.getAuthority().equals(AuthoritiesConstants.ADMIN)
-          || auth.getAuthority().equals(AuthoritiesConstants.ORG_ADMIN)) {
-        return invoiceService.findAllByCriteria();
+      if(auth.getAuthority().equals(AuthoritiesConstants.ORG_ADMIN) || auth.getAuthority().equals(AuthoritiesConstants.ADMIN)) { 
+        return invoiceService.findAllByCriteria(criteria);
+      }
+      if(auth.getAuthority().equals(AuthoritiesConstants.USER)) {
+        criteria.setCreatedBy(user.getUsername());
+        return invoiceService.findAllByCriteria(criteria);
       }
     }
-    return invoiceService.findAllByCriteria(user.getUsername());
+    return new ArrayList<InvoiceReport>();
   }
     
     /**

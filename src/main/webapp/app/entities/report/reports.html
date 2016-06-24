@@ -5,19 +5,10 @@
 	<div class="row">
 		<div class="form-group col-md-4" has-authority="ROLE_ORG_ADMIN">
 			<div class="btn-group" uib-dropdown keyboard-nav>
-				<button id="simple-btn-keyboard-nav" type="button" class="btn btn-primary" uib-dropdown-toggle>{{ vm.selectedDealer.firmName || 'All Dealers'}} <span class="caret"></span>
+				<button id="simple-btn-keyboard-nav" type="button" class="btn btn-primary" uib-dropdown-toggle>{{ vm.selectedUsername || 'All Users'}} <span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu" uib-dropdown-menu role="menu"	aria-labelledby="simple-btn-keyboard-nav">
-					<li role="menuitem" ng-repeat="dealer in vm.dealers" ng-click="vm.selectContact(dealer)"><a>{{dealer.firmName}}</a></li>
-				</ul>
-			</div>
-		</div>
-		<div class="form-group col-md-4">
-			<div class="btn-group" uib-dropdown keyboard-nav>
-				<button id="simple-btn-keyboard-nav" type="button"	class="btn btn-primary" uib-dropdown-toggle>{{ vm.selectedContact.firmName || 'Select Firm Name'}} <span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu" uib-dropdown-menu role="menu"	aria-labelledby="simple-btn-keyboard-nav">
-					<li role="menuitem" ng-repeat="invoice in vm.invoices"	ng-click="vm.selectContact(dealer)"><a>{{dealer.firmName}}</a></li>
+					<li role="menuitem" ng-repeat="username in vm.usernames" ng-click="vm.selectUser(username)"><a>{{username}}</a></li>
 				</ul>
 			</div>
 		</div>
@@ -30,7 +21,7 @@
 					name="fromDate" datetime-picker="{{dateformat}}"
 					ng-model="vm.search.fromDate"
 					is-open="vm.datePickerOpenStatus.creationTime" /> <span
-					class="input-group-btn">
+					class="input-group-btn" required>
 					<button type="button" class="btn btn-default"
 						ng-click="vm.openCalendar('creationTime')">
 						<i class="glyphicon glyphicon-calendar"></i>
@@ -45,7 +36,7 @@
 					name="toDate" datetime-picker="{{dateformat}}"
 					ng-model="vm.search.toDate"
 					is-open="vm.datePickerOpenStatus.modificationTime" /> <span
-					class="input-group-btn">
+					class="input-group-btn" required>
 					<button type="button" class="btn btn-default"
 						ng-click="vm.openCalendar('modificationTime')">
 						<i class="glyphicon glyphicon-calendar"></i>
@@ -56,7 +47,7 @@
 	</div>
 	<div class="row">
 		<div class="form-group col-md-4">
-			<button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" ng-click="vm.getData()">Search</button>
+			<button type="submit" ng-disabled="!(vm.search.fromDate && vm.search.toDate)" class="btn btn-primary" ng-click="vm.getData()">Search</button>
 		</div>
 		<div class="form-group col-md-4">
 			<button type="submit" ng-disabled="vm.invoices.length === 0" class="btn btn-primary" ng-click="vm.exportData()">Export</button>
@@ -69,21 +60,24 @@
 				<thead>
 					<tr>
 						<th><span>Invoice Number</span></th>
-						<th><span>Date</span></th>
+						<th><span>Created By</span></th>
+						<th><span>Created On</span></th>
 						<th><span>Customer Name</span></th>
-						<th><span>Order Number</span></th>
+						<th><span>Tax Amount</span></th>
 						<th><span>Total Amount (Rs)</span></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="invoice in vm.invoices track by invoice.id">
 						<td><a ui-sref="invoice-detail({id:invoice.id})">{{invoice.invoiceNumber}}</a></td>
-						<td>{{invoice.creationTime}}</td>
-						<td>{{invoice.dealerId}}</td>
-						<td>{{invoice.orderNumber}}</td>
+						<td>{{invoice.createdBy}}</td>
+						<td>{{invoice.creationTime | date: medium}}</td>
+						<td>{{invoice.customerName}}</td>
+						<td>{{invoice.taxAmount}}</td>
 						<td>{{invoice.totalAmount}}</td>
 					</tr>
 					<tr>
+						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
@@ -93,5 +87,8 @@
 				</tbody>
 			</table>
 		</div>
+	</div>
+	<div class="alert alert-warning" ng-show="vm.noData">
+		<strong>No Results Found!</strong>.
 	</div>
 </div>

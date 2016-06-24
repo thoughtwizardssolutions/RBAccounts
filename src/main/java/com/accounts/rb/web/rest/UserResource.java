@@ -182,6 +182,29 @@ public class UserResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(managedUserDTOs, headers, HttpStatus.OK);
     }
+    
+
+    /**
+     * GET  /users : get all users.
+     * 
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and with body all users
+     * @throws URISyntaxException if the pagination headers couldnt be generated
+     */
+    @RequestMapping(value = "/usernames",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    @Transactional(readOnly = true)
+    @Secured({"ROLE_ADMIN", "ROLE_ORG_ADMIN"})
+    public Set<String> getAllLogins(){
+       Set<String> users = userRepository.findAllLogins();
+       users.remove("admin");
+       users.remove("system");
+       users.remove("anonymous");
+       users.remove("user");
+       return users;
+    }
 
     /**
      * GET  /users/:login : get the "login" user.

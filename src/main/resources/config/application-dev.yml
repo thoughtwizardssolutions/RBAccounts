@@ -18,19 +18,22 @@ spring:
         livereload:
             enabled: false # we use gulp + BrowserSync for livereload
     datasource:
-        url: jdbc:mysql://rbdbdev.c73evv6a4lq0.us-west-2.rds.amazonaws.com:3306/rbdbdev?useUnicode=true&characterEncoding=utf8&useSSL=false
-        name: rbdbdev
-        username: admin123
-        password: admin123
+        driverClassName : org.h2.Driver
+        url: jdbc:h2:file:./rbaccounts
+        name:
+        username: accounts
+        password:
+    h2:
+        console:
+            enabled: true
     jpa:
-        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-        database: MYSQL
-        show_sql: true
+        database-platform: com.accounts.rb.domain.util.FixedH2Dialect
+        database: H2
+        show-sql: true
         properties:
-            hibernate.cache.use_second_level_cache: true
+            hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
-            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
     mail:
         host: localhost
         port: 25
