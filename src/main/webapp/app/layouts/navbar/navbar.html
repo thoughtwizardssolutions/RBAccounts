@@ -44,6 +44,12 @@
                         <span class="hidden-sm">My Products</span>
                     </a>
                 </li>
+                <li ng-class="{active: vm.$state.includes('tax')}" has-any-authority = "ROLE_USER, ROLE_ORG_ADMIN" ng-switch-when="true">
+                    <a ui-sref="tax" ng-click="vm.collapseNavbar()">
+                        <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
+                        <span>My Taxes</span>
+                    </a>
+                </li>
                 <li ng-class="{active: vm.$state.includes('invoice')}" has-any-authority = "ROLE_USER, ROLE_ORG_ADMIN" ng-switch-when="true">
                     <a ui-sref="invoice" ng-click="vm.collapseNavbar()">
                         <span class="glyphicon glyphicon-file"></span>
