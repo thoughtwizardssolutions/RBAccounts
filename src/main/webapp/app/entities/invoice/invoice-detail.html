@@ -12,6 +12,10 @@
         <dd>
             <span>{{vm.invoice.modificationTime | date:'medium'}}</span>
         </dd>
+        <dt><span>Customer name</span></dt>
+        <dd>
+            <span>{{vm.selectedContact.firmName}}</span>
+        </dd>
         <dt><span>Invoice Number</span></dt>
         <dd>
             <span>{{vm.invoice.invoiceNumber}}</span>
@@ -24,13 +28,68 @@
         <dd>
             <span>{{vm.invoice.salesPersonName}}</span>
         </dd>
-        <dt><span>Shipping Charges</span></dt>
-        <dd>
-            <span>{{vm.invoice.shippingCharges}}</span>
-        </dd>
+        
+        <dt><span>Items</span></dt><dd></dd>
+        
+        <div class="alert alert-warning" data-ng-repeat="invoiceItem in vm.invoice.invoiceItems">
+        <dl>
+        	<dt><span>Product</span></dt>
+	        <dd>
+	           <span>{{invoiceItem.productName}}</span>
+	        </dd>
+	        <dt><span>Color</span></dt>
+	        <dd>
+	           <span>{{invoiceItem.color}}</span>
+	        </dd>
+	        <dt><span>Description</span></dt>
+	        <dd>
+	           <span>{{invoiceItem.description}}</span>
+	        </dd>
+	        <dt><span>Quantity</span></dt>
+	        <dd>
+	           <span>{{invoiceItem.quantity}}</span>
+	        </dd>
+	        <dt><span>Rate</span></dt>
+	        <dd>
+	           <span>{{invoiceItem.mrp}}</span>
+	        </dd>
+	        <dt><span>Discount</span></dt>
+	        <dd>
+	           <span>{{invoiceItem.discount}}</span>
+	        </dd>
+	        <dt><span>Tax</span></dt>
+	        <dd>
+	           <span>{{invoiceItem.taxType}} {{invoiceItem.taxRate}}</span>
+	        </dd>
+	        <dt><span>Amount</span></dt>
+	        <dd>
+	           <span>{{invoiceItem.amount}}</span>
+	        </dd>
+	        <div class="table-condensed">
+				<table class="table">
+					<tr>
+						<th></th>
+						<th>IMEI 1</th>
+						<th>IMEI 2 {{invoiceItem.imeis.length}} </th>
+					</tr>
+					<tr data-ng-repeat="imei in invoiceItem.imeis">
+						<td></td>
+						<td>{{imei.imei1}}</td>
+						<td>{{imei.imei2}}</td>
+						<td>
+	                       </td>
+	                  	</tr>
+				</table>
+			</div>
+	    </dl>
+        </div>
         <dt><span>Subtotal</span></dt>
         <dd>
             <span>{{vm.invoice.subtotal}}</span>
+        </dd>
+        <dt><span>Shipping Charges</span></dt>
+        <dd>
+            <span>{{vm.invoice.shippingCharges}}</span>
         </dd>
         <dt><span>Taxes</span></dt>
         <dd>
