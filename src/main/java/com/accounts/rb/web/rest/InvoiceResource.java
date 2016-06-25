@@ -11,7 +11,6 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -36,7 +35,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -269,7 +267,7 @@ public class InvoiceResource {
 			List<InvoiceItem> currInvoiceItems = invoice.getInvoiceItems();
 			int invoiceCount = 1;
 			for (InvoiceItem invoiceItem : currInvoiceItems) {
-				td.add(new TableData(String.valueOf(invoiceCount), invoiceItem.getColor(),
+				td.add(new TableData(String.valueOf(invoiceCount), invoiceItem.getProductName() + " " + invoiceItem.getColor(),
 						String.valueOf(invoiceItem.getMrp()), String.valueOf(invoiceItem.getQuantity()),
 						String.valueOf(invoiceItem.getAmount()), 
 						StringUtils.isNotBlank(invoiceItem.getTaxType()) ? invoiceItem.getTaxType() + " " + invoiceItem.getTaxRate() + " %" : ""));
