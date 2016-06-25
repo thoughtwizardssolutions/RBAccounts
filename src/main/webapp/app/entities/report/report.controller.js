@@ -30,7 +30,6 @@
         
 		function loadUsernames() {
 			if(!vm.usernames) {
-				console.log('loading usernames...');
 				UserName.query({}, onSuccess, onError);
 				function onSuccess(data, headers) {
 					vm.usernames = data;

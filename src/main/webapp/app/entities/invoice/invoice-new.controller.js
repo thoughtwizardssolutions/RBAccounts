@@ -161,7 +161,7 @@
 				console.log(data);
 				vm.taxes = data;
 				var tax = {};
-				tax.name = 'Add new Tax+';
+				tax.name = 'Add new Tax';
 				tax.id = -1;
 				vm.taxes.push(tax);
 			}
@@ -233,7 +233,7 @@
 		}
 		
 		function selectInvoiceItemTax(invoiceItem , tax) {
-			if(tax.name === 'Add new Tax+') {
+			if(tax.name === 'Add new Tax') {
                 $uibModal.open({
                     templateUrl: 'app/entities/tax/tax-dialog.html',
                     controller: 'TaxDialogController',

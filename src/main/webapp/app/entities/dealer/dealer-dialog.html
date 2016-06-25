@@ -27,7 +27,7 @@
             <input type="text" class="form-control" name="tin" id="field_tin" ng-model="vm.dealer.tin" placeholder="Leave blank if you have applied for it..."
                      />
         </div>
-         <!-- <div class="form-group">
+        <div class="form-group">
             <label class="control-label" for="field_openingBalance">Opening Balance</label>
             <input type="number" class="form-control" name="openingBalance" id="field_openingBalance"
                     ng-model="vm.dealer.openingBalance"
@@ -38,7 +38,7 @@
             <input type="number" class="form-control" name="currentBalance" id="field_currentBalance"
                     ng-model="vm.dealer.currentBalance"
                      />
-        </div>  -->
+        </div>
         <div class="form-group">
             <label class="control-label" for="field_address1">Address Line 1</label>
             <input type="text" class="form-control" name="address1" id="field_address1" ng-model="vm.dealer.address.address1" required />
@@ -95,7 +95,7 @@
             <label class="control-label" for="field_country">Country</label>
             <input type="text" class="form-control" name="country" id="field_country"
                     ng-model="vm.dealer.address.country"
-                    required />
+                    required>{{vm.dealer.address.country || 'India'}} </input>
             <div ng-show="editForm.country.$invalid">
                 <p class="help-block"
                     ng-show="editForm.country.$error.required">

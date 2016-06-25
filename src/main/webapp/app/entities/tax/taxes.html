@@ -18,17 +18,15 @@
         <table class="jh-table table table-striped">
             <thead>
                 <tr>
-                    <th><span>ID</span></th>
                     <th><span>Name</span></th>
-                    <th><span>Rate</span></th>
+                    <th><span>Rate %</span></th>
                     <th><span>Created By</span></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="tax in vm.taxes track by tax.id">
-                    <td><a ui-sref="tax-detail({id:tax.id})">{{tax.id}}</a></td>
-                    <td>{{tax.name}}</td>
+                    <td><a ui-sref="tax-detail({id:tax.id})">{{tax.name}}</a></td>
                     <td>{{tax.rate}}</td>
                     <td>{{tax.createdBy}}</td>
                     <td class="text-right">
