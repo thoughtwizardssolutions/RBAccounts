@@ -18,8 +18,8 @@ spring:
         livereload:
             enabled: false
     datasource:
-        url: jdbc:mysql://rbdbdev.c73evv6a4lq0.us-west-2.rds.amazonaws.com:3306/rbdbdev?useUnicode=true&characterEncoding=utf8&useSSL=false
-        name: rbdbdev
+        url: jdbc:mysql://rbdb-prod.c35u0frwhtvd.ap-southeast-1.rds.amazonaws.com:3306/rbdbprod?useUnicode=true&characterEncoding=utf8&useSSL=false
+        name: rbdbprod
         username: admin123
         password: admin123
     jpa:
@@ -72,7 +72,7 @@ jhipster:
             # security key (this key should be unique for your application, and kept secret)
             key: 15c4d111e25237cf90ff25aed986e11b0e7586d9
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: rbaccounts@localhost
+        from: admin@rbaccounts.com
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:

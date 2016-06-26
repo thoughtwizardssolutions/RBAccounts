@@ -30,7 +30,7 @@
             parent: 'home',
             url: '/{id}/edit',
             data: {
-                authorities: ['ROLE_USER']
+                authorities: ['ROLE_USER', 'ROLE_ORG_ADMIN', 'ROLE_ADMIN']
             },
             onEnter: ['$stateParams', '$state', function($stateParams, $state, $uibModal) {
                 $uibModal.open({

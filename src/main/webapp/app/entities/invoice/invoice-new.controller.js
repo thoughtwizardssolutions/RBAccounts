@@ -39,6 +39,8 @@
 		loadTaxes();
 		
 		function setupInvoice() {
+			vm.error = null;
+			vm.success = null;
 			if(entity) {
 				vm.editing = true;
 				// show items
@@ -90,17 +92,24 @@
 		}
 
 		function saveInvoice() {
+			vm.error = null;
 			if (vm.invoice.totalAmount == 0) {
 				return;
 			}
 			if(vm.invoice.id) {
-				Invoice.update(vm.invoice,onSaveSuccess, onError);
+				Invoice.update(vm.invoice,onSaveSuccess, onSaveError);
 			} else {
-				Invoice.save(vm.invoice, onSaveSuccess, onError);
+				Invoice.save(vm.invoice, onSaveSuccess, onSaveError);
 			}
-			$state.go('invoice', null, { reload: true });
-			
 			function onSaveSuccess(data) {
+				vm.success = true;
+				$state.go('invoice', null, { reload: true });
+			}
+			function onSaveError(error) {
+				console.dir(error);
+				console.log(error);
+				AlertService.error(error.data.message);
+				vm.error = true;
 			}
 		}
 		
@@ -158,7 +167,6 @@
 			Tax.query({}, onSuccess, onError);
 
 			function onSuccess(data, headers) {
-				console.log(data);
 				vm.taxes = data;
 				var tax = {};
 				tax.name = 'Add new Tax';
@@ -169,6 +177,7 @@
 
 		function onError(error) {
 			AlertService.error(error.data.message);
+			vm.error = true;
 		}
 		
 		function showImeiSection(invoiceItem) {
@@ -225,10 +234,6 @@
 				invoiceItem.mrp = product.mrp;
 				invoiceItem.color = product.color;
 				calculateItemAmount(invoiceItem)
-				console.log('Selected product : ');
-				console.log(product);
-				console.log('Selected invoice : ');
-				console.dir(vm.invoice);
 			}
 		}
 		
@@ -253,11 +258,7 @@
 			} else {
 				invoiceItem.taxRate = tax.rate;
 				invoiceItem.taxType = tax.name;
-				console.log('Selected tax : ');
-				console.log(tax);
 				updateAmounts();
-				console.log('Selected invoice : ');
-				console.log(vm.invoice);
 			}
 		}
 		
@@ -273,7 +274,6 @@
 	    
 	    function removeImeiToInvoiceItem(invoiceItem, imei) { 
     	  var index = invoiceItem.imeis.indexOf(imei);
-    	  console.log(index);
     	  invoiceItem.imeis.splice(index, 1); 
     	  if (invoiceItem.imeis.length == 0) {
     		  invoiceItem.imeis = null;
@@ -282,13 +282,10 @@
 	    
 	     function addImeiOnEnter(invoiceItem, imei1, imei2){
 	    	 var imeis = invoiceItem.imeis;
-	    	 console.log('imei1 :::: ' +imei1);
-	    	 console.log('imei2 :::: ' +imei2);
 	    	
 	    	 if(imeis.length === 1 && !imeis[0].imei1 && !imeis[0].imei2) {
 	    		 imeis[0].imei1 = imei1;
 	    		 imeis[0].imei2 = imei2;
-	    		 console.log('updating first imei');
 	    	 } else  if(imeis.length === invoiceItem.quantity) {
 	    		 AlertService.error('Can not add more IMEI. Please increase quantity of this product.');
 		    	 vm.imei1 = "";
@@ -300,7 +297,6 @@
 	    		 imei.imei2 = imei2;
 	    		 imei.index = imeis.length + 1;
 	    		 imeis.push(imei);
-	    		 console.log('adding imei'+imei);
 	    	 }
 	    	 vm.imei1 = "";
     		 vm.imei2 = "";
