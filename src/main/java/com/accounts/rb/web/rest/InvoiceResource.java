@@ -169,9 +169,12 @@ public class InvoiceResource {
 			document.add(paragraphOne);
 
 			Paragraph paragraphTwo = new Paragraph(
-					"\n " + profile.getAddress().getAddress1() + ", " + profile.getAddress().getAddress2() + "\n"
-							+ profile.getAddress().getCity() + " - " + profile.getAddress().getPincode() + "\n Phone : "
-							+ profile.getAddress().getPhone() + "\n" + profile.getAddress().getEmail());
+					"\n " + (StringUtils.isNotBlank(profile.getAddress().getAddress1()) ? profile.getAddress().getAddress1() : "") 
+							+ ", " + (StringUtils.isNotBlank(profile.getAddress().getAddress2()) ? profile.getAddress().getAddress2() : "") + "\n"
+							+ (StringUtils.isNotBlank(profile.getAddress().getCity()) ? profile.getAddress().getCity() : "" ) + " - " 
+							+ profile.getAddress().getPincode() + "\n Phone : "
+							+ (StringUtils.isNotBlank(profile.getAddress().getPhone()) ? profile.getAddress().getPhone() : "") + "\n" 
+							+ (StringUtils.isNotBlank(profile.getAddress().getEmail()) ? profile.getAddress().getEmail() : "" ));
 			paragraphTwo.setAlignment(Element.ALIGN_CENTER);
 			document.add(paragraphTwo);
 
@@ -185,31 +188,34 @@ public class InvoiceResource {
 			LineSeparator ls = new LineSeparator();
 			document.add(new Chunk(ls));
 
-			Paragraph paragraphFour = new Paragraph("TIN No. : " + profile.getTin());
+			Paragraph paragraphFour = new Paragraph("TIN No. : " + (StringUtils.isNotBlank(profile.getTin()) ? profile.getTin() : ""));
 			paragraphFour.setAlignment(Element.ALIGN_RIGHT);
 			document.add(paragraphFour);
 			document.add(new Chunk(ls));
 
-			Paragraph paragraphFive = new Paragraph(dealer.getFirmName().toUpperCase(), blackBoldFont);
+			Paragraph paragraphFive = new Paragraph(StringUtils.isNotBlank(dealer.getFirmName()) ? dealer.getFirmName().toUpperCase() : "", blackBoldFont);
 			paragraphFive.add("\t\t\t\tInvoice No.:");
-			paragraphFive.add(invoice.getInvoiceNumber());
+			paragraphFive.add(StringUtils.isNotBlank(invoice.getInvoiceNumber()) ? invoice.getInvoiceNumber() : "");
 			paragraphFive.setFont(blackBoldFont);
 			paragraphFive.add("\t\t\t\tDate : " + sdf.format(new Date()));
 			document.add(paragraphFive);
 
-			Paragraph paragraphSix = new Paragraph("\n " + dealer.getAddress().getAddress1() + ", "
-					+ dealer.getAddress().getAddress2() + "\n" + dealer.getAddress().getCity() + " - "
-					+ dealer.getAddress().getPincode() + "\n\n MOB- " + dealer.getAddress().getPhone() + "\n EMAIL- "
-					+ dealer.getAddress().getEmail() + "\n TIN. No.- " + dealer.getTin(), blackFont);
+			Paragraph paragraphSix = new Paragraph("\n " + (StringUtils.isNotBlank(dealer.getAddress().getAddress1()) ? dealer.getAddress().getAddress1() : "") + ", "
+					+ (StringUtils.isNotBlank(dealer.getAddress().getAddress2()) ? dealer.getAddress().getAddress2() : "") + "\n" 
+					+ (StringUtils.isNotBlank(dealer.getAddress().getCity()) ? dealer.getAddress().getCity() : "") + " - "
+					+ dealer.getAddress().getPincode() 
+					+ "\n\n MOB- " + (StringUtils.isNotBlank(dealer.getAddress().getPhone()) ? dealer.getAddress().getPhone() : "") + "\n EMAIL- "
+					+ (StringUtils.isNotBlank(dealer.getAddress().getEmail()) ? dealer.getAddress().getEmail() : "") + "\n TIN. No.- " 
+					+ (StringUtils.isNotBlank(dealer.getTin()) ? dealer.getTin() : ""), blackFont);
 			paragraphSix.setAlignment(Element.ALIGN_LEFT);
 			document.add(paragraphSix);
 
-			PdfPTable table = new PdfPTable(7);
+			PdfPTable table = new PdfPTable(6);
 			table.setWidthPercentage(100); // Width 100%
 			table.setSpacingBefore(10f); // Space before table
 			table.setSpacingAfter(10f); // Space after table
 
-			float[] columnWidths = { 0.7f, 3f, 0.8f, 0.6f, 0.6f, 0.6f, 0.8f };
+			float[] columnWidths = { 0.7f, 3f, 0.6f, 0.6f, 0.6f, 0.8f };
 			table.setWidths(columnWidths);
 
 			PdfPCell cell1 = new PdfPCell(new Paragraph("S.No.", blackBoldFont));
@@ -224,11 +230,11 @@ public class InvoiceResource {
 			cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
-			PdfPCell cell3 = new PdfPCell(new Paragraph("M.R.P.", blackBoldFont));
+			/*PdfPCell cell3 = new PdfPCell(new Paragraph("M.R.P.", blackBoldFont));
 			cell3.setBackgroundColor(BaseColor.LIGHT_GRAY);
 			cell3.setPaddingLeft(10);
 			cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
-			cell3.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell3.setVerticalAlignment(Element.ALIGN_MIDDLE);*/
 
 			PdfPCell cell4 = new PdfPCell(new Paragraph("Qty.", blackBoldFont));
 			cell4.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -256,7 +262,7 @@ public class InvoiceResource {
 
 			table.addCell(cell1);
 			table.addCell(cell2);
-			table.addCell(cell3);
+			//table.addCell(cell3);
 			table.addCell(cell4);
 			table.addCell(cell5);
 			table.addCell(cell6);
@@ -267,7 +273,8 @@ public class InvoiceResource {
 			List<InvoiceItem> currInvoiceItems = invoice.getInvoiceItems();
 			int invoiceCount = 1;
 			for (InvoiceItem invoiceItem : currInvoiceItems) {
-				td.add(new TableData(String.valueOf(invoiceCount), invoiceItem.getProductName() + " " + invoiceItem.getColor(),
+				td.add(new TableData(String.valueOf(invoiceCount), 
+						invoiceItem.getProductName() + " " + (StringUtils.isNotBlank(invoiceItem.getColor()) ? invoiceItem.getColor() : ""),
 						String.valueOf(invoiceItem.getMrp()), String.valueOf(invoiceItem.getQuantity()),
 						String.valueOf(invoiceItem.getAmount()), 
 						StringUtils.isNotBlank(invoiceItem.getTaxType()) ? invoiceItem.getTaxType() + " " + invoiceItem.getTaxRate() + " %" : ""));
@@ -289,9 +296,9 @@ public class InvoiceResource {
 				cell = new PdfPCell(new Phrase(tableData.getItemdesc(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
 				setCellBorder(td, count, cell);
 				table.addCell(cell);
-				cell = new PdfPCell(new Phrase(tableData.getMrp(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
+				/*cell = new PdfPCell(new Phrase(tableData.getMrp(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
 				setCellBorder(td, count, cell);
-				table.addCell(cell);
+				table.addCell(cell);*/
 				cell = new PdfPCell(new Phrase(tableData.getQty(), FontFactory.getFont(FontFactory.HELVETICA, 8)));
 				setCellBorder(td, count, cell);
 				table.addCell(cell);
