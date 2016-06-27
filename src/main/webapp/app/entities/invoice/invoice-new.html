@@ -1,4 +1,38 @@
+<style>
+table {
+        width: 100%;
+    }
 
+thead, tbody, tr, td, th { display: block; }
+
+tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+thead th {
+    height: 30px;
+
+    /*text-align: left;*/
+}
+
+tbody {
+    height: 400px;
+    overflow-y: auto;
+}
+
+thead {
+    /* fallback */
+}
+
+
+tbody td, thead th {
+    width: 24%;
+    float: left;
+}
+</style>
 <div>
     <h2><span>Create/Edit Invoice</span></h2>
     <hr>
@@ -124,25 +158,28 @@
 								<button class="btn btn-primary" ng-click="vm.addImeiToInvoiceItem(invoiceItem)">Add IMEIs</button>
 							</div>
 							<div ng-show="vm.showImeiSection(invoiceItem)">
-								<div class="form-group col-md-4">
+								<div class="form-group col-md-3">
 									<label class="control-label" for="field_imei1">IMEI 1</label>
 									<input type="text" class="form-control" name="imei1" id="field_imei1" ng-model="vm.imei1" move-focus-next />
 									<label class="control-label" for="field_imei2">IMEI 2</label>
 									<input type="text" class="form-control" name="imei2" id="field_imei2" ng-model="vm.imei2" move-focus-previous ng-keyup="$event.keyCode == 13 && vm.addImeiOnEnter(invoiceItem, vm.imei1, vm.imei2)"/>
 								</div>
-								<div class="col-md-4">
+								<div class="col-md-6">
 								<div class="table-condensed">
-									<table class="table">
+									<table class="table table-striped">
+										<thead>
 										<tr>
-											<th>Nr.</th>
-											<th>IMEI 1</th>
-											<th>IMEI 2</th>
+											<th style="width:10%">Nr.</th>
+											<th style="width:35%">IMEI 1</th>
+											<th style="width:35%">IMEI 2</th>
 										</tr>
+										</thead>
+										<tbody>
 										<tr data-ng-repeat="imei in invoiceItem.imeis track by imei.index">
-											<td>{{ imei.index}}</td>
-											<td>{{ imei.imei1}}</td>
-											<td>{{ imei.imei2}}</td>
-											<td>
+											<td style="width:10%">{{ imei.index}}</td>
+											<td style="width:35%">{{ imei.imei1}}</td>
+											<td style="width:35%">{{ imei.imei2}}</td>
+											<td style="width:10%">
 											<div class="btn-group flex-btn-group-container">
 					                            <button type="submit"
 					                            		ng-click="vm.removeImeiToInvoiceItem(invoiceItem, imei)"
@@ -153,6 +190,7 @@
 					                        </div>
 					                        </td>
 				                    	</tr>
+				                    	</tbody>
 									</table>
 									</div>
 								</div>
