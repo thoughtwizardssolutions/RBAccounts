@@ -26,32 +26,40 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label" for="field_prefix">Prefix</label>
-            <input type="text" class="form-control" name="prefix" id="field_prefix"
-                    ng-model="vm.userSequence.prefix"
-                    required />
-            <div ng-show="editForm.prefix.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.prefix.$error.required">
-                    This field is required.
-                </p>
-            </div>
+            <label class="control-label" for="field_salesSequence">Sales Sequence</label>
+            <input type="number" class="form-control" name="salesSequence" id="field_salesSequence"
+                    ng-model="vm.userSequence.salesSequence"
+                     />
         </div>
         <div class="form-group">
-            <label class="control-label" for="field_currentSequence">Current Sequence</label>
-            <input type="number" class="form-control" name="currentSequence" id="field_currentSequence"
-                    ng-model="vm.userSequence.currentSequence"
-                    required />
-            <div ng-show="editForm.currentSequence.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.currentSequence.$error.required">
-                    This field is required.
-                </p>
-                <p class="help-block"
-                    ng-show="editForm.currentSequence.$error.number">
-                    This field should be a number.
-                </p>
-            </div>
+            <label class="control-label" for="field_sampleInvoiceSequence">Sample Invoice Sequence</label>
+            <input type="number" class="form-control" name="sampleInvoiceSequence" id="field_sampleInvoiceSequence"
+                    ng-model="vm.userSequence.sampleInvoiceSequence"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="rbaccountsApp.userSequence.prefix_tax" for="field_prefix_tax">Prefix Tax</label>
+            <input type="text" class="form-control" name="prefix_tax" id="field_prefix_tax"
+                    ng-model="vm.userSequence.prefix_tax"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="rbaccountsApp.userSequence.prefix_sales" for="field_prefix_sales">Prefix Sales</label>
+            <input type="text" class="form-control" name="prefix_sales" id="field_prefix_sales"
+                    ng-model="vm.userSequence.prefix_sales"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="rbaccountsApp.userSequence.prefix_sample" for="field_prefix_sample">Prefix Sample</label>
+            <input type="text" class="form-control" name="prefix_sample" id="field_prefix_sample"
+                    ng-model="vm.userSequence.prefix_sample"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_taxSequence">Tax Sequence</label>
+            <input type="number" class="form-control" name="taxSequence" id="field_taxSequence"
+                    ng-model="vm.userSequence.taxSequence"
+                     />
         </div>
 
     </div>

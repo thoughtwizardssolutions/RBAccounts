@@ -16,8 +16,19 @@ import java.util.Objects;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class UserSequence implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    
+  private static final long serialVersionUID = 1L;
+
+  public UserSequence(String createdBy,String prefixTax, String prefixSales, String prefixSample, Integer taxSequence, Integer salesSequence, Integer sampleInvoiceSequence) {
+    super();
+    this.createdBy = createdBy;
+    this.salesSequence = salesSequence;
+    this.sampleSequence = sampleInvoiceSequence;
+    this.prefixTax = prefixTax;
+    this.prefixSales = prefixSales;
+    this.prefixSample = prefixSample;
+    this.taxSequence = taxSequence;
+  }
+
     public UserSequence() {
       super();
     }
@@ -30,13 +41,23 @@ public class UserSequence implements Serializable {
     @Column(name = "created_by", nullable = false)
     private String createdBy;
 
-    @NotNull
-    @Column(name = "prefix", nullable = false)
-    private String prefix;
+    @Column(name = "sales_sequence")
+    private Integer salesSequence;
 
-    @NotNull
-    @Column(name = "current_sequence", nullable = false)
-    private Integer currentSequence;
+    @Column(name = "sample_sequence")
+    private Integer sampleSequence;
+
+    @Column(name = "prefix_tax")
+    private String prefixTax;
+
+    @Column(name = "prefix_sales")
+    private String prefixSales;
+
+    @Column(name = "prefix_sample")
+    private String prefixSample;
+
+    @Column(name = "tax_sequence")
+    private Integer taxSequence;
 
     public Long getId() {
         return id;
@@ -54,20 +75,52 @@ public class UserSequence implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public String getPrefix() {
-        return prefix;
+    public Integer getSalesSequence() {
+        return salesSequence;
     }
 
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
+    public void setSalesSequence(Integer salesSequence) {
+        this.salesSequence = salesSequence;
     }
 
-    public Integer getCurrentSequence() {
-        return currentSequence;
+    public Integer getSampleInvoiceSequence() {
+        return sampleSequence;
     }
 
-    public void setCurrentSequence(Integer currentSequence) {
-        this.currentSequence = currentSequence;
+    public void setSampleInvoiceSequence(Integer sampleInvoiceSequence) {
+        this.sampleSequence = sampleInvoiceSequence;
+    }
+
+    public Integer getTaxSequence() {
+        return taxSequence;
+    }
+
+    public void setTaxSequence(Integer taxSequence) {
+        this.taxSequence = taxSequence;
+    }
+
+    public String getPrefixTax() {
+      return prefixTax;
+    }
+
+    public void setPrefixTax(String prefixTax) {
+      this.prefixTax = prefixTax;
+    }
+
+    public String getPrefixSales() {
+      return prefixSales;
+    }
+
+    public void setPrefixSales(String prefixSales) {
+      this.prefixSales = prefixSales;
+    }
+
+    public String getPrefixSample() {
+      return prefixSample;
+    }
+
+    public void setPrefixSample(String prefixSample) {
+      this.prefixSample = prefixSample;
     }
 
     @Override
@@ -89,21 +142,18 @@ public class UserSequence implements Serializable {
     public int hashCode() {
         return Objects.hashCode(id);
     }
-    
-    public UserSequence(String createdBy, String prefix, Integer currentSequence) {
-      super();
-      this.createdBy = createdBy;
-      this.prefix = prefix;
-      this.currentSequence = currentSequence;
-    }
 
     @Override
     public String toString() {
         return "UserSequence{" +
             "id=" + id +
             ", createdBy='" + createdBy + "'" +
-            ", prefix='" + prefix + "'" +
-            ", currentSequence='" + currentSequence + "'" +
+            ", salesSequence='" + salesSequence + "'" +
+            ", sampleInvoiceSequence='" + sampleSequence + "'" +
+            ", prefixTax='" + prefixTax + "'" +
+            ", prefixSales='" + prefixSales + "'" +
+            ", prefixSample='" + prefixSample + "'" +
+            ", taxSequence='" + taxSequence + "'" +
             '}';
     }
 }

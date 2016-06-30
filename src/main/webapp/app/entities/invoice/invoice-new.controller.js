@@ -12,6 +12,9 @@
 
 		vm.doNotMatch = null;
 		vm.error = null;
+		vm.invoiceType = null;
+		vm.userSequence = null;
+		vm.selectInvoiceType = selectInvoiceType;
 		vm.errorUserExists = null;
 		vm.success = null;
 		vm.saveInvoice = saveInvoice;
@@ -75,19 +78,35 @@
 				vm.invoice.shippingCharges = 0;
 				vm.invoice.creationDate = new Date();
 				vm.invoice.invoiceItems = [];
+				vm.invoice.invoiceType = 'TAX_INVOICE';
 				vm.dealers = [];
 				vm.products = [];
 				vm.selectedContact = {};
+				vm.invoiceType = 'Tax Invoice';
 				
 		        Principal.identity().then(function(account) {
 		            vm.currentAccount = account;
 					UserSequence.get({user : account.login}, onSuccess, onError);
 					function onSuccess(data, headers) {
-						vm.invoice.invoiceNumber = data.prefix + '-' +data.currentSequence;
-					}
+						vm.userSequence = data;
+						// select tax by default
+						vm.invoice.invoiceNumber = data.prefixTax + '-' +data.taxSequence;
+						}
 		        });
-				
-
+			}
+		}
+		
+		function selectInvoiceType(invoiceType) {
+			vm.invoiceType = invoiceType;
+			if(invoiceType === 'Tax Invoice') {
+				vm.invoice.invoiceNumber = vm.userSequence.prefixTax + '-' +vm.userSequence.taxSequence;
+				vm.invoice.invoiceType = 'TAX_INVOICE';
+			} else if(invoiceType === 'Sales Invoice') {
+				vm.invoice.invoiceNumber = vm.userSequence.prefixSales + '-' +vm.userSequence.salesSequence;
+				vm.invoice.invoiceType = 'SALES_INVOICE';
+			} else {
+				vm.invoice.invoiceNumber = vm.userSequence.prefixSample + '-' +vm.userSequence.sampleInvoiceSequence;
+				vm.invoice.invoiceType = 'SAMPLE_INVOICE';
 			}
 		}
 
@@ -106,9 +125,9 @@
 				$state.go('invoice', null, { reload: true });
 			}
 			function onSaveError(error) {
-				console.dir(error);
 				console.log(error);
-				AlertService.error(error.data.message);
+				console.log(error.headers);
+				AlertService.error(error.headers('X-rbaccountsApp-error'));
 				vm.error = true;
 			}
 		}

@@ -48,13 +48,13 @@ import com.accounts.rb.domain.Invoice;
 import com.accounts.rb.domain.InvoiceItem;
 import com.accounts.rb.domain.InvoiceReport;
 import com.accounts.rb.domain.InvoiceSearchCommand;
+import com.accounts.rb.domain.InvoiceType;
 import com.accounts.rb.domain.Profile;
-import com.accounts.rb.domain.UserSequence;
 import com.accounts.rb.repository.DealerRepository;
 import com.accounts.rb.repository.ProfileRepository;
-import com.accounts.rb.repository.UserSequenceRepository;
 import com.accounts.rb.security.AuthoritiesConstants;
 import com.accounts.rb.service.InvoiceService;
+import com.accounts.rb.service.UserSequenceService;
 import com.accounts.rb.web.rest.util.HeaderUtil;
 import com.accounts.rb.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
@@ -87,13 +87,13 @@ public class InvoiceResource {
     private InvoiceService invoiceService;
     
     @Inject
+    private UserSequenceService userSequenceService;
+    
+    @Inject
     private DealerRepository dealerResource;
     
     @Inject
     private ProfileRepository profileRepository;
-    
-    @Inject 
-    private UserSequenceRepository userSequenceRepository;
     
     /**
      * POST  /invoices : Create a new invoice.
@@ -118,10 +118,8 @@ public class InvoiceResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("invoice", "profilenotexists", "Invoice cannot be created as the user has not setup profile yet.")).body(null);
         }
         Invoice result = invoiceService.save(invoice);
-        List<UserSequence> userSequence = userSequenceRepository.findByCreatedBy(user.getUsername());
-        UserSequence newUserSeq = userSequence.get(0);
-        newUserSeq.setCurrentSequence(newUserSeq.getCurrentSequence() + 1);
-        userSequenceRepository.save(newUserSeq);
+        userSequenceService.updateUserSequence(user.getUsername(), InvoiceType.valueOf(invoice.getInvoiceType()));
+        // TOOD save data in reporting tables
         return ResponseEntity.created(new URI("/api/invoices/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("invoice", result.getId().toString()))
             .body(result);
@@ -181,8 +179,25 @@ public class InvoiceResource {
 			Paragraph paragraphAuth = new Paragraph("(Pre Authenticated By)", newFont);
 			paragraphAuth.setAlignment(Element.ALIGN_RIGHT);
 			document.add(paragraphAuth);
-
-			Paragraph paragraphThree = new Paragraph("TAX INVOICE", blackHeadingLargeFont);
+			
+			Paragraph paragraphThree = null;
+            switch (InvoiceType.valueOf(invoice.getInvoiceType())) {
+              case TAX_INVOICE: {
+                paragraphThree = new Paragraph("TAX INVOICE", blackHeadingLargeFont);
+                break;
+              }
+              case SALES_INVOICE: {
+                paragraphThree = new Paragraph("SALES INVOICE", blackHeadingLargeFont);
+                break;
+              }
+              case SAMPLE_INVOICE: {
+                paragraphThree = new Paragraph("SAMPLE INVOICE", blackHeadingLargeFont);
+                break;
+              }
+              default: {
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("invoiceType", "invalidInvoiceType", "Invoice Type is invalid, should be one of [TAX_INVOICE,SALES_INVOICE,SAMPLE_INVOICE].")).body(null);
+              }
+            }
 			paragraphThree.setAlignment(Element.ALIGN_CENTER);
 			document.add(paragraphThree);
 			LineSeparator ls = new LineSeparator();

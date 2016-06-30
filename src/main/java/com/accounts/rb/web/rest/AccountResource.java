@@ -88,7 +88,7 @@ public class AccountResource {
     userService.createUserInformation(managedUserDTO.getLogin(), managedUserDTO.getPassword(),
         managedUserDTO.getFirstName(), managedUserDTO.getLastName(),
         email, managedUserDTO.getLangKey());
-    userSequenceRepository.save(new UserSequence(managedUserDTO.getLogin(),"INV", 100000));
+    userSequenceRepository.save(new UserSequence(managedUserDTO.getLogin(),"INV-T","INV-S","INV-X",100000,100000,100000));
     return new ResponseEntity<>(HttpStatus.CREATED);
   }
 

@@ -52,7 +52,7 @@ tbody td, thead th {
 				<!-- Choose Contact Start -->
 				<div class="form-group">
 			        <div class="btn-group" uib-dropdown keyboard-nav>
-				        <button id="simple-btn-keyboard-nav" type="button" class="btn btn-primary" uib-dropdown-toggle>
+				        <button id="contact-choice" type="button" class="btn btn-primary" uib-dropdown-toggle>
 				            {{ vm.selectedContact.firmName || 'Select Contact'}} <span class="caret"></span>
 				        </button>
 				        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
@@ -63,7 +63,20 @@ tbody td, thead th {
 		            	<input ng-bind="vm.selectedContact" type="text" class="form-control" name="field_contact" id="field_contact" value ="{{vm.selectedContact.firmName}} {{vm.selectedContact.address.address1}} {{vm.selectedContact.address.address2}} {{vm.selectedContact.address.city}} {{vm.selectedContact.address.state}} {{vm.selectedContact.address.pincode}}" required readonly="true"/>
 					</div>        
 		        </div>	
-		       	<!-- Choose Contact End -->		
+		       	<!-- Choose Contact End -->
+		       	<!-- Choose Invoice Type -->
+				<div class="form-group">
+			        <div class="btn-group" uib-dropdown keyboard-nav>
+				        <button id="invoice-type-choice" type="button" class="btn btn-primary" uib-dropdown-toggle>Invoice Type : {{vm.invoiceType}} <span class="caret"></span>
+				        </button>
+				        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+				            <li role="menuitem" ng-click="vm.selectInvoiceType('Tax Invoice')"><a>Tax Invoice</a></li>
+							<li role="menuitem" ng-click="vm.selectInvoiceType('Sales Invoice')"><a>Sales Invoice</a></li>
+							<li role="menuitem" ng-click="vm.selectInvoiceType('Sample Invoice')"><a>Sample Invoice</a></li>
+				        </ul>
+				    </div>
+		        </div>	
+		       	<!-- Choose Invoice Type -->			
 				
 				<div class="row">
 					<!-- Choose Invoice Number -->	
@@ -153,7 +166,6 @@ tbody td, thead th {
 					<!-- Add Imeis -->
 					<hr>
 					<div class="row">
-					<jhi-alert></jhi-alert>
 							<div class="col-md-2">
 								<button class="btn btn-primary" ng-click="vm.addImeiToInvoiceItem(invoiceItem)">Add IMEIs</button>
 							</div>
@@ -239,7 +251,7 @@ tbody td, thead th {
 		            <input type="number" class="form-control" name="totalAmount" id="field_totalAmount" ng-model="vm.invoice.totalAmount" required />
 		        </div>
 		        </div>
-		        
+		        <jhi-alert></jhi-alert>
 		        <div class="form-group col-md-4 col-md-offset-8">
     			<button type="submit" onclick="window.history.back()" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span></button>
                 <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary" ng-click="vm.saveInvoice()">Save</button>

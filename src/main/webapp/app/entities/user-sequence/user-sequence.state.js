@@ -13,7 +13,7 @@
             parent: 'entity',
             url: '/user-sequence',
             data: {
-                authorities: ['ROLE_USER','ROLE_ORG_ADMIN','ROLE_ADMIN'],
+                authorities: ['ROLE_USER'],
                 pageTitle: 'UserSequences'
             },
             views: {
@@ -63,8 +63,12 @@
                         entity: function () {
                             return {
                                 createdBy: null,
-                                prefix: null,
-                                currentSequence: null,
+                                salesSequence: null,
+                                sampleInvoiceSequence: null,
+                                prefix_tax: null,
+                                prefix_sales: null,
+                                prefix_sample: null,
+                                taxSequence: null,
                                 id: null
                             };
                         }

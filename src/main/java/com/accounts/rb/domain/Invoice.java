@@ -67,6 +67,9 @@ public class Invoice implements Serializable {
     @NotNull
     @Column(name = "dealer_id", nullable = false)
     private Long dealerId;
+    
+    @Column(name = "invoice_type", nullable = false)
+    private String invoiceType;
 
     @OneToMany(mappedBy = "invoice", cascade = {CascadeType.ALL})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -184,6 +187,14 @@ public class Invoice implements Serializable {
         this.invoiceItems = invoiceItems;
     }
 
+    public String getInvoiceType() {
+      return invoiceType;
+    }
+
+    public void setInvoiceType(String invoiceType) {
+      this.invoiceType = invoiceType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -220,6 +231,7 @@ public class Invoice implements Serializable {
             ", totalAmount='" + totalAmount + "'" +
             ", createdBy='" + createdBy + "'" +
             ", dealerId='" + dealerId + "'" +
+            ", invoiceType='" + invoiceType + "'" +
             '}';
     }
 }

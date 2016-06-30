@@ -43,11 +43,21 @@ public class UserSequenceResourceIntTest {
 
     private static final String DEFAULT_CREATED_BY = "AAAAA";
     private static final String UPDATED_CREATED_BY = "BBBBB";
-    private static final String DEFAULT_PREFIX = "AAAAA";
-    private static final String UPDATED_PREFIX = "BBBBB";
 
-    private static final Integer DEFAULT_CURRENT_SEQUENCE = 1;
-    private static final Integer UPDATED_CURRENT_SEQUENCE = 2;
+    private static final Integer DEFAULT_SALES_SEQUENCE = 1;
+    private static final Integer UPDATED_SALES_SEQUENCE = 2;
+
+    private static final Integer DEFAULT_SAMPLE_INVOICE_SEQUENCE = 1;
+    private static final Integer UPDATED_SAMPLE_INVOICE_SEQUENCE = 2;
+    private static final String DEFAULT_PREFIX_TAX = "AAAAA";
+    private static final String UPDATED_PREFIX_TAX = "BBBBB";
+    private static final String DEFAULT_PREFIX_SALES = "AAAAA";
+    private static final String UPDATED_PREFIX_SALES = "BBBBB";
+    private static final String DEFAULT_PREFIX_SAMPLE = "AAAAA";
+    private static final String UPDATED_PREFIX_SAMPLE = "BBBBB";
+
+    private static final Integer DEFAULT_TAX_SEQUENCE = 1;
+    private static final Integer UPDATED_TAX_SEQUENCE = 2;
 
     @Inject
     private UserSequenceRepository userSequenceRepository;
@@ -76,8 +86,12 @@ public class UserSequenceResourceIntTest {
     public void initTest() {
         userSequence = new UserSequence();
         userSequence.setCreatedBy(DEFAULT_CREATED_BY);
-        userSequence.setPrefix(DEFAULT_PREFIX);
-        userSequence.setCurrentSequence(DEFAULT_CURRENT_SEQUENCE);
+        userSequence.setSalesSequence(DEFAULT_SALES_SEQUENCE);
+        userSequence.setSampleInvoiceSequence(DEFAULT_SAMPLE_INVOICE_SEQUENCE);
+        userSequence.setPrefixTax(DEFAULT_PREFIX_TAX);
+        userSequence.setPrefixSales(DEFAULT_PREFIX_SALES);
+        userSequence.setPrefixSample(DEFAULT_PREFIX_SAMPLE);
+        userSequence.setTaxSequence(DEFAULT_TAX_SEQUENCE);
     }
 
     @Test
@@ -97,8 +111,12 @@ public class UserSequenceResourceIntTest {
         assertThat(userSequences).hasSize(databaseSizeBeforeCreate + 1);
         UserSequence testUserSequence = userSequences.get(userSequences.size() - 1);
         assertThat(testUserSequence.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
-        assertThat(testUserSequence.getPrefix()).isEqualTo(DEFAULT_PREFIX);
-        assertThat(testUserSequence.getCurrentSequence()).isEqualTo(DEFAULT_CURRENT_SEQUENCE);
+        assertThat(testUserSequence.getSalesSequence()).isEqualTo(DEFAULT_SALES_SEQUENCE);
+        assertThat(testUserSequence.getSampleInvoiceSequence()).isEqualTo(DEFAULT_SAMPLE_INVOICE_SEQUENCE);
+        assertThat(testUserSequence.getPrefixTax()).isEqualTo(DEFAULT_PREFIX_TAX);
+        assertThat(testUserSequence.getPrefixSales()).isEqualTo(DEFAULT_PREFIX_SALES);
+        assertThat(testUserSequence.getPrefixSample()).isEqualTo(DEFAULT_PREFIX_SAMPLE);
+        assertThat(testUserSequence.getTaxSequence()).isEqualTo(DEFAULT_TAX_SEQUENCE);
     }
 
     @Test
@@ -107,42 +125,6 @@ public class UserSequenceResourceIntTest {
         int databaseSizeBeforeTest = userSequenceRepository.findAll().size();
         // set the field null
         userSequence.setCreatedBy(null);
-
-        // Create the UserSequence, which fails.
-
-        restUserSequenceMockMvc.perform(post("/api/user-sequences")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(userSequence)))
-                .andExpect(status().isBadRequest());
-
-        List<UserSequence> userSequences = userSequenceRepository.findAll();
-        assertThat(userSequences).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkPrefixIsRequired() throws Exception {
-        int databaseSizeBeforeTest = userSequenceRepository.findAll().size();
-        // set the field null
-        userSequence.setPrefix(null);
-
-        // Create the UserSequence, which fails.
-
-        restUserSequenceMockMvc.perform(post("/api/user-sequences")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(userSequence)))
-                .andExpect(status().isBadRequest());
-
-        List<UserSequence> userSequences = userSequenceRepository.findAll();
-        assertThat(userSequences).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkCurrentSequenceIsRequired() throws Exception {
-        int databaseSizeBeforeTest = userSequenceRepository.findAll().size();
-        // set the field null
-        userSequence.setCurrentSequence(null);
 
         // Create the UserSequence, which fails.
 
@@ -167,8 +149,12 @@ public class UserSequenceResourceIntTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(userSequence.getId().intValue())))
                 .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY.toString())))
-                .andExpect(jsonPath("$.[*].prefix").value(hasItem(DEFAULT_PREFIX.toString())))
-                .andExpect(jsonPath("$.[*].currentSequence").value(hasItem(DEFAULT_CURRENT_SEQUENCE)));
+                .andExpect(jsonPath("$.[*].salesSequence").value(hasItem(DEFAULT_SALES_SEQUENCE)))
+                .andExpect(jsonPath("$.[*].sampleInvoiceSequence").value(hasItem(DEFAULT_SAMPLE_INVOICE_SEQUENCE)))
+                .andExpect(jsonPath("$.[*].prefix_tax").value(hasItem(DEFAULT_PREFIX_TAX.toString())))
+                .andExpect(jsonPath("$.[*].prefix_sales").value(hasItem(DEFAULT_PREFIX_SALES.toString())))
+                .andExpect(jsonPath("$.[*].prefix_sample").value(hasItem(DEFAULT_PREFIX_SAMPLE.toString())))
+                .andExpect(jsonPath("$.[*].taxSequence").value(hasItem(DEFAULT_TAX_SEQUENCE)));
     }
 
     @Test
@@ -183,8 +169,12 @@ public class UserSequenceResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(userSequence.getId().intValue()))
             .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY.toString()))
-            .andExpect(jsonPath("$.prefix").value(DEFAULT_PREFIX.toString()))
-            .andExpect(jsonPath("$.currentSequence").value(DEFAULT_CURRENT_SEQUENCE));
+            .andExpect(jsonPath("$.salesSequence").value(DEFAULT_SALES_SEQUENCE))
+            .andExpect(jsonPath("$.sampleInvoiceSequence").value(DEFAULT_SAMPLE_INVOICE_SEQUENCE))
+            .andExpect(jsonPath("$.prefix_tax").value(DEFAULT_PREFIX_TAX.toString()))
+            .andExpect(jsonPath("$.prefix_sales").value(DEFAULT_PREFIX_SALES.toString()))
+            .andExpect(jsonPath("$.prefix_sample").value(DEFAULT_PREFIX_SAMPLE.toString()))
+            .andExpect(jsonPath("$.taxSequence").value(DEFAULT_TAX_SEQUENCE));
     }
 
     @Test
@@ -206,8 +196,12 @@ public class UserSequenceResourceIntTest {
         UserSequence updatedUserSequence = new UserSequence();
         updatedUserSequence.setId(userSequence.getId());
         updatedUserSequence.setCreatedBy(UPDATED_CREATED_BY);
-        updatedUserSequence.setPrefix(UPDATED_PREFIX);
-        updatedUserSequence.setCurrentSequence(UPDATED_CURRENT_SEQUENCE);
+        updatedUserSequence.setSalesSequence(UPDATED_SALES_SEQUENCE);
+        updatedUserSequence.setSampleInvoiceSequence(UPDATED_SAMPLE_INVOICE_SEQUENCE);
+        updatedUserSequence.setPrefixTax(UPDATED_PREFIX_TAX);
+        updatedUserSequence.setPrefixSales(UPDATED_PREFIX_SALES);
+        updatedUserSequence.setPrefixSample(UPDATED_PREFIX_SAMPLE);
+        updatedUserSequence.setTaxSequence(UPDATED_TAX_SEQUENCE);
 
         restUserSequenceMockMvc.perform(put("/api/user-sequences")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -219,8 +213,12 @@ public class UserSequenceResourceIntTest {
         assertThat(userSequences).hasSize(databaseSizeBeforeUpdate);
         UserSequence testUserSequence = userSequences.get(userSequences.size() - 1);
         assertThat(testUserSequence.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
-        assertThat(testUserSequence.getPrefix()).isEqualTo(UPDATED_PREFIX);
-        assertThat(testUserSequence.getCurrentSequence()).isEqualTo(UPDATED_CURRENT_SEQUENCE);
+        assertThat(testUserSequence.getSalesSequence()).isEqualTo(UPDATED_SALES_SEQUENCE);
+        assertThat(testUserSequence.getSampleInvoiceSequence()).isEqualTo(UPDATED_SAMPLE_INVOICE_SEQUENCE);
+        assertThat(testUserSequence.getPrefixTax()).isEqualTo(UPDATED_PREFIX_TAX);
+        assertThat(testUserSequence.getPrefixSales()).isEqualTo(UPDATED_PREFIX_SALES);
+        assertThat(testUserSequence.getPrefixSample()).isEqualTo(UPDATED_PREFIX_SAMPLE);
+        assertThat(testUserSequence.getTaxSequence()).isEqualTo(UPDATED_TAX_SEQUENCE);
     }
 
     @Test

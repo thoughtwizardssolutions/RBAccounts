@@ -20,8 +20,12 @@
                 <tr>
                     <th><span>ID</span></th>
                     <th><span>Created By</span></th>
-                    <th><span>Prefix</span></th>
-                    <th><span>Current Sequence</span></th>
+                    <th><span>Sales Sequence</span></th>
+                    <th><span>Sample Invoice Sequence</span></th>
+                    <th><span translate="rbaccountsApp.userSequence.prefix_tax">Prefix Tax</span></th>
+                    <th><span translate="rbaccountsApp.userSequence.prefix_sales">Prefix Sales</span></th>
+                    <th><span translate="rbaccountsApp.userSequence.prefix_sample">Prefix Sample</span></th>
+                    <th><span>Tax Sequence</span></th>
                     <th></th>
                 </tr>
             </thead>
@@ -29,8 +33,12 @@
                 <tr ng-repeat="userSequence in vm.userSequences track by userSequence.id">
                     <td><a ui-sref="user-sequence-detail({id:userSequence.id})">{{userSequence.id}}</a></td>
                     <td>{{userSequence.createdBy}}</td>
-                    <td>{{userSequence.prefix}}</td>
-                    <td>{{userSequence.currentSequence}}</td>
+                    <td>{{userSequence.salesSequence}}</td>
+                    <td>{{userSequence.sampleInvoiceSequence}}</td>
+                    <td>{{userSequence.prefix_tax}}</td>
+                    <td>{{userSequence.prefix_sales}}</td>
+                    <td>{{userSequence.prefix_sample}}</td>
+                    <td>{{userSequence.taxSequence}}</td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"

@@ -1,4 +1,4 @@
-id;created_by;prefix;current_sequence
-1;admin;INV;100000
-2;orgadmin;INV;100000
-3;user;INV;100000
+id;created_by;prefix_tax;prefix_sales;prefix_sample;tax_sequence,sample_sequence,sales_sequence
+1;admin;INV-T;INV-S;INV-X;100000;100000;100000
+2;orgadmin;INV-T;INV-S;INV-X;100000;100000;100000
+3;user;INV-T;INV-S;INV-X;100000;100000;100000
