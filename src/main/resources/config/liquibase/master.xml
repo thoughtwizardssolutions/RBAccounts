@@ -8,6 +8,8 @@
     <include file="classpath:config/liquibase/changelog/20160620034840_added_entity_Imei.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160620040012_added_entity_InvoiceItem.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160620062755_added_entity_Invoice.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160620062755_add_column_Invoice.xml" relativeToChangelogFile="false"/>
+    
     <include file="classpath:config/liquibase/changelog/20160620073406_added_entity_Address.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160620074017_added_entity_Dealer.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160620074743_added_entity_Tax.xml" relativeToChangelogFile="false"/>
@@ -20,9 +22,4 @@
     <include file="classpath:config/liquibase/changelog/20160620074017_added_entity_constraints_Dealer.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160621141124_added_entity_constraints_Profile.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
-    <include file="classpath:config/liquibase/changelog/20160622191951_drop_column_UserSequence.xml" relativeToChangelogFile="false"/>
-    
-    <include file="classpath:config/liquibase/changelog/20160622191952_drop_column_UserSequence.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20160622191953_update_data_UserSequence.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20160620062755_add_column_Invoice.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

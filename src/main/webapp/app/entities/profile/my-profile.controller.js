@@ -45,10 +45,9 @@
         }
 
         function onSaveSuccess (result) {
-            // $scope.$emit('rbaccountsApp:myProfileUpdate', result);
-            // $uibModalInstance.close(result);
             vm.isSaving = false;
             vm.success = true;
+            $state.go('my-profile', null, { reload: true });
         }
 
         function onSaveError () {

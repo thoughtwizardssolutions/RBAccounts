@@ -24,17 +24,30 @@
             <column name="created_by" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            
-            <column name="prefix" type="varchar(255)">
+            <column name="prefix_tax" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            
-            <column name="current_sequence" type="integer">
+            <column name="prefix_sales" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            
+            <column name="prefix_sample" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="tax_sequence" type="integer">
+                <constraints nullable="false" />
+            </column>
+            <column name="sales_sequence" type="integer">
+                <constraints nullable="false" />
+            </column>
+            <column name="sample_sequence" type="integer">
+                <constraints nullable="false" />
+            </column>            
             <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
         </createTable>
-        
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/user_sequences.csv"
+                  separator=";"
+                  tableName="user_sequence">
+        </loadData>
     </changeSet>
 </databaseChangeLog>

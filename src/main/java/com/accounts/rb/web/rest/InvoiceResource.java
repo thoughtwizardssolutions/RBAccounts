@@ -55,6 +55,7 @@ import com.accounts.rb.repository.ProfileRepository;
 import com.accounts.rb.security.AuthoritiesConstants;
 import com.accounts.rb.service.InvoiceService;
 import com.accounts.rb.service.UserSequenceService;
+import com.accounts.rb.web.rest.errors.ErrorDTO;
 import com.accounts.rb.web.rest.util.HeaderUtil;
 import com.accounts.rb.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
