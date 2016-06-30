@@ -58,6 +58,7 @@ public class ProductResource {
         User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         product.setCreatedBy(user.getUsername());
         product.setCreationTime(ZonedDateTime.now());
+        if(product.getQuantity() == null) product.setQuantity(0);
         Product result = productRepository.save(product);
         return ResponseEntity.created(new URI("/api/products/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("product", result.getId().toString()))

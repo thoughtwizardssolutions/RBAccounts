@@ -1,13 +1,13 @@
 <div>
-    <h2>Products</h2>
+    <h2>Product Transactions</h2>
     <jhi-alert></jhi-alert>
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="product.new" >
+                <button class="btn btn-primary" ui-sref="product-transaction.new" >
                     <span class="glyphicon glyphicon-plus"></span>
                     <span >
-                        Create new Product
+                        Create new Product Transaction
                     </span>
                 </button>
             </div>
@@ -19,48 +19,40 @@
             <thead>
                 <tr>
                     <th><span>ID</span></th>
-                    <th><span>Name</span></th>
-                    <th><span>MOP</span></th>
-                    <th><span>Color</span></th>
-                    <th><span>Units Available</span></th>
                     <th><span>Creation Time</span></th>
                     <th><span>Modification Time</span></th>
-                    <th><span>Created By</span></th>
+                    <th><span>Quantity</span></th>
+                    <th><span>New Stock</span></th>
+                    <th><span>Return Stock</span></th>
+                    <th><span>Invoiced Stock</span></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="product in vm.products track by product.id">
-                    <td><a ui-sref="product-detail({id:product.id})">{{product.id}}</a></td>
-                    <td>{{product.name}}</td>
-                    <td>{{product.mrp}}</td>
-                    <td>{{product.color}}</td>
-                    <td>{{product.quantity}}</td>
-                    <td>{{product.creationTime | date:'medium'}}</td>
-                    <td>{{product.modificationTime | date:'medium'}}</td>
-                    <td>{{product.createdBy}}</td>
+                <tr ng-repeat="productTransaction in vm.productTransactions track by productTransaction.id">
+                    <td><a ui-sref="product-transaction-detail({id:productTransaction.id})">{{productTransaction.id}}</a></td>
+                    <td>{{productTransaction.creationTime | date:'medium'}}</td>
+                    <td>{{productTransaction.modificationTime | date:'medium'}}</td>
+                    <td>{{productTransaction.quantity}}</td>
+                    <td>{{productTransaction.newStock}}</td>
+                    <td>{{productTransaction.returnStock}}</td>
+                    <td>{{productTransaction.invoicedStock}}</td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"
-                                    ui-sref="add-stock({id:product.id})"
-                                    class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-plus"></span>
-                                <span class="hidden-xs hidden-sm"></span>
-                            </button>
-                            <button type="submit"
-                                    ui-sref="product-detail({id:product.id})"
+                                    ui-sref="product-transaction-detail({id:productTransaction.id})"
                                     class="btn btn-info btn-sm">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                                 <span class="hidden-xs hidden-sm"></span>
                             </button>
                             <button type="submit"
-                                    ui-sref="product.edit({id:product.id})"
+                                    ui-sref="product-transaction.edit({id:productTransaction.id})"
                                     class="btn btn-primary btn-sm">
                                 <span class="glyphicon glyphicon-pencil"></span>
                                 <span class="hidden-xs hidden-sm"></span>
                             </button>
                             <button type="submit"
-                                    ui-sref="product.delete({id:product.id})"
+                                    ui-sref="product-transaction.delete({id:productTransaction.id})"
                                     class="btn btn-danger btn-sm">
                                 <span class="glyphicon glyphicon-remove-circle"></span>
                                 <span class="hidden-xs hidden-sm"></span>

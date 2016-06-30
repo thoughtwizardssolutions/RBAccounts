@@ -135,7 +135,7 @@ tbody td, thead th {
 						</div>
 						<div class="col-md-2">
 							<label class="control-label" for="field_mrp">Rate</label>
-							<input type="number" class="form-control" name="quantity" id="field_mrp" ng-model="invoiceItem.mrp" ng-change="vm.calculateItemAmount(invoiceItem)" required />
+							<input type="number" class="form-control" name="rate" id="field_mrp" ng-model="invoiceItem.mrp" ng-change="vm.calculateItemAmount(invoiceItem)" required />
 						</div>
 						<div class="col-md-2">
 							<label class="control-label" for="field_discount">Discount</label>
@@ -254,8 +254,8 @@ tbody td, thead th {
 		        </div>
 		        <div class="form-group col-md-4 col-md-offset-8">
     			<button type="submit" onclick="window.history.back()" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span></button>
-                <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary" ng-click="vm.saveInvoice()">Save</button>
-                <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary" ng-click="vm.showInvoice()">Download as PDF</button>
+                <button type="submit" ng-disabled="editForm.$invalid || vm.invalid" class="btn btn-primary" ng-click="vm.saveInvoice()">Save</button>
+                <button type="submit" ng-disabled="editForm.$invalid || vm.invalid" class="btn btn-primary" ng-click="vm.showInvoice()">Download as PDF</button>
                 </div>
             </form>
             <p></p>

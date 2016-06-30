@@ -252,6 +252,7 @@
 				invoiceItem.productName = product.name;
 				invoiceItem.mrp = product.mrp;
 				invoiceItem.color = product.color;
+				invoiceItem.maxQuantity = product.quantity;
 				calculateItemAmount(invoiceItem)
 			}
 		}
@@ -324,15 +325,21 @@
 	     
 	      
 		 function calculateItemAmount(invoiceItem) {
+			 if(invoiceItem.quantity > invoiceItem.maxQuantity) {
+				 AlertService.error("Available quantity for the selected product is "+invoiceItem.maxQuantity);
+				 vm.invalid = true;
+				 return;
+			 } else {
+				 vm.invalid = false;
+			 }
 			 if(!invoiceItem.discount) invoiceItem.discount = 0;
 			 if(!invoiceItem.quantity) invoiceItem.quantity = 0;
 			 if(!invoiceItem.mrp) invoiceItem.mrp = 0;
 			if (invoiceItem) {
 				invoiceItem.amount = (invoiceItem.quantity * invoiceItem.mrp) - invoiceItem.discount;
 				updateAmounts();
-			 } else {
-		     }
-	}
+			 }
+		 }
 		 function updateAmounts(){
 			vm.invoice.subtotal = 0;
 			vm.invoice.taxes = 0;

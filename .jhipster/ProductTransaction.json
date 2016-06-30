@@ -1,0 +1,40 @@
+{
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "creationTime",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "modificationTime",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "quantity",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "newStock",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "returnStock",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "invoicedStock",
+            "fieldType": "Boolean"
+        }
+    ],
+    "changelogDate": "20160630151827",
+    "dto": "no",
+    "service": "serviceClass",
+    "entityTableName": "product_transaction",
+    "pagination": "no"
+}

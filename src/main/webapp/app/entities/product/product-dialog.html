@@ -8,11 +8,7 @@
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <div class="form-group" ng-show="vm.product.id">
-            <label for="id">ID</label>
-            <input type="text" class="form-control" id="id" name="id"
-                    ng-model="vm.product.id" readonly />
-        </div>
+
         <div class="form-group">
             <label class="control-label" for="field_name">Name</label>
             <input type="text" class="form-control" name="name" id="field_name"
@@ -45,6 +41,12 @@
             <label class="control-label" for="field_color">Color</label>
             <input type="text" class="form-control" name="color" id="field_color"
                     ng-model="vm.product.color"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_units_available">Units Available</label>
+            <input type="text" class="form-control" name="color" id="field_units_available"
+                    ng-model="vm.product.quantity"
                      />
         </div>
     </div>

@@ -1,0 +1,51 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myProductTransactionLabel">Add Product Stock Entry</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group">
+            <label class="control-label" for="field_quantity">Add Stock</label>
+            <input type="number" class="form-control" name="quantity" id="field_quantity"
+                    ng-model="vm.productTransaction.quantity"
+                    required />
+            <div ng-show="editForm.quantity.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.quantity.$error.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.quantity.$error.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
+        
+        <div class="form-group">
+        <div class="btn-group">
+   			<label class="btn btn-default"><input type="radio" ng-model="vm.stockType" value="newStock" ng-required="!vm.stockType"  ng-click="vm.selectStockType('newStock')" >New Stock</label>
+   			<label class="btn btn-default"><input type="radio" ng-model="vm.stockType" value="returnStock" ng-required="!vm.stockType"  ng-click="vm.selectStockType('returnStock')" >Return Stock</label>
+    	</div>
+         <div ng-show="editForm.stockType.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.quantity.$error.required">
+                    Please select type of stock.
+                </p>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

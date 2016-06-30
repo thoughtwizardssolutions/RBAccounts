@@ -3,11 +3,15 @@ package com.accounts.rb.domain;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -43,6 +47,14 @@ public class Product implements Serializable {
 
     @Column(name = "created_by")
     private String createdBy;
+    
+    @Column(name = "quantity")
+    private Integer quantity;
+    
+    @OneToMany(mappedBy = "product")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonIgnore
+    private List<ProductTransaction> productTransactions = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -98,6 +110,22 @@ public class Product implements Serializable {
 
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public List<ProductTransaction> getProductTransactions() {
+      return productTransactions;
+    }
+
+    public void setProductTransactions(List<ProductTransaction> productTransactions) {
+      this.productTransactions = productTransactions;
+    }
+
+    public Integer getQuantity() {
+      return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+      this.quantity = quantity;
     }
 
     @Override

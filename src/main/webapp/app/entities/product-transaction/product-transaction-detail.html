@@ -1,0 +1,38 @@
+
+<div>
+    <h2><span>Product Transaction</span> {{vm.productTransaction.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span>Creation Time</span></dt>
+        <dd>
+            <span>{{vm.productTransaction.creationTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Modification Time</span></dt>
+        <dd>
+            <span>{{vm.productTransaction.modificationTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Quantity</span></dt>
+        <dd>
+            <span>{{vm.productTransaction.quantity}}</span>
+        </dd>
+        <dt><span>New Stock</span></dt>
+        <dd>
+            <span>{{vm.productTransaction.newStock}}</span>
+        </dd>
+        <dt><span>Return Stock</span></dt>
+        <dd>
+            <span>{{vm.productTransaction.returnStock}}</span>
+        </dd>
+        <dt><span>Invoiced Stock</span></dt>
+        <dd>
+            <span>{{vm.productTransaction.invoicedStock}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+</div>

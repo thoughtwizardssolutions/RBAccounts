@@ -3,22 +3,21 @@
 
     angular
         .module('rbaccountsApp')
-        .controller('InvoiceDialogController', InvoiceDialogController);
+        .controller('ProductTransactionDialogController', ProductTransactionDialogController);
 
-    InvoiceDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Invoice', 'InvoiceItem'];
+    ProductTransactionDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'ProductTransaction'];
 
-    function InvoiceDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, Invoice, InvoiceItem) {
+    function ProductTransactionDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, ProductTransaction) {
         var vm = this;
 
-        vm.invoice = entity;
+        vm.productTransaction = entity;
         vm.clear = clear;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         vm.save = save;
-        vm.invoiceitems = InvoiceItem.query();
 
         $timeout(function (){
-            angular.element('.form-group:eq(3)>input').focus();
+            angular.element('.form-group:eq(1)>input').focus();
         });
 
         function clear () {
@@ -27,15 +26,15 @@
 
         function save () {
             vm.isSaving = true;
-            if (vm.invoice.id !== null) {
-                Invoice.update(vm.invoice, onSaveSuccess, onSaveError);
+            if (vm.productTransaction.id !== null) {
+                ProductTransaction.update(vm.productTransaction, onSaveSuccess, onSaveError);
             } else {
-                Invoice.save(vm.invoice, onSaveSuccess, onSaveError);
+                ProductTransaction.save(vm.productTransaction, onSaveSuccess, onSaveError);
             }
         }
 
         function onSaveSuccess (result) {
-            $scope.$emit('rbaccountsApp:invoiceUpdate', result);
+            $scope.$emit('rbaccountsApp:productTransactionUpdate', result);
             $uibModalInstance.close(result);
             vm.isSaving = false;
         }

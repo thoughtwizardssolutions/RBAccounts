@@ -127,6 +127,30 @@
                     $state.go('^');
                 });
             }]
+        })
+        .state('add-stock', {
+            parent: 'product',
+            url: '/{id}/addStock',
+            data: {
+                authorities: ['ROLE_USER', 'ROLE_ORG_ADMIN']
+            },
+            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                $uibModal.open({
+                    templateUrl: 'app/entities/product-transaction/product-add-transaction-dialog.html',
+                    controller: 'ProductAddTransactionDialogController',
+                    controllerAs: 'vm',
+                    size: 'md',
+                    resolve: {
+                        entity: ['Product', function(Product) {
+                            return Product.get({id : $stateParams.id}).$promise;
+                        }]
+                    }
+                }).result.then(function() {
+                    $state.go('product', null, { reload: true });
+                }, function() {
+                    $state.go('^');
+                });
+            }]
         });
     }
 
