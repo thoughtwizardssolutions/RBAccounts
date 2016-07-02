@@ -32,7 +32,6 @@
         function save () {
             vm.isSaving = true;
             vm.productTransaction.product = vm.product;
-            vm.productTransaction.product.quantity = vm.productTransaction.product.quantity + vm.productTransaction.quantity;
             if (vm.productTransaction.id !== null) {
                 ProductTransaction.update(vm.productTransaction, onSaveSuccess, onSaveError);
             } else {

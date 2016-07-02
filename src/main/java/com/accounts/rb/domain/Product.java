@@ -51,7 +51,12 @@ public class Product implements Serializable {
     @Column(name = "quantity")
     private Integer quantity;
     
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch=FetchType.LAZY)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonIgnore
+    private List<InvoiceItem> invoiceItem = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "product", fetch=FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JsonIgnore
     private List<ProductTransaction> productTransactions = new ArrayList<>();
@@ -126,6 +131,14 @@ public class Product implements Serializable {
 
     public void setQuantity(Integer quantity) {
       this.quantity = quantity;
+    }
+
+    public List<InvoiceItem> getInvoiceItem() {
+      return invoiceItem;
+    }
+
+    public void setInvoiceItem(List<InvoiceItem> invoiceItem) {
+      this.invoiceItem = invoiceItem;
     }
 
     @Override

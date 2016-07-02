@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.accounts.rb.domain.Product;
 import com.accounts.rb.repository.ProductRepository;
+import com.accounts.rb.service.ProductTransactionService;
 import com.accounts.rb.web.rest.util.HeaderUtil;
 import com.codahale.metrics.annotation.Timed;
 
@@ -38,6 +39,10 @@ public class ProductResource {
         
     @Inject
     private ProductRepository productRepository;
+    
+    @Inject
+    private ProductTransactionService productTransactionService;
+    
     
     /**
      * POST  /products : Create a new product.
@@ -60,8 +65,9 @@ public class ProductResource {
         product.setCreationTime(ZonedDateTime.now());
         if(product.getQuantity() == null) product.setQuantity(0);
         Product result = productRepository.save(product);
+        productTransactionService.saveProductTransactions(product);
         return ResponseEntity.created(new URI("/api/products/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("product", result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert("product", result.getName()))
             .body(result);
     }
 
@@ -86,7 +92,7 @@ public class ProductResource {
         product.setModificationTime(ZonedDateTime.now());
         Product result = productRepository.save(product);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("product", product.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert("product", product.getName()))
             .body(result);
     }
 
@@ -141,5 +147,5 @@ public class ProductResource {
         productRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("product", id.toString())).build();
     }
-
+    
 }

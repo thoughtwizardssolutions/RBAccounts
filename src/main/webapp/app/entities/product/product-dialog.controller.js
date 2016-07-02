@@ -15,6 +15,15 @@
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         vm.save = save;
+        vm.isEdit = false;
+        
+        setup();
+        
+        function setup() {
+        	if(entity && entity.id) {
+        		vm.isEdit = true;
+        	}
+        }
 
         $timeout(function (){
             angular.element('.form-group:eq(0)>input').focus();

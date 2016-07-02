@@ -5,9 +5,9 @@
         .module('rbaccountsApp')
         .controller('MyProfileController', MyProfileController);
 
-    MyProfileController.$inject = ['$timeout', '$scope', '$stateParams', '$q', 'MyProfile'];
+    MyProfileController.$inject = ['$timeout', '$state', 'MyProfile', 'AlertService'];
 
-    function MyProfileController ($timeout, $scope, $stateParams, $q, MyProfile) {
+    function MyProfileController ($timeout, $state, MyProfile, AlertService) {
         var vm = this;
 
         vm.profile = {};
@@ -46,7 +46,6 @@
 
         function onSaveSuccess (result) {
             vm.isSaving = false;
-            vm.success = true;
             $state.go('my-profile', null, { reload: true });
         }
 

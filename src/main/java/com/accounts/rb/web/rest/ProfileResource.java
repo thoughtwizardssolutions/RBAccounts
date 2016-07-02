@@ -71,7 +71,7 @@ public class ProfileResource {
           Profile result = profileRepository.save(profile);
           
         return ResponseEntity.created(new URI("/api/profiles/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("profile", result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert("profile", result.getFirmName()))
             .body(result);
     }
 
@@ -93,10 +93,11 @@ public class ProfileResource {
         if (profile.getId() == null) {
             return createProfile(profile);
         }
+        addressRepository.save(profile.getAddress());
         profile.setModificationTime(ZonedDateTime.now());
         Profile result = profileRepository.save(profile);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("profile", profile.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert("profile", profile.getFirmName()))
             .body(result);
     }
 

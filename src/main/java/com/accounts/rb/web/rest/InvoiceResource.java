@@ -55,7 +55,6 @@ import com.accounts.rb.repository.ProfileRepository;
 import com.accounts.rb.security.AuthoritiesConstants;
 import com.accounts.rb.service.InvoiceService;
 import com.accounts.rb.service.UserSequenceService;
-import com.accounts.rb.web.rest.errors.ErrorDTO;
 import com.accounts.rb.web.rest.util.HeaderUtil;
 import com.accounts.rb.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
@@ -87,8 +86,6 @@ public class InvoiceResource {
     @Inject
     private InvoiceService invoiceService;
     
-    @Inject
-    private UserSequenceService userSequenceService;
     
     @Inject
     private DealerRepository dealerResource;
@@ -112,20 +109,20 @@ public class InvoiceResource {
         if (invoice.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("invoice", "idexists", "A new invoice cannot already have an ID")).body(null);
         }
-        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = getCurrentUser();
         invoice.setCreationTime(ZonedDateTime.now());
         invoice.setCreatedBy(user.getUsername());
         if(profileRepository.findByUser(user.getUsername()).isEmpty()) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("invoice", "profilenotexists", "Invoice cannot be created as the user has not setup profile yet.")).body(null);
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("invoice", "profilenotexists", "Please set up your profile before creating an Invoice")).body(null);
         }
-        Invoice result = invoiceService.save(invoice);
-        userSequenceService.updateUserSequence(user.getUsername(), InvoiceType.valueOf(invoice.getInvoiceType()));
-        // TOOD save data in reporting tables
+        Invoice result = invoiceService.save(invoice, user);
+        
         return ResponseEntity.created(new URI("/api/invoices/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("invoice", result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert("invoice", result.getInvoiceNumber()))
             .body(result);
     }
-    
+
+
     /**
      * POST  /invoices/pdf : Create a new invoice PDF.
      *
@@ -151,10 +148,10 @@ public class InvoiceResource {
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 		Document document = new Document();
 		Dealer dealer = dealerResource.findOne(invoice.getDealerId());
-		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = getCurrentUser();
 		List<Profile> profiles = profileRepository.findByUser(user.getUsername());
 		if(profiles.isEmpty()) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("invoice", "profilenotexists", "Invoice cannot be created as the user has not setup profile yet.")).body(null);
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("invoice", "profilenotexists", "Please set up your profile before creating an Invoice.")).body(null);
 		}
 		Profile profile = profiles.get(0);
 		try {
@@ -479,7 +476,7 @@ public class InvoiceResource {
         if (invoice.getId() == null) {
             return createInvoice(invoice);
         }
-        Invoice result = invoiceService.save(invoice);
+        Invoice result = invoiceService.update(invoice, getCurrentUser());
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("invoice", invoice.getId().toString()))
             .body(result);
@@ -499,7 +496,7 @@ public class InvoiceResource {
     public ResponseEntity<List<Invoice>> getAllInvoices(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Invoices");
-        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = getCurrentUser();
         Page<Invoice> page = invoiceService.findByCreatedBy(pageable, user.getUsername());
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/invoices");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -518,7 +515,7 @@ public class InvoiceResource {
   public List<InvoiceReport> getReport(InvoiceSearchCommand criteria) {
     
     log.debug("REST request to create report for criteria : " + criteria);
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    User user = getCurrentUser();
     Iterator<GrantedAuthority> iter = user.getAuthorities().iterator();
     while(iter.hasNext()) {
       GrantedAuthority auth = iter.next();
@@ -568,5 +565,13 @@ public class InvoiceResource {
         invoiceService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("invoice", id.toString())).build();
     }
-
+    
+    /**
+     * 
+     * @return current logged in User
+     */
+    private User getCurrentUser() {
+      User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      return user;
+    }
 }

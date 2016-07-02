@@ -69,6 +69,8 @@
 				function onSuccess(data, headers) {
 					vm.selectedContact = data;
 				}
+				// TODO load max quantities for each invoiceItem
+				// currently it is allowed to enter invalid quantities while editing an invoice
 			} else {
 				vm.invoice = {};
 				vm.invoice.taxes = 0;
@@ -125,8 +127,6 @@
 				$state.go('invoice', null, { reload: true });
 			}
 			function onSaveError(error) {
-				console.log(error);
-				console.log(error.headers);
 				AlertService.error(error.headers('X-rbaccountsApp-error'));
 				vm.error = true;
 			}
@@ -142,7 +142,7 @@
                 var fileURL = URL.createObjectURL(file);
                 window.open(fileURL);
             }).error(function(data,status,headers,config) {
-            	AlertService.error("Request failed, please try again later!");
+            	AlertService.error(headers('X-rbaccountsApp-error'));
             });
 		}
 		function addInvoiceitem() {
@@ -253,6 +253,7 @@
 				invoiceItem.mrp = product.mrp;
 				invoiceItem.color = product.color;
 				invoiceItem.maxQuantity = product.quantity;
+				invoiceItem.product = product;
 				calculateItemAmount(invoiceItem)
 			}
 		}

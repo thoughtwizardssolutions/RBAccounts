@@ -19,7 +19,7 @@ spring:
             enabled: false # we use gulp + BrowserSync for livereload
     datasource:
         driverClassName : org.h2.Driver
-        url: jdbc:h2:file:./rbaccounts;
+        url: jdbc:h2:file:./rbaccounts
         name:
         username: accounts
         password:

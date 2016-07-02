@@ -3,6 +3,8 @@ package com.accounts.rb.domain;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -45,6 +47,10 @@ public class ProductTransaction implements Serializable {
     @ManyToOne
     @JoinColumn(name="product_id")
     private Product product;
+    
+    @OneToOne
+    @JoinColumn(name="invoice_item_id")
+    private InvoiceItem invoiceItem;
     
     public Long getId() {
         return id;
@@ -108,6 +114,14 @@ public class ProductTransaction implements Serializable {
 
     public void setProduct(Product product) {
       this.product = product;
+    }
+
+    public InvoiceItem getInvoiceItem() {
+      return invoiceItem;
+    }
+
+    public void setInvoiceItem(InvoiceItem invoiceItem) {
+      this.invoiceItem = invoiceItem;
     }
 
     @Override

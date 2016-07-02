@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -22,10 +23,11 @@ import com.accounts.rb.domain.Invoice;
 import com.accounts.rb.domain.InvoiceItem;
 import com.accounts.rb.domain.InvoiceReport;
 import com.accounts.rb.domain.InvoiceSearchCommand;
+import com.accounts.rb.domain.InvoiceType;
 import com.accounts.rb.repository.InvoiceRepository;
 
 /**
- * Service Interface for managing InvoiceItem.
+ * Service Interface for managing Invoice.
  */
 @Service
 @Transactional
@@ -34,8 +36,15 @@ public class InvoiceService {
   @Inject 
   InvoiceItemService invoiceItemService;
   
+  @Inject
+  private UserSequenceService userSequenceService;
+  
   @Inject 
   InvoiceRepository invoiceRepository;
+
+  @Inject 
+  ProductTransactionService productTransactionService;
+
 
     /**
      * Save a invoiceItem.
@@ -43,7 +52,7 @@ public class InvoiceService {
      * @param invoiceItem the entity to save
      * @return the persisted entity
      */
-    public Invoice save(Invoice invoice) {
+    public Invoice save(Invoice invoice, User user) {
       for(InvoiceItem invoiceItem : invoice.getInvoiceItems()) {
     	  if (!CollectionUtils.isEmpty(invoiceItem.getImeis())) {
 	        for(Imei imei: invoiceItem.getImeis()) {
@@ -52,8 +61,12 @@ public class InvoiceService {
     	  }
         invoiceItem.setInvoice(invoice);
       }
-      return invoiceRepository.save(invoice);
+      Invoice savedInvoice = invoiceRepository.save(invoice);
+      updateUserSequence(savedInvoice, user);
+      productTransactionService.saveInvoiceTransactions(invoice);
+      return savedInvoice;
     }
+    
 
     /**
      *  Get all the invoiceItems.
@@ -113,17 +126,6 @@ public Page<Invoice> findByCreatedBy(Pageable pageable, String createdBy) {
     }
 
     /**
-     *  find Invoices based on criteria irrespective of createdBy
-     * @param criteria 
-     *  
-     *  @param search criteria
-    public List<InvoiceReport> findAllByCriteria(InvoiceSearchCommand criteria) {
-      // TODO
-      return Collections.EMPTY_LIST;
-    }
-     */
-
-    /**
      *  find Invoices based on criteria only createdBy provided username
      *  
      *  @param search criteria, username
@@ -151,5 +153,28 @@ public Page<Invoice> findByCreatedBy(Pageable pageable, String createdBy) {
         list.add(new InvoiceReport(invoiceNumber, creationTime, customerName, taxes, totalAmount, createdBy, id));
       }
        return list; 
+    }
+    
+    /**
+     * Updates Invoice sequence number for User after invoice is created
+     * @param invoice
+     * @param user
+     */
+    private void updateUserSequence(Invoice invoice, User user) {
+      userSequenceService.updateUserSequence(user.getUsername(), InvoiceType.valueOf(invoice.getInvoiceType()));
+    }
+
+    public Invoice update(Invoice invoice, User currentUser) {
+        for(InvoiceItem invoiceItem : invoice.getInvoiceItems()) {
+                  if (!CollectionUtils.isEmpty(invoiceItem.getImeis())) {
+                    for(Imei imei: invoiceItem.getImeis()) {
+                      imei.setInvoiceItem(invoiceItem);
+                    }
+                  }
+         invoiceItem.setInvoice(invoice);
+        }
+      Invoice savedInvoice = invoiceRepository.save(invoice);
+      productTransactionService.updateInvoiceTransactions(invoice);
+      return savedInvoice;
     }
 }

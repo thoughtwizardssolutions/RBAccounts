@@ -53,7 +53,7 @@ public class TaxResource {
         tax.setCreatedBy(user.getUsername());
         Tax result = taxRepository.save(tax);
         return ResponseEntity.created(new URI("/api/taxes/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("tax", result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert("tax", result.getName()))
             .body(result);
     }
 
@@ -77,7 +77,7 @@ public class TaxResource {
         }
         Tax result = taxRepository.save(tax);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("tax", tax.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert("tax", tax.getName()))
             .body(result);
     }
 

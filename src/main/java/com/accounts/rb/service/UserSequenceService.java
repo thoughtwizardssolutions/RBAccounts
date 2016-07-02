@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.accounts.rb.domain.InvoiceType;
+import com.accounts.rb.domain.UserSequence;
 import com.accounts.rb.repository.UserSequenceRepository;
 
 @Service
@@ -25,13 +26,15 @@ public class UserSequenceService {
   @Async
   public void updateUserSequence(String username, InvoiceType invoiceType) {
     log.info("Updating user sequence");
+    List<UserSequence> userSequences = userSequenceRepository.findByCreatedBy(username);
+    UserSequence userSequence = userSequences.get(0);
     if(invoiceType.equals(InvoiceType.TAX_INVOICE)) {
-      userSequenceRepository.incrementTaxSequence(username);
+      userSequence.setTaxSequence(userSequence.getTaxSequence() + 1);
     } else if(invoiceType.equals(InvoiceType.SALES_INVOICE)) {
-      userSequenceRepository.incrementSalesSequence(username);
+      userSequence.setSalesSequence(userSequence.getSalesSequence() + 1);
     } else {
-      userSequenceRepository.incrementSampleSequence(username);
+      userSequence.setSampleInvoiceSequence(userSequence.getSampleInvoiceSequence() + 1);
     }
+    userSequenceRepository.save(userSequence);
   }
-  
 }

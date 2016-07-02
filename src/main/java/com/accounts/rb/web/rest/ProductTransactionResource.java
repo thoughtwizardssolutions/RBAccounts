@@ -7,7 +7,6 @@ import com.accounts.rb.service.ProductTransactionService;
 import com.accounts.rb.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,10 +49,6 @@ public class ProductTransactionResource {
         if (productTransaction.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("productTransaction", "idexists", "A new productTransaction cannot already have an ID")).body(null);
         }
-        productTransaction.getProduct().setModificationTime(ZonedDateTime.now());
-        productRepository.save(productTransaction.getProduct());
-        productTransaction.setCreationTime(ZonedDateTime.now());
-        productTransaction.setInvoicedStock(false);
         ProductTransaction result = productTransactionService.save(productTransaction);
         return ResponseEntity.created(new URI("/api/product-transactions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("productTransaction", result.getId().toString()))

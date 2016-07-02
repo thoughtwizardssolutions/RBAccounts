@@ -13,8 +13,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -68,14 +70,23 @@ public class InvoiceItem implements Serializable {
 
     @Column(name = "product_name")
     private String productName;
+    
+    @ManyToOne
+    @JoinColumn(name="product_id")
+    private Product product;
 
     @OneToMany(mappedBy = "invoiceItem", cascade = {CascadeType.ALL})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<Imei> imeis = new ArrayList<>();
 
     @ManyToOne
+    @JoinColumn(name="invoice_id")
     @JsonIgnore
     private Invoice invoice;
+    
+    @OneToOne(mappedBy = "invoiceItem")
+    @JsonIgnore
+    private ProductTransaction productTransaction;
 
     public Long getId() {
         return id;
@@ -173,6 +184,14 @@ public class InvoiceItem implements Serializable {
         this.productName = productName;
     }
 
+    public Product getProduct() {
+      return product;
+    }
+
+    public void setProduct(Product product) {
+      this.product = product;
+    }
+
     public List<Imei> getImeis() {
         return imeis;
     }
@@ -187,6 +206,14 @@ public class InvoiceItem implements Serializable {
 
     public void setInvoice(Invoice invoice) {
         this.invoice = invoice;
+    }
+
+    public ProductTransaction getProductTransaction() {
+      return productTransaction;
+    }
+
+    public void setProductTransaction(ProductTransaction productTransaction) {
+      this.productTransaction = productTransaction;
     }
 
     @Override
