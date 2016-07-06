@@ -3,6 +3,7 @@ package com.accounts.rb.web.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +22,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.accounts.rb.domain.FileUpload;
 import com.accounts.rb.domain.Product;
 import com.accounts.rb.repository.ProductRepository;
 import com.accounts.rb.service.ProductTransactionService;
@@ -147,5 +151,37 @@ public class ProductResource {
         productRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("product", id.toString())).build();
     }
+    
+    @RequestMapping(
+        value = "products/upload",
+        method = RequestMethod.POST
+    )
+    public ResponseEntity uploadFile(MultipartHttpServletRequest request) {
+
+        try {
+            Iterator<String> itr = request.getFileNames();
+
+            while (itr.hasNext()) {
+                String uploadedFile = itr.next();
+                MultipartFile file = request.getFile(uploadedFile);
+                String mimeType = file.getContentType();
+                String filename = file.getOriginalFilename();
+                byte[] bytes = file.getBytes();
+
+                FileUpload newFile = new FileUpload(filename, bytes, mimeType);
+                
+                log.info("File ready for product creation :::: ");
+                log.info(newFile.toString());
+
+                // fileUploadService.uploadFile(newFile);
+            }
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>("{}", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>("{}", HttpStatus.OK);
+    }
+    
     
 }

@@ -1,0 +1,25 @@
+<form name="editForm" role="form" novalidate ng-submit="vm.uploadFile()" show-validation>
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="productUploadLabel">Upload Excel Sheet with Product Data</h4>
+    </div>
+    <div class="modal-body">
+	    <jhi-alert-error></jhi-alert-error>
+        <div  class="dropzone" dropzone="">
+                 <div class="dz-default dz-message">
+                 </div>
+         </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="!vm.fileAdded" class="btn btn-primary">
+            <span class="glyphicon glyphicon-upload"></span>&nbsp;<span>Upload & Create Products</span>
+        </button>
+         <button type="button" ng-disabled="vm.isSaving" ng-click="vm.close()" class="btn btn-success">
+            <span class="glyphicon glyphicon-off"></span>&nbsp;<span>Close</span>
+        </button>
+    </div>
+</form>

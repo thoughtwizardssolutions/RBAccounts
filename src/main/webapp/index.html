@@ -3,14 +3,19 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>rbaccounts</title>
     <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css content/css/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css">
+    <!-- Load Dropzone CSS -->
+    <link href="bower_components/dropzone/downloads/css/basic.css" rel="stylesheet" />
+    <link href="bower_components/dropzone/downloads/css/dropzone.css" rel="stylesheet" />
     <!-- endinject -->
     <!-- endbuild -->
     <!-- build:css content/css/main.css -->
@@ -68,6 +73,9 @@
     <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
     <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
     <script src="bower_components/angular-file-saver/dist/angular-file-saver.bundle.js"></script>
+    <script src="bower_components/dropzone/downloads/dropzone.js"></script>
+    <script src="bower_components/angular-dropzone/lib/angular-dropzone.js"></script>
+    
     <!-- endinject -->
     <!-- endbuild -->
 
@@ -244,6 +252,9 @@
     <script src="app/account/activate/activate.state.js"></script>
     <script src="app/account/activate/activate.controller.js"></script>
     <script src="app/account/account.state.js"></script>
+    <script src="app/entities/product/dropzone.directive.js"></script>
+    <script src="app/entities/product/product-upload-dialog.controller.js"></script>
+    
     <!-- endinject -->
     <!-- endbuild -->
 

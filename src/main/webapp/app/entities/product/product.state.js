@@ -115,6 +115,7 @@
                     templateUrl: 'app/entities/product/product-delete-dialog.html',
                     controller: 'ProductDeleteController',
                     controllerAs: 'vm',
+                    backdrop: 'static',
                     size: 'md',
                     resolve: {
                         entity: ['Product', function(Product) {
@@ -139,11 +140,34 @@
                     templateUrl: 'app/entities/product-transaction/product-add-transaction-dialog.html',
                     controller: 'ProductAddTransactionDialogController',
                     controllerAs: 'vm',
+                    backdrop: 'static',
                     size: 'md',
                     resolve: {
                         entity: ['Product', function(Product) {
                             return Product.get({id : $stateParams.id}).$promise;
                         }]
+                    }
+                }).result.then(function() {
+                    $state.go('product', null, { reload: true });
+                }, function() {
+                    $state.go('^');
+                });
+            }]
+        })
+        .state('product-upload', {
+            parent: 'product',
+            url: '/productUpload',
+            data: {
+                authorities: ['ROLE_USER', 'ROLE_ORG_ADMIN']
+            },
+            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                $uibModal.open({
+                    templateUrl: 'app/entities/product/product-upload-dialog.html',
+                    controller: 'ProductUploadDialogController',
+                    controllerAs: 'vm',
+                    backdrop: 'static',
+                    size: 'md',
+                    resolve: {
                     }
                 }).result.then(function() {
                     $state.go('product', null, { reload: true });
