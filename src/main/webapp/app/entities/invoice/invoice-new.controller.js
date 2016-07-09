@@ -10,7 +10,6 @@
 			AlertService, Product, Tax, $http, UserSequence, Principal) {
 		var vm = this;
 
-		vm.doNotMatch = null;
 		vm.error = null;
 		vm.invoiceType = null;
 		vm.userSequence = null;
@@ -175,6 +174,16 @@
 
 			function onSuccess(data, headers) {
 				vm.products = data;
+				if(vm.editing){
+					// update max quantities for each item
+					for(var i = 0; i < vm.invoice.invoiceItems.length; i ++) {
+						for(var j = 0 ; j < vm.products.length ; j++) {
+							if(vm.invoice.invoiceItems[i].productName === vm.products[j].name) {
+								entity.invoiceItems[i].maxQuantity = vm.products[j].quantity;
+							}
+						}
+					}
+				}
 				var product = {};
 				product.name = 'Add new Product+';
 				product.id = -1;
@@ -208,6 +217,8 @@
 		
 		function selectContact(dealer) {
 			if(dealer.firmName === 'Add new contact+') {
+				vm.selectedContact = null;
+				vm.invoice.dealerId = null;
                 $uibModal.open({
                     templateUrl: 'app/entities/dealer/dealer-dialog.html',
                     controller: 'DealerDialogController',
@@ -232,6 +243,12 @@
 		
 		function selectInvoiceItemProduct(invoiceItem, product) {
 			if(product.name === 'Add new Product+') {
+				vm.tmpSelectedProduct = null;
+				invoiceItem.productName = null;
+				invoiceItem.mrp = null;
+				invoiceItem.color = null;
+				invoiceItem.maxQuantity = null;
+				invoiceItem.product = null;
                 $uibModal.open({
                     templateUrl: 'app/entities/product/product-dialog.html',
                     controller: 'ProductDialogController',
@@ -249,6 +266,7 @@
                 	loadProducts();
                 });
 			} else {
+				vm.tmpSelectedProduct = null;
 				invoiceItem.productName = product.name;
 				invoiceItem.mrp = product.mrp;
 				invoiceItem.color = product.color;

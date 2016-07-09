@@ -16,7 +16,9 @@
             // jhipster-needle-angularjs-add-module JHipster will add new module here
             'angular-loading-bar',
             'ngFileSaver',
-            'ngDropzone'
+            'ngDropzone',
+            'ui.select',
+            'ngSanitize'
         ])
         .run(run);
 

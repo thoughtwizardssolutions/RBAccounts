@@ -149,6 +149,7 @@ public class DealerResource {
     @Timed
     public ResponseEntity<Void> deleteDealer(@PathVariable Long id) {
         log.debug("REST request to delete Contact : {}", id);
+        // TODO check if any invoices exist for this dealer. If yes, don't allow delete
         dealerRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("Contact", id.toString())).build();
     }

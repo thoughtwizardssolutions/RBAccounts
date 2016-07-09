@@ -1,36 +1,32 @@
 <style>
 table {
-        width: 100%;
-    }
-
-thead, tbody, tr, td, th { display: block; }
-
+	width: 100%;
+}
+thead, tbody, tr, td, th {
+	display: block;
+}
 tr:after {
-    content: ' ';
-    display: block;
-    visibility: hidden;
-    clear: both;
+	content: ' ';
+	display: block;
+	visibility: hidden;
+	clear: both;
 }
-
 thead th {
-    height: 30px;
+	height: 30px;
 
-    /*text-align: left;*/
+	/*text-align: left;*/
 }
-
 tbody {
-    height: 200px;
-    overflow-y: auto;
+	height: 200px;
+	overflow-y: auto;
 }
-
 thead {
-    /* fallback */
+	/* fallback */
+	
 }
-
-
 tbody td, thead th {
-    width: 24%;
-    float: left;
+	width: 24%;
+	float: left;
 }
 </style>
 <div>
@@ -48,23 +44,23 @@ tbody td, thead th {
         </div>
         <form ng-show="!vm.success" name="editForm" role="form" novalidate show-validation>
         <div class="col-md-10 col-md-offset-1">
-
+				
 				<!-- Choose Contact Start -->
 				<div class="form-group">
-			        <div class="btn-group" uib-dropdown keyboard-nav>
-				        <button id="contact-choice" type="button" class="btn btn-primary" uib-dropdown-toggle>
-				            {{ vm.selectedContact.firmName || 'Select Contact'}} <span class="caret"></span>
-				        </button>
-				        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
-							<li role="menuitem" ng-repeat= "dealer in vm.dealers" ng-click="vm.selectContact(dealer)"><a>{{dealer.firmName}}</a></li>
-				        </ul>
-				    </div>
-				    <div>
-		            	<input ng-bind="vm.selectedContact" type="text" class="form-control" name="field_contact" id="field_contact" value ="{{vm.selectedContact.firmName}} {{vm.selectedContact.address.address1}} {{vm.selectedContact.address.address2}} {{vm.selectedContact.address.city}} {{vm.selectedContact.address.state}} {{vm.selectedContact.address.pincode}}" required readonly="true"/>
-					</div>        
-		        </div>	
-		       	<!-- Choose Contact End -->
-		       	<!-- Choose Invoice Type -->
+					<ui-select ng-model="vm.tmpSelectedContact" 
+						on-select="vm.selectContact($item, $model)" >
+						<ui-select-match
+						placeholder="Select a contact in the list or search by Firm Name...">{{vm.selectedContact.firmName}}</ui-select-match>
+						<ui-select-choices
+							repeat="dealer in vm.dealers | propsFilter: {firmName: $select.search}">
+						<div ng-bind-html="dealer.firmName | highlight: $select.search">
+						</div>
+						<small>{{dealer.address.address1}} {{dealer.address.address2}} {{dealer.address.city}} {{dealer.address.state}} {{dealer.address.pincode}}</small>
+						</ui-select-choices> 
+					</ui-select>
+				</div>
+				<!-- Choose Contact End -->
+				<!-- Choose Invoice Type -->
 				<div class="form-group">
 			        <div class="btn-group" uib-dropdown keyboard-nav>
 				        <button id="invoice-type-choice" type="button" class="btn btn-primary" uib-dropdown-toggle>Invoice Type : {{vm.invoiceType}} <span class="caret"></span>
@@ -102,33 +98,37 @@ tbody td, thead th {
 	        				
 				<!--Item start -->
 				<div class="alert alert-warning" data-ng-repeat="invoiceItem in vm.invoice.invoiceItems track by invoiceItem.index">
-					<!-- Choose Product -->
-					<div class="form-group">
-						<div class="btn-group" uib-dropdown keyboard-nav>
-							<button id="product-choice" type="button" class="btn btn-primary" uib-dropdown-toggle>{{ invoiceItem.productName || 'Select Product'}}<span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="product-choice">
-								<li role="menuitem"	ng-repeat="product in vm.products track by product.id"	ng-click="vm.selectInvoiceItemProduct(invoiceItem, product)" ><a>{{product.name}}</a></li>
-							</ul>
+				<!-- Choose Product Start -->
+				<div class="form-group">
+					<ui-select ng-model="vm.tmpSelectedProduct"
+						on-select="vm.selectInvoiceItemProduct(invoiceItem, $select.selected)" >
+						<ui-select-match
+						placeholder="Select a Product in the list or search by Product Name..."></ui-select-match>
+						<ui-select-choices
+							repeat="product in vm.products | propsFilter: {name: $select.search}">
+						<div ng-bind-html="product.name | highlight: $select.search">
 						</div>
-					</div>
-					<!--  Choose Product End -->
+						<small ng-if="product.color">Color: {{product.color}} MOP: {{product.mrp}} Units Available : {{product.quantity}} </small>
+						</ui-select-choices> 
+					</ui-select>
+				</div>
+				<!-- Choose Product End -->
 					
 					<!-- Invoice Item start  -->
 					<!-- Row start -->
 					<div class="row">
 						<div class="col-md-2">
 							<label class="control-label" for="product-name">Product</label> 
-							<input type="text" class="form-control" name="product-name"	id="product-name" ng-model="invoiceItem.productName" value="{{invoiceItem.productName}}" required />
+							<input type="text" class="form-control" name="product-name"	id="product-name" ng-model="invoiceItem.productName" value="{{invoiceItem.productName}}" required readonly="true" />
 						</div>
 						<div class="col-md-2">
 							<label class="control-label" for="field_color">Color</label>
-							<input type="text" class="form-control" name="field_color" id="field_color" ng-model="invoiceItem.color" />
+							<input type="text" class="form-control" name="field_color" id="field_color" ng-model="invoiceItem.color" readonly="true"/>
 						</div>
-						<div class="col-md-2">
+						<!-- <div class="col-md-2">
 							<label class="control-label" for="product-description">Description</label>
 							<input type="text" class="form-control"	name="product-description" id="product-description"	ng-model="invoiceItem.description" />
-						</div>
+						</div>  -->
 						<div class="col-md-2">
 							<label class="control-label" for="field_quantity">Quantity</label>
 							<input type="number" class="form-control" name="quantity" id="field_quantity" ng-model="invoiceItem.quantity" ng-change="vm.calculateItemAmount(invoiceItem)" required />
@@ -154,7 +154,7 @@ tbody td, thead th {
 						</div>
 						<div class="col-md-2">
 							<label class="control-label" for="field_item_amount">Amount</label> 
-							<input type="number" class="form-control" name="field_item_amount"	id="field_item_amount" ng-model="invoiceItem.amount" required />
+							<input type="number" class="form-control" name="field_item_amount"	id="field_item_amount" ng-model="invoiceItem.amount" required readonly="true"/>
 						</div>
 						<!--  Choose Tax End -->
 						
@@ -254,8 +254,8 @@ tbody td, thead th {
 		        </div>
 		        <div class="form-group col-md-4 col-md-offset-8">
     			<button type="submit" onclick="window.history.back()" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span></button>
-                <button type="submit" ng-disabled="editForm.$invalid || vm.invalid" class="btn btn-primary" ng-click="vm.saveInvoice()">Save</button>
-                <button type="submit" ng-disabled="editForm.$invalid || vm.invalid" class="btn btn-primary" ng-click="vm.showInvoice()">Download as PDF</button>
+                <button type="submit" ng-disabled="editForm.$invalid || vm.inval  || !vm.invoice.dealerId" class="btn btn-primary" ng-click="vm.saveInvoice()">Save</button>
+                <button type="submit" ng-disabled="editForm.$invalid || vm.invalid || !vm.invoice.dealerId" class="btn btn-primary" ng-click="vm.showInvoice()">Download as PDF</button>
                 </div>
             </form>
             <p></p>

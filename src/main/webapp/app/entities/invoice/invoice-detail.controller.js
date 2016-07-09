@@ -5,9 +5,9 @@
         .module('rbaccountsApp')
         .controller('InvoiceDetailController', InvoiceDetailController);
 
-    InvoiceDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'entity', 'Invoice', 'InvoiceItem', 'Dealer'];
+    InvoiceDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'entity', 'Invoice', 'InvoiceItem', 'Dealer', 'AlertService'];
 
-    function InvoiceDetailController($scope, $rootScope, $stateParams, entity, Invoice, InvoiceItem, Dealer) {
+    function InvoiceDetailController($scope, $rootScope, $stateParams, entity, Invoice, InvoiceItem, Dealer, AlertService) {
         var vm = this;
 
         vm.invoice = entity;

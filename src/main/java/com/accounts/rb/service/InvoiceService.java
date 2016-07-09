@@ -24,7 +24,9 @@ import com.accounts.rb.domain.InvoiceItem;
 import com.accounts.rb.domain.InvoiceReport;
 import com.accounts.rb.domain.InvoiceSearchCommand;
 import com.accounts.rb.domain.InvoiceType;
+import com.accounts.rb.domain.Product;
 import com.accounts.rb.repository.InvoiceRepository;
+import com.accounts.rb.repository.ProductRepository;
 
 /**
  * Service Interface for managing Invoice.
@@ -41,6 +43,9 @@ public class InvoiceService {
   
   @Inject 
   InvoiceRepository invoiceRepository;
+  
+  @Inject
+  ProductRepository productRepository;
 
   @Inject 
   ProductTransactionService productTransactionService;
@@ -118,10 +123,17 @@ public Page<Invoice> findByCreatedBy(Pageable pageable, String createdBy) {
 
     /**
      *  Delete the "id" invoiceItem.
-     *  
+     *  Also updates the invoiced products quantity
      *  @param id the id of the entity
      */
     public void delete(Long id) {
+      Invoice invoice = invoiceRepository.findOne(id);
+      for(InvoiceItem invoiceItem : invoice.getInvoiceItems()) {
+        Product product = invoiceItem.getProduct();
+        product.setModificationTime(ZonedDateTime.now());
+        product.setQuantity(product.getQuantity() + invoiceItem.getQuantity()); 
+        productRepository.save(product);
+    }
       invoiceRepository.delete(id);
     }
 
@@ -173,6 +185,7 @@ public Page<Invoice> findByCreatedBy(Pageable pageable, String createdBy) {
                   }
          invoiceItem.setInvoice(invoice);
         }
+        // TODO handle product updates in case quantity/product is changed in invoice
       Invoice savedInvoice = invoiceRepository.save(invoice);
       productTransactionService.updateInvoiceTransactions(invoice);
       return savedInvoice;

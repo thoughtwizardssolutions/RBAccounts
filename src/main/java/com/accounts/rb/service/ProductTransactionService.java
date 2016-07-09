@@ -67,7 +67,7 @@ public class ProductTransactionService {
     }   
     
     /**
-     * Asynchronously update productTransactions
+     * Asynchronously update productTransactions and products' available quantities
      * To be used with invoice creation flow to capture product transactions related to an invoice
      * @param List of InvoiceItems
      * @return the persisted entity
@@ -81,19 +81,34 @@ public class ProductTransactionService {
           ProductTransaction productTransaction = productTransactionRepository.findByInvoiceItem(invoiceItem).get(0);
           productTransaction.setModificationTime(ZonedDateTime.now());
           Integer oldQuantity = productTransaction.getQuantity();
-          productTransaction.setQuantity(invoiceItem.getQuantity());
-          // update product availability
-          Product product = productRepository.findOne(invoiceItem.getProduct().getId());
-          product.setModificationTime(ZonedDateTime.now());
-          Integer currentProductQuantity = product.getQuantity();
-          Integer newQuantity = invoiceItem.getQuantity();
-          if(newQuantity > oldQuantity) {
-            product.setQuantity(currentProductQuantity - (newQuantity - oldQuantity));
+          Product oldProduct = productTransaction.getProduct();
+          // product is not updated
+          if(oldProduct.getId().equals(invoiceItem.getProduct().getId())) {
+            productTransaction.setQuantity(invoiceItem.getQuantity());
+            // update product availability 
+            Product product = productRepository.findOne(invoiceItem.getProduct().getId());
+            product.setModificationTime(ZonedDateTime.now());
+            Integer currentProductQuantity = product.getQuantity();
+            Integer newQuantity = invoiceItem.getQuantity();
+            if(newQuantity > oldQuantity) {
+              product.setQuantity(currentProductQuantity - (newQuantity - oldQuantity));
+            } else {
+              product.setQuantity(currentProductQuantity + (oldQuantity - newQuantity));
+            }
+            productTransactions.add(productTransaction);
+            products.add(product);
           } else {
-            product.setQuantity(currentProductQuantity + (oldQuantity - newQuantity));
+            Product newProduct = productRepository.findOne(invoiceItem.getProduct().getId());
+            newProduct.setModificationTime(ZonedDateTime.now());
+            oldProduct.setModificationTime(ZonedDateTime.now());
+            // update old product
+            oldProduct.setQuantity(oldProduct.getQuantity() + oldQuantity);
+            // update new product
+            newProduct.setQuantity(newProduct.getQuantity() - invoiceItem.getQuantity());
+            productTransactions.add(productTransaction);
+            products.add(oldProduct);
+            products.add(newProduct);
           }
-          productTransactions.add(productTransaction);
-          products.add(product);
         }
         productTransactionRepository.save(productTransactions);
         productRepository.save(products);

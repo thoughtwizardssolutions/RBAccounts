@@ -84,7 +84,7 @@ public class InvoiceItem implements Serializable {
     @JsonIgnore
     private Invoice invoice;
     
-    @OneToOne(mappedBy = "invoiceItem")
+    @OneToOne(mappedBy = "invoiceItem", cascade = {CascadeType.ALL})
     @JsonIgnore
     private ProductTransaction productTransaction;
 
