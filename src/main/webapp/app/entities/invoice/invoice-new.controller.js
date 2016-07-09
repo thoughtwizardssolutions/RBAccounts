@@ -67,9 +67,8 @@
 				Dealer.get({id : vm.invoice.dealerId}, onSuccess, onError);
 				function onSuccess(data, headers) {
 					vm.selectedContact = data;
+					vm.tmpSelectedContact = vm.selectedContact.firmName;
 				}
-				// TODO load max quantities for each invoiceItem
-				// currently it is allowed to enter invalid quantities while editing an invoice
 			} else {
 				vm.invoice = {};
 				vm.invoice.taxes = 0;
