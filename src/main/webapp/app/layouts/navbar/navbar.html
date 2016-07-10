@@ -32,17 +32,30 @@
                         <span class="hidden-sm">My Contacts</span>
                     </a>
                 </li>
-                 <li ng-class="{active: vm.$state.includes('register')}" has-any-authority="ROLE_ADMIN,ROLE_ORG_ADMIN" ng-switch-when="true">
-                     <a ui-sref="register" ng-click="vm.collapseNavbar()">
-                         <span class="glyphicon glyphicon-plus-sign"></span>
-                         <span>Dealer Registration</span>
-                     </a>
-                </li>
-                <li ng-class="{active: vm.$state.includes('dealer-management')}" has-any-authority="ROLE_ORG_ADMIN" ng-switch-when="true">
-                     <a ui-sref="dealer-management" ng-click="vm.collapseNavbar()">
-                         <span class="glyphicon glyphicon-plus-sign"></span>
-                         <span>Dealer Management</span>
-                     </a>
+                 <li ng-class="{active: vm.$state.includes('register')}" uib-dropdown class="dropdown pointer">
+                    <a class="dropdown-toggle" uib-dropdown-toggle href="" id="account-menu">
+                        <span>
+                            <span class="glyphicon glyphicon-cog"></span>
+                            <span class="hidden-sm">
+                                Dealers
+                            </span>
+                            <b class="caret"></b>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu" uib-dropdown-menu>
+                        <li ui-sref-active="active" ng-switch-when="true">
+                            <a ui-sref="register" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-plus"></span>&nbsp;
+                                <span>Dealer Registration</span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-switch-when="true">
+                            <a ui-sref="dealer-management" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-wrench"></span>
+                                <span>Dealer Management</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li ng-class="{active: vm.$state.includes('product')}" has-any-authority = "ROLE_USER, ROLE_ORG_ADMIN" ng-switch-when="true">
                     <a ui-sref="product" ng-click="vm.collapseNavbar()">
