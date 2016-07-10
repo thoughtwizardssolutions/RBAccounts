@@ -1,4 +1,4 @@
-package com.rb.accounts.service.pdf;
+package com.accounts.rb.service.pdf;
 
 public class TableData {
 

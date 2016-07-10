@@ -116,9 +116,35 @@
                     templateUrl: 'app/entities/invoice/invoice-delete-dialog.html',
                     controller: 'InvoiceDeleteController',
                     controllerAs: 'vm',
+                    backdrop: 'static',
                     size: 'md',
                     resolve: {
                         entity: ['Invoice', function(Invoice) {
+                            return Invoice.get({id : $stateParams.id}).$promise;
+                        }]
+                    }
+                }).result.then(function() {
+                    $state.go('invoice', null, { reload: true });
+                }, function() {
+                    $state.go('^');
+                });
+            }]
+        })
+        .state('invoice.send', {
+            parent: 'invoice',
+            url: '/{id}/send',
+            data: {
+                authorities: ['ROLE_USER', 'ROLE_ORG_ADMIN']
+            },
+            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                $uibModal.open({
+                    templateUrl: 'app/entities/invoice/invoice-send-dialog.html',
+                    controller: 'InvoiceSendDialogController',
+                    controllerAs: 'vm',
+                    backdrop: 'static',
+                    size: 'md',
+                    resolve: {
+                    	entity: ['Invoice', function(Invoice) {
                             return Invoice.get({id : $stateParams.id}).$promise;
                         }]
                     }

@@ -36,7 +36,7 @@ spring:
             hibernate.generate_statistics: true
     mail:
         host: smtp.rbaccounts.com
-        port: 587
+        port: 25
         username: admin@rbaccounts.com 
         password: gigHAcv7
         protocol: smtp
@@ -44,7 +44,7 @@ spring:
         properties.mail.smtp:
             auth: true
             starttls.enable: true
-            ssl.trust: smtp-mail.outlook.com
+            ssl.trust: smtp.rbaccounts.com
     messages:
         cache-seconds: 1
     thymeleaf:

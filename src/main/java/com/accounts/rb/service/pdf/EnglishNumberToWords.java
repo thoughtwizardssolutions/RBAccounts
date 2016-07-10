@@ -1,4 +1,4 @@
-package com.rb.accounts.service.pdf;
+package com.accounts.rb.service.pdf;
 import java.text.DecimalFormat;
 
 import org.apache.commons.lang3.text.WordUtils;
