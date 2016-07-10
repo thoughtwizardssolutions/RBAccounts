@@ -3,14 +3,14 @@
 
     angular
         .module('rbaccountsApp')
-        .controller('UserManagementDialogController',UserManagementDialogController);
+        .controller('DealerManagementDialogController',DealerManagementDialogController);
 
-    UserManagementDialogController.$inject = ['$stateParams', '$uibModalInstance', 'entity', 'User'];
+    DealerManagementDialogController.$inject = ['$stateParams', '$uibModalInstance', 'entity', 'User'];
 
-    function UserManagementDialogController ($stateParams, $uibModalInstance, entity, User) {
+    function DealerManagementDialogController ($stateParams, $uibModalInstance, entity, User) {
         var vm = this;
 
-        vm.authorities = ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_ORG_ADMIN', 'ROLE_EDIT_INVOICE'];
+        vm.authorities = ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_EDIT_INVOICE'];
         vm.clear = clear;
         vm.languages = null;
         vm.save = save;

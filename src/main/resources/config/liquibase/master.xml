@@ -20,6 +20,8 @@
     <include file="classpath:config/liquibase/changelog/20160621141124_added_entity_Profile.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160622191950_added_entity_UserSequence.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160630151827_added_entity_ProductTransaction.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160630151837_added_new_authority.xml" relativeToChangelogFile="false"/>
+    
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="classpath:config/liquibase/changelog/20160620034840_added_entity_constraints_Imei.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160620040012_added_entity_constraints_InvoiceItem.xml" relativeToChangelogFile="false"/>

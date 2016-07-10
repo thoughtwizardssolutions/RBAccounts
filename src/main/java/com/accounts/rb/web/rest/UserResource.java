@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,6 +60,13 @@ import java.util.stream.Collectors;
 public class UserResource {
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
+    private static final List<String> SPECIAL_LOGINS = new ArrayList<>();
+    static {
+      SPECIAL_LOGINS.add("system");
+      SPECIAL_LOGINS.add("admin");
+      SPECIAL_LOGINS.add("user");
+      SPECIAL_LOGINS.add("anaonymoususer");
+    }
 
     @Inject
     private UserRepository userRepository;
@@ -68,7 +76,7 @@ public class UserResource {
 
     @Inject
     private UserService userService;
-
+    
     /**
      * POST  /users  : Creates a new user.
      * <p>
@@ -86,7 +94,7 @@ public class UserResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    @Secured(AuthoritiesConstants.ADMIN)
+    @Secured({AuthoritiesConstants.ADMIN, AuthoritiesConstants.ORG_ADMIN})
     public ResponseEntity<?> createUser(@RequestBody ManagedUserDTO managedUserDTO, HttpServletRequest request) throws URISyntaxException {
         log.debug("REST request to save User : {}", managedUserDTO);
 
@@ -127,7 +135,7 @@ public class UserResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Transactional
-    @Secured(AuthoritiesConstants.ADMIN)
+    @Secured({AuthoritiesConstants.ADMIN, AuthoritiesConstants.ORG_ADMIN})
     public ResponseEntity<ManagedUserDTO> updateUser(@RequestBody ManagedUserDTO managedUserDTO) {
         log.debug("REST request to update User : {}", managedUserDTO);
         Optional<User> existingUser = userRepository.findOneByEmail(managedUserDTO.getEmail());
@@ -173,15 +181,33 @@ public class UserResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Transactional(readOnly = true)
+    @Secured({AuthoritiesConstants.ADMIN, AuthoritiesConstants.ORG_ADMIN})
     public ResponseEntity<List<ManagedUserDTO>> getAllUsers(Pageable pageable)
         throws URISyntaxException {
         Page<User> page = userRepository.findAll(pageable);
         List<ManagedUserDTO> managedUserDTOs = page.getContent().stream()
             .map(ManagedUserDTO::new)
             .collect(Collectors.toList());
+        filterSpecialLogins(managedUserDTOs);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(managedUserDTOs, headers, HttpStatus.OK);
     }
+
+  private void filterSpecialLogins(List<ManagedUserDTO> managedUserDTOs) {
+    org.springframework.security.core.userdetails.User user =
+        (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext()
+            .getAuthentication().getPrincipal();
+    if (!user.getUsername().equals("admin")) {
+      // remove special users
+      Iterator<ManagedUserDTO> iter = managedUserDTOs.iterator();
+      while (iter.hasNext()) {
+        ManagedUserDTO managedUserDTO = iter.next();
+        if (SPECIAL_LOGINS.contains(managedUserDTO.getLogin())) {
+          iter.remove();
+        }
+      }
+    }
+  }
     
 
     /**
@@ -196,6 +222,7 @@ public class UserResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Transactional(readOnly = true)
+    @Secured({AuthoritiesConstants.ADMIN, AuthoritiesConstants.ORG_ADMIN})
     public Set<String> getAllLogins(){
        Set<String> users = userRepository.findAllLogins();
        // remove special usernames
@@ -233,6 +260,8 @@ public class UserResource {
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Transactional
+    @Secured({AuthoritiesConstants.ADMIN, AuthoritiesConstants.ORG_ADMIN})
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUserInformation(login);

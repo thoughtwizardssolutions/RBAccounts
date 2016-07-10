@@ -47,7 +47,7 @@ tbody td, thead th {
 				
 				<!-- Choose Contact Start -->
 				<div class="form-group">
-					<ui-select ng-model="vm.tmpSelectedContact" 
+					<ui-select ng-model="vm.tmpSelectedContact"
 						on-select="vm.selectContact($item, $model)" >
 						<ui-select-match
 						placeholder="Select a contact in the list or search by Firm Name...">{{vm.selectedContact.firmName}}</ui-select-match>
@@ -253,9 +253,9 @@ tbody td, thead th {
 		        </div>
 		        </div>
 		        <div class="form-group col-md-4 col-md-offset-8">
-    			<button type="submit" onclick="window.history.back()" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span></button>
-                <button type="submit" ng-disabled="editForm.$invalid || vm.inval  || !vm.invoice.dealerId" class="btn btn-primary" ng-click="vm.saveInvoice()">Save</button>
-                <button type="submit" ng-disabled="editForm.$invalid || vm.invalid || !vm.invoice.dealerId" class="btn btn-primary" ng-click="vm.showInvoice()">Download as PDF</button>
+	    			<button type="submit" onclick="window.history.back()" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span></button>
+	                <button type="submit" ng-disabled="editForm.$invalid || vm.invalid  || !vm.invoice.dealerId" class="btn btn-primary" ng-click="vm.saveInvoice()">Save</button>
+	                <button type="submit" ng-disabled="editForm.$invalid || vm.invalid || !vm.invoice.dealerId" class="btn btn-primary" ng-click="vm.showInvoice()">Download as PDF</button>
                 </div>
             </form>
             <p></p>

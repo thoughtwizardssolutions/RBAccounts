@@ -9,23 +9,23 @@
 
     function stateConfig($stateProvider) {
         $stateProvider
-        .state('user-management', {
-            parent: 'admin',
-            url: '/user-management',
+        .state('dealer-management', {
+            parent: 'home',
+            url: 'dealer-management',
             data: {
                 authorities: ['ROLE_ADMIN', 'ROLE_ORG_ADMIN'],
                 pageTitle: 'rbaccounts'
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/admin/user-management/user-management.html',
-                    controller: 'UserManagementController',
+                    templateUrl: 'app/entities/dealer-management/dealer-management.html',
+                    controller: 'DealerManagementController',
                     controllerAs: 'vm'
                 }
             }
         })
-        .state('user-management-detail', {
-            parent: 'admin',
+        .state('dealer-management-detail', {
+            parent: 'dealer-management',
             url: '/user/:login',
             data: {
                 authorities: ['ROLE_ADMIN', 'ROLE_ORG_ADMIN'],
@@ -33,22 +33,27 @@
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/admin/user-management/user-management-detail.html',
-                    controller: 'UserManagementDetailController',
+                    templateUrl: 'app/entities/dealer-management/dealer-management-detail.html',
+                    controller: 'DealerManagementDetailController',
                     controllerAs: 'vm'
+                },                   
+            resolve: {
+                    entity: ['User', function(User) {
+                        return User.get({login : $stateParams.login});
+                    }]
                 }
             }
         })
-        .state('user-management.new', {
-            parent: 'user-management',
+        .state('dealer-management.new', {
+            parent: 'dealer-management',
             url: '/new',
             data: {
                 authorities: ['ROLE_ADMIN', 'ROLE_ORG_ADMIN']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/admin/user-management/user-management-dialog.html',
-                    controller: 'UserManagementDialogController',
+                    templateUrl: 'app/entities/dealer-management/dealer-management-dialog.html',
+                    controller: 'DealerManagementDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
@@ -63,22 +68,22 @@
                         }
                     }
                 }).result.then(function() {
-                    $state.go('user-management', null, { reload: true });
+                    $state.go('dealer-management', null, { reload: true });
                 }, function() {
-                    $state.go('user-management');
+                    $state.go('dealer-management');
                 });
             }]
         })
-        .state('user-management.edit', {
-            parent: 'user-management',
+        .state('dealer-management.edit', {
+            parent: 'dealer-management',
             url: '/{login}/edit',
             data: {
                 authorities: ['ROLE_ADMIN', 'ROLE_ORG_ADMIN']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/admin/user-management/user-management-dialog.html',
-                    controller: 'UserManagementDialogController',
+                    templateUrl: 'app/entities/dealer-management/dealer-management-dialog.html',
+                    controller: 'DealerManagementDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
@@ -88,23 +93,24 @@
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('user-management', null, { reload: true });
+                    $state.go('dealer-management', null, { reload: true });
                 }, function() {
                     $state.go('^');
                 });
             }]
         })
-        .state('user-management.delete', {
-            parent: 'user-management',
+        .state('dealer-management.delete', {
+            parent: 'dealer-management',
             url: '/{login}/delete',
             data: {
-                authorities: ['ROLE_ADMIN']
+                authorities: ['ROLE_ADMIN', 'ROLE_ORG_ADMIN']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/admin/user-management/user-management-delete-dialog.html',
-                    controller: 'UserManagementDeleteController',
+                    templateUrl: 'app/entities/dealer-management/dealer-management-delete-dialog.html',
+                    controller: 'DealerManagementDeleteController',
                     controllerAs: 'vm',
+                    backdrop: 'static',
                     size: 'md',
                     resolve: {
                         entity: ['User', function(User) {
@@ -112,7 +118,7 @@
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('user-management', null, { reload: true });
+                    $state.go('dealer-management', null, { reload: true });
                 }, function() {
                     $state.go('^');
                 });

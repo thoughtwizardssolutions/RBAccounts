@@ -218,6 +218,7 @@
 			if(dealer.firmName === 'Add new contact+') {
 				vm.selectedContact = null;
 				vm.invoice.dealerId = null;
+				vm.tmpSelectedContact = null;
                 $uibModal.open({
                     templateUrl: 'app/entities/dealer/dealer-dialog.html',
                     controller: 'DealerDialogController',
@@ -237,6 +238,7 @@
 			} else {
 				vm.selectedContact = dealer;
 				vm.invoice.dealerId = dealer.id;
+				vm.tmpSelectedContact = null;
 			}
 		}
 		

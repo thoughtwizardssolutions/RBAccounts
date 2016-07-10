@@ -10,7 +10,7 @@
     function stateConfig($stateProvider) {
         $stateProvider.state('register', {
             parent: 'home',
-            url: '/register',
+            url: 'register',
             data: {
                 authorities: ['ROLE_ORG_ADMIN','ROLE_ADMIN'],
                 pageTitle: 'User Registration'

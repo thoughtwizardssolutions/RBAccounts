@@ -7,7 +7,7 @@
     User.$inject = ['$resource'];
 
     function User ($resource) {
-        var resourceUrl =  'api/users/:id';
+        var resourceUrl =  'api/users/:login';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
